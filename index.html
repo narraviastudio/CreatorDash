@@ -54,9 +54,9 @@
         }
 
         .botanical-card {
-            background: rgba(255, 253, 250, 0.88);
+            background: rgba(255, 253, 250, 0.94);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(229, 217, 202, 0.48);
+            border: 1px solid rgba(229, 217, 202, 0.58);
             box-shadow: 0 10px 30px -12px rgba(79, 105, 82, 0.08);
         }
 
@@ -107,24 +107,22 @@
             box-shadow: 0 14px 28px -12px rgba(53, 43, 40, 0.14);
         }
 
-        .jpg-page-sheet {
-            width: 2400px;
-            min-height: 3394px;
+        .jpg-landscape-sheet {
+            width: 3600px;
+            min-height: 2545px;
             background-color: #FAF7F2;
             background-image:
-                radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
-                radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
-                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.58) 0%, transparent 36%),
-                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.25) 0%, transparent 38%),
-                radial-gradient(circle at 14% 52%, rgba(246, 216, 222, 0.36) 0%, transparent 34%),
-                radial-gradient(circle at 88% 55%, rgba(126, 150, 128, 0.2) 0%, transparent 34%),
-                radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.22) 0%, transparent 36%),
-                radial-gradient(circle at 86% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 40%);
-            background-size: 76px 76px, 76px 76px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-            background-position: 0 0, 38px 38px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+                radial-gradient(rgba(53, 43, 40, 0.085) 8px, transparent 9px),
+                radial-gradient(rgba(53, 43, 40, 0.085) 8px, transparent 9px),
+                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.56) 0%, transparent 38%),
+                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.24) 0%, transparent 40%),
+                radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.2) 0%, transparent 38%),
+                radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 42%);
+            background-size: 84px 84px, 84px 84px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            background-position: 0 0, 42px 42px, 0 0, 0 0, 0 0, 0 0;
             position: relative;
             overflow: hidden;
-            padding: 112px 128px 104px 128px;
+            padding: 96px 150px 88px 150px;
             box-sizing: border-box;
         }
 
@@ -271,35 +269,38 @@
                 </p>
             </div>
 
-            <form id="authForm" class="space-y-4">
+            <form id="authForm" autocomplete="off" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-regular fa-user text-sageDark mr-1"></i> Username <span class="text-muted font-normal">(untuk akun baru)</span>
                     </label>
-                    <input type="text" id="authUsername" placeholder="Contoh: Cachaoo"
+                    <input type="text" id="authUsername" autocomplete="off" placeholder="@username"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email
                     </label>
-                    <input type="email" id="authEmail" required placeholder="halo@narraviastudio.com"
+                    <input type="email" id="authEmail" required autocomplete="off" placeholder="halo@narraviastudio.com"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-solid fa-key text-sageDark mr-1"></i> Password
                     </label>
-                    <input type="password" id="authPassword" required placeholder="Minimal 6 karakter"
+                    <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
 
                 <div class="flex items-center justify-between pt-0.5">
                     <label class="inline-flex items-center gap-2 text-xs text-espresso/85 cursor-pointer select-none">
-                        <input type="checkbox" id="rememberMe" checked
+                        <input type="checkbox" id="rememberMe"
                             class="w-4 h-4 rounded border-[#D8C9B8] text-sageDark focus:ring-sageDark accent-[#4F6952]">
                         <span>Remember me</span>
                     </label>
+                    <button type="button" id="btnForgotPassword" class="text-xs font-semibold text-roseSoft hover:text-espresso underline cursor-pointer">
+                        Forgot password?
+                    </button>
                 </div>
 
                 <div id="authNotice" class="text-sageDark bg-sage/15 border border-sage/35 rounded-2xl px-3.5 py-2.5 text-xs hidden space-y-2">
@@ -342,7 +343,7 @@
                 <div class="mt-2.5 flex items-center gap-3">
                     <label title="Klik untuk ganti foto profil user" class="relative w-11 h-11 rounded-full overflow-hidden border-2 border-sage/50 bg-blush/45 flex items-center justify-center cursor-pointer shrink-0 group shadow-xs micro-card-lift">
                         <img id="userAvatarImg" src="" alt="Foto Profil User" class="w-full h-full object-cover hidden">
-                        <span id="userAvatarInitial" class="font-serif text-base font-semibold text-espresso">C</span>
+                        <span id="userAvatarInitial" class="font-serif text-base font-semibold text-espresso">U</span>
                         <span class="absolute inset-0 bg-espresso/45 text-white text-[9px] font-semibold flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                             <i class="fa-solid fa-camera"></i>
                         </span>
@@ -350,7 +351,7 @@
                     </label>
                     <div>
                         <p id="greetingDisplay" class="text-sm font-medium text-espresso inline-flex items-center gap-1.5">
-                            Hallo, <span id="userDisplayName" class="font-semibold text-sageDark">Cachaoo</span>
+                            Hallo, <span id="userDisplayName" class="font-semibold text-sageDark">@username</span>
                             <span id="verifiedBadge" title="Akun Email Terverifikasi" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px]">
                                 <i class="fa-solid fa-check"></i>
                             </span>
@@ -508,7 +509,7 @@
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-solid fa-sparkles text-roseSoft mr-1"></i> Project Name
                         </label>
-                        <input type="text" id="clientName" required placeholder="Contoh: Content Pratama Jaya Motor"
+                        <input type="text" id="clientName" required placeholder="Contoh: Intimate Wedding Clara & Dimas"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
@@ -622,7 +623,7 @@
 
             <!-- Tabel Riwayat -->
             <div class="botanical-card rounded-3xl overflow-hidden">
-                <div class="p-4 sm:px-6 border-b border-[#EADFD3] flex flex-wrap justify-between items-center gap-3">
+                <div class="p-4 sm:px-6 border-b border-[#EADFD3]/60 flex flex-wrap justify-between items-center gap-3">
                     <div>
                         <h3 class="font-serif text-lg font-semibold text-espresso">
                             <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Riwayat Pemasukan
@@ -639,7 +640,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-cream/80 text-muted text-[11px] uppercase tracking-wider border-b border-[#EADFD3]">
+                            <tr class="bg-cream/80 text-muted text-[11px] uppercase tracking-wider border-b border-[#EADFD3]/60">
                                 <th class="p-4">Tanggal</th>
                                 <th class="p-4">Project Name</th>
                                 <th class="p-4">Kategori</th>
@@ -648,7 +649,7 @@
                                 <th class="p-4 text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody" class="divide-y divide-[#F0E6DA] text-sm"></tbody>
+                        <tbody id="tableBody" class="divide-y divide-[#F0E6DA]/70 text-sm"></tbody>
                     </table>
                 </div>
             </div>
@@ -673,10 +674,10 @@
                 </div>
             </div>
 
-            <!-- Kolom Sambutan Portofolio (Border Agak Transparan & Otomatis Mengikuti Username) -->
+            <!-- Kolom Sambutan dengan border semi-transparan -->
             <div class="botanical-card p-4 sm:px-6 rounded-3xl mb-6 flex items-center justify-center text-center">
                 <p id="portfolioGreetingBanner" class="text-sm font-medium text-espresso leading-relaxed">
-                    Hi, kenalin aku Cachaoo. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
+                    Hi, kenalin aku @username. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
                 </p>
             </div>
 
@@ -702,12 +703,12 @@
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0">
                         <img id="socialProfileAvatarImg" src="" alt="Foto Profil User" class="w-full h-full object-cover hidden">
-                        <span id="socialProfileAvatarInitial" class="font-serif text-2xl font-semibold text-espresso">C</span>
+                        <span id="socialProfileAvatarInitial" class="font-serif text-2xl font-semibold text-espresso">U</span>
                     </div>
                     <div class="flex-1">
                         <div class="relative bg-cream/90 border border-[#E2D4C3]/60 rounded-3xl px-5 py-4 text-sm text-espresso leading-relaxed">
                             <p id="socialIntroBubbleText" class="font-medium">
-                                Hi, kenalin aku Cachaoo. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
+                                Hi, kenalin aku @username. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
                             </p>
                         </div>
                         <div id="socialHandlesPreviewRow" class="flex flex-wrap gap-2 mt-3"></div>
@@ -788,7 +789,7 @@
     </div>
 
     <!-- Container Tersembunyi untuk Render JPG HD & PDF Recap -->
-    <div id="jpgRenderStaging" style="position: fixed; left: -20000px; top: 0; pointer-events: none; z-index: -1;"></div>
+    <div id="jpgRenderStaging" style="position: fixed; left: -25000px; top: 0; pointer-events: none; z-index: -1;"></div>
 
     <!-- MODAL PREVIEW FOTO HD -->
     <div id="photoModal" onclick="closePhotoModal()" class="fixed inset-0 z-50 bg-espresso/75 backdrop-blur-xs hidden items-center justify-center p-4">
@@ -798,9 +799,6 @@
                     <h4 id="modalTitle" class="font-serif text-lg font-semibold text-espresso"></h4>
                     <p id="modalSubtitle" class="text-xs text-muted"></p>
                 </div>
-                <button id="modalDownloadBtn" onclick="downloadModalPhotoJpg()" class="clay-pill text-sageDark text-xs font-semibold px-3.5 py-1.5 inline-flex items-center gap-1.5 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-download"></i> JPG HD
-                </button>
                 <button onclick="closePhotoModal()" class="clay-pill text-muted hover:text-espresso text-lg px-3 py-1 cursor-pointer shrink-0">&times;</button>
             </div>
             <div class="w-full max-h-[75vh] overflow-auto rounded-2xl bg-cream flex items-center justify-center p-2">
@@ -820,6 +818,7 @@
             signInWithEmailAndPassword,
             createUserWithEmailAndPassword,
             sendEmailVerification,
+            sendPasswordResetEmail,
             updateProfile,
             onAuthStateChanged,
             signOut
@@ -866,7 +865,6 @@
         let hdPhotoBase64 = "";
         let incomeChartInstance = null;
         let currentAvatarDataUrl = "";
-        let activeModalRecord = null;
         let userSocials = {
             instagram: "",
             tiktok: "",
@@ -894,18 +892,49 @@
         const authNotice = document.getElementById('authNotice');
         const authNoticeText = document.getElementById('authNoticeText');
         const btnResendVerify = document.getElementById('btnResendVerify');
+        const btnForgotPassword = document.getElementById('btnForgotPassword');
         const rememberMeCheckbox = document.getElementById('rememberMe');
+        const authUsernameInput = document.getElementById('authUsername');
+        const authEmailInput = document.getElementById('authEmail');
+        const authPasswordInput = document.getElementById('authPassword');
 
+        function clearAuthFormInputs(keepRememberCheckbox = false) {
+            authUsernameInput.value = "";
+            authEmailInput.value = "";
+            authPasswordInput.value = "";
+            if (!keepRememberCheckbox) {
+                rememberMeCheckbox.checked = false;
+            }
+        }
+
+        function clearRememberedPref() {
+            try {
+                localStorage.removeItem(REMEMBER_KEY);
+            } catch (_) {}
+        }
+
+        // Otomatis kosong semua saat halaman dimuat kecuali Remember me dicentang
         try {
             const savedPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
-            if (savedPref) {
-                rememberMeCheckbox.checked = Boolean(savedPref.remember);
-                if (savedPref.remember) {
-                    if (savedPref.username) document.getElementById('authUsername').value = savedPref.username;
-                    if (savedPref.email) document.getElementById('authEmail').value = savedPref.email;
-                }
+            if (savedPref && savedPref.remember) {
+                rememberMeCheckbox.checked = true;
+                if (savedPref.username) authUsernameInput.value = savedPref.username;
+                if (savedPref.email) authEmailInput.value = savedPref.email;
+            } else {
+                clearRememberedPref();
+                clearAuthFormInputs(false);
             }
-        } catch (_) {}
+        } catch (_) {
+            clearRememberedPref();
+            clearAuthFormInputs(false);
+        }
+
+        rememberMeCheckbox.addEventListener("change", () => {
+            if (!rememberMeCheckbox.checked) {
+                clearRememberedPref();
+                clearAuthFormInputs(false);
+            }
+        });
 
         function saveRememberPreference(remember, username = "", email = "") {
             try {
@@ -979,10 +1008,10 @@
 
         function getActiveUsername() {
             const rawName = (document.getElementById('userDisplayName')?.innerText || "").trim();
-            return (!rawName || rawName.toLowerCase() === "creator") ? "Cachaoo" : rawName;
+            if (!rawName || rawName.toLowerCase() === "creator") return "@username";
+            return rawName.startsWith("@") ? rawName : `@${rawName}`;
         }
 
-        // Mengambil nama sosial media pertama yang tersimpan di halaman Social Media untuk "Created by ..."
         function getCreatedBySocialName() {
             const entries = [
                 normalizeSocialEntry(userSocials.instagram, "instagram"),
@@ -993,7 +1022,7 @@
             ].filter(Boolean);
 
             if (entries.length > 0) {
-                return entries[0].label;
+                return entries.map(e => e.label).join(" • ");
             }
             return getActiveUsername();
         }
@@ -1051,9 +1080,10 @@
             if (!cardEl || !chipsRow) return;
 
             const username = getActiveUsername();
+            const cleanInitialSource = username.replace(/^@+/, "");
 
             if (avatarInitial) {
-                avatarInitial.innerText = (username.charAt(0) || "C").toUpperCase();
+                avatarInitial.innerText = (cleanInitialSource.charAt(0) || "U").toUpperCase();
             }
             if (avatarImg && avatarInitial) {
                 if (currentAvatarDataUrl) {
@@ -1164,7 +1194,8 @@
         function renderUserAvatar(uid, displayName, remotePhotoUrl = "") {
             const imgEl = document.getElementById('userAvatarImg');
             const initialEl = document.getElementById('userAvatarInitial');
-            const initialChar = (displayName || "C").trim().charAt(0).toUpperCase() || "C";
+            const cleanSrc = String(displayName || "@username").replace(/^@+/, "").trim();
+            const initialChar = (cleanSrc.charAt(0) || "U").toUpperCase();
             initialEl.innerText = initialChar;
 
             let savedAvatar = "";
@@ -1262,6 +1293,26 @@
             authNotice.classList.remove('hidden');
         }
 
+        function formatFirebaseAuthError(err, fallbackText) {
+            const code = err?.code || "";
+            if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
+                return "Email atau password salah, atau akun belum terdaftar. Periksa kembali input lo atau klik Forgot password.";
+            }
+            if (code === "auth/invalid-email") {
+                return "Format email tidak valid.";
+            }
+            if (code === "auth/too-many-requests") {
+                return "Terlalu banyak percobaan gagal. Tunggu beberapa menit lalu coba lagi.";
+            }
+            if (code === "auth/unauthorized-domain") {
+                return "Domain website ini belum terdaftar di Firebase Authentication -> Authorized domains.";
+            }
+            if (code === "auth/network-request-failed") {
+                return "Koneksi internet bermasalah saat menghubungi Firebase.";
+            }
+            return `${fallbackText} (${code || err?.message || "unknown"})`;
+        }
+
         function stopRealtimeSync() {
             if (unsubscribeRecords) {
                 unsubscribeRecords();
@@ -1281,7 +1332,7 @@
         function setHeaderUserInfo(user, profileData = {}) {
             const firestoreUsername = typeof profileData === "string" ? profileData : (profileData?.username || "");
             const firestorePhotoUrl = typeof profileData === "object" ? (profileData?.photoURL || "") : "";
-            const finalName = (firestoreUsername || user.displayName || "Cachaoo").trim();
+            const finalName = (firestoreUsername || user.displayName || "@username").trim();
 
             document.getElementById('userDisplayName').innerText = finalName;
             document.getElementById('userEmailDisplay').innerText = user.email || "";
@@ -1290,8 +1341,6 @@
 
             if (typeof profileData === "object") {
                 applySocialsToUi(profileData?.socials || {}, user.uid);
-            } else {
-                syncGreetingTexts();
             }
 
             try {
@@ -1473,9 +1522,9 @@
 
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const usernameInput = document.getElementById('authUsername').value.trim();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
+            const usernameInput = authUsernameInput.value.trim();
+            const email = authEmailInput.value.trim();
+            const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
 
             authError.classList.add('hidden');
@@ -1486,7 +1535,11 @@
                     auth,
                     remember ? browserLocalPersistence : browserSessionPersistence
                 );
-                saveRememberPreference(remember, usernameInput, email);
+                if (remember) {
+                    saveRememberPreference(true, usernameInput, email);
+                } else {
+                    clearRememberedPref();
+                }
 
                 const cred = await signInWithEmailAndPassword(auth, email, password);
                 await cred.user.reload();
@@ -1504,14 +1557,14 @@
                     await setDoc(doc(db, `users/${cred.user.uid}`), { username: usernameInput }, { merge: true });
                 }
             } catch (err) {
-                showAuthError("Gagal login: Pastikan email dan password sudah benar.");
+                showAuthError(formatFirebaseAuthError(err, "Gagal login"));
             }
         });
 
         document.getElementById('btnRegister').addEventListener('click', async () => {
-            const usernameInput = document.getElementById('authUsername').value.trim();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
+            const usernameInput = authUsernameInput.value.trim();
+            const email = authEmailInput.value.trim();
+            const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
 
             authError.classList.add('hidden');
@@ -1527,8 +1580,12 @@
                     auth,
                     remember ? browserLocalPersistence : browserSessionPersistence
                 );
-                const chosenName = usernameInput || "Cachaoo";
-                saveRememberPreference(remember, chosenName, email);
+                const chosenName = usernameInput || "@username";
+                if (remember) {
+                    saveRememberPreference(true, chosenName, email);
+                } else {
+                    clearRememberedPref();
+                }
 
                 const cred = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(cred.user, { displayName: chosenName });
@@ -1542,7 +1599,28 @@
                     true
                 );
             } catch (err) {
-                showAuthError("Gagal daftar: " + err.message);
+                showAuthError(formatFirebaseAuthError(err, "Gagal daftar"));
+            }
+        });
+
+        btnForgotPassword.addEventListener('click', async () => {
+            const email = authEmailInput.value.trim();
+            authError.classList.add('hidden');
+            authNotice.classList.add('hidden');
+
+            if (!email) {
+                showAuthError("Masukkan alamat email lo terlebih dahulu, lalu klik Forgot password.");
+                authEmailInput.focus();
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showAuthNotice(
+                    `Link reset password sudah dikirim ke ${email}. Cek inbox atau folder Spam lo untuk mengganti password.`
+                );
+            } catch (err) {
+                showAuthError(formatFirebaseAuthError(err, "Gagal mengirim email reset password"));
             }
         });
 
@@ -1556,9 +1634,13 @@
             }
         });
 
-        document.getElementById('btnLogout').addEventListener('click', () => {
+        document.getElementById('btnLogout').addEventListener('click', async () => {
             stopRealtimeSync();
-            signOut(auth);
+            await signOut(auth);
+            if (!rememberMeCheckbox.checked) {
+                clearRememberedPref();
+                clearAuthFormInputs(false);
+            }
         });
 
         document.addEventListener("visibilitychange", () => {
@@ -1718,11 +1800,6 @@
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;");
 
-        const sanitizeSlug = (str) => String(str || "portofolio")
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "_")
-            .replace(/^_+|_+$/g, "") || "portofolio";
-
         function getPortfolioEligibleItems() {
             return records.filter(r => (r.photoData && r.photoData !== "") || (r.portfolioLink && r.portfolioLink !== ""));
         }
@@ -1736,7 +1813,7 @@
             const eligibleCount = getPortfolioEligibleItems().length;
             const enough = eligibleCount >= MIN_JPG_EVENTS;
             btn.disabled = !enough;
-            label.innerText = enough ? "Export JPG HD" : `Export JPG HD (${eligibleCount}/${MIN_JPG_EVENTS})`;
+            label.innerText = enough ? "Export JPG HD" : `Export JPG (${eligibleCount}/${MIN_JPG_EVENTS})`;
             hint.innerText = enough
                 ? `${eligibleCount} event siap di-export JPG HD`
                 : `Minimal ${MIN_JPG_EVENTS} event untuk export JPG HD`;
@@ -2118,7 +2195,7 @@
             sheet.innerHTML = `
                 <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
-                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; padding:28px 32px; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.1);">
+                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid rgba(234,223,211,0.65); border-radius:28px; padding:28px 32px; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.1);">
                             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
                                 <div>
                                     <span style="display:inline-block; padding:4px 12px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:12px; font-weight:700; margin-bottom:8px;">
@@ -2138,30 +2215,30 @@
                             </div>
 
                             <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px; margin-top:24px;">
-                                <div style="background:#FAF7F2; border:1px solid #EADFD3; border-radius:20px; padding:18px;">
+                                <div style="background:#FAF7F2; border:1px solid rgba(234,223,211,0.65); border-radius:20px; padding:18px;">
                                     <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Fee Lunas (Excl. Pajak)</p>
                                     <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#4F6952;">${formatRupiah(paidFeeTotal)}</p>
                                 </div>
-                                <div style="background:#FAF7F2; border:1px solid #EADFD3; border-radius:20px; padding:18px;">
+                                <div style="background:#FAF7F2; border:1px solid rgba(234,223,211,0.65); border-radius:20px; padding:18px;">
                                     <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Fee Belum Lunas (Excl. Pajak)</p>
                                     <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#D97D90;">${formatRupiah(unpaidFeeTotal)}</p>
                                 </div>
-                                <div style="background:#FAF7F2; border:1px solid #EADFD3; border-radius:20px; padding:18px;">
+                                <div style="background:#FAF7F2; border:1px solid rgba(234,223,211,0.65); border-radius:20px; padding:18px;">
                                     <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Total Nominal Pajak</p>
                                     <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#352B28;">${formatRupiah(totalTax)}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; overflow:hidden; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
-                            <div style="padding:18px 24px; border-bottom:1px solid #EADFD3; background:#F3ECE2;">
+                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid rgba(234,223,211,0.65); border-radius:28px; overflow:hidden; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
+                            <div style="padding:18px 24px; border-bottom:1px solid rgba(234,223,211,0.65); background:#F3ECE2;">
                                 <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28;">
                                     Rincian Project, Fee (Exclude Pajak) &amp; Pajak
                                 </h2>
                             </div>
                             <table style="width:100%; border-collapse:collapse; text-align:left;">
                                 <thead>
-                                    <tr style="background:rgba(243,236,226,0.65); border-bottom:1px solid #EADFD3; font-size:12px; text-transform:uppercase; color:#7A6C67;">
+                                    <tr style="background:rgba(243,236,226,0.65); border-bottom:1px solid rgba(234,223,211,0.65); font-size:12px; text-transform:uppercase; color:#7A6C67;">
                                         <th style="padding:12px 16px;">Tanggal</th>
                                         <th style="padding:12px 16px;">Project Name</th>
                                         <th style="padding:12px 16px;">Management</th>
@@ -2177,7 +2254,7 @@
                             </table>
                         </div>
 
-                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; padding:22px 26px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
+                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid rgba(234,223,211,0.65); border-radius:28px; padding:22px 26px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
                             <h3 style="margin:0 0 12px 0; font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; color:#352B28;">
                                 Ringkasan Tagihan Belum Lunas (DP / Pending)
                             </h3>
@@ -2283,7 +2360,7 @@
             document.body.removeChild(a);
         }
 
-        function makeHd43Thumbnail(src, targetW = 1600, targetH = 1200) {
+        function makeHd43Photo(src, targetW = 2400, targetH = 1800) {
             return new Promise((resolve) => {
                 if (!src) return resolve("");
                 const img = new Image();
@@ -2313,4 +2390,374 @@
                     }
 
                     ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality
+                    ctx.imageSmoothingQuality = "high";
+                    ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+                    resolve(canvas.toDataURL("image/jpeg", 0.99));
+                };
+                img.onerror = () => resolve(src);
+                img.src = src;
+            });
+        }
+
+        function renderMonthlyCollages(items) {
+            const collageContainer = document.getElementById('monthlyCollageContainer');
+            if (!collageContainer) return;
+
+            const photoItems = items.filter(r => r.photoData && r.photoData !== "");
+            if (photoItems.length === 0) {
+                collageContainer.innerHTML = `
+                    <div class="col-span-full botanical-card text-center py-8 px-4 rounded-3xl text-muted text-xs">
+                        <i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto saat mencatat project untuk membentuk kolase per bulan.
+                    </div>`;
+                return;
+            }
+
+            const monthGroups = {};
+            photoItems.forEach(item => {
+                const ym = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
+                if (!monthGroups[ym]) monthGroups[ym] = [];
+                monthGroups[ym].push(item);
+            });
+
+            const sortedMonths = Object.keys(monthGroups).sort().reverse();
+            collageContainer.innerHTML = '';
+
+            sortedMonths.forEach(ym => {
+                const ranked = sortByRateAndPopularity(monthGroups[ym]);
+                const topSix = ranked.slice(0, 6);
+                let slotsHtml = '';
+
+                for (let i = 0; i < 6; i++) {
+                    const cellItem = topSix[i];
+                    if (cellItem) {
+                        const rankBadge = i === 0
+                            ? `<span class="absolute top-1.5 left-1.5 bg-sageDark text-white text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-crown text-amber-300 mr-0.5"></i> Top</span>`
+                            : `<span class="absolute top-1.5 left-1.5 bg-ivory/95 text-espresso text-[10px] font-bold px-2 py-0.5 rounded-full">#${i + 1}</span>`;
+
+                        slotsHtml += `
+                            <div class="rounded-2xl bg-cream/80 border border-[#EADFD3]/55 p-2 flex flex-col">
+                                <div onclick="openPhotoModal('${cellItem.id}')" title="${escapeHtml(cellItem.clientName)}"
+                                    class="aspect-[4/3] w-full rounded-xl overflow-hidden bg-cream relative cursor-pointer group border border-[#EADFD3]/50 flex items-center justify-center">
+                                    <img src="${cellItem.photoData}" alt="${escapeHtml(cellItem.clientName)}" class="w-full h-full object-contain group-hover:scale-105 transition duration-300">
+                                    ${rankBadge}
+                                </div>
+                                <p class="mt-2 text-center font-semibold text-[11px] text-espresso leading-snug line-clamp-1" style="transform:none;">
+                                    ${escapeHtml(cellItem.clientName)}
+                                </p>
+                            </div>`;
+                    } else {
+                        slotsHtml += `
+                            <div class="aspect-[4/3] rounded-2xl border border-[#E6DACB]/55 bg-ivory/70 flex flex-col items-center justify-center text-muted/60 text-[10px]">
+                                <i class="fa-regular fa-image mb-1 text-roseSoft/60"></i>
+                                <span>Slot ${i + 1}</span>
+                            </div>`;
+                    }
+                }
+
+                collageContainer.innerHTML += `
+                    <div class="botanical-card micro-card-lift p-5 rounded-3xl">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <h3 class="font-serif text-lg font-semibold text-espresso flex items-center gap-2">
+                                <i class="fa-solid fa-spa text-roseSoft text-sm"></i>
+                                <span>Portofolio ${formatMonthName(ym)}</span>
+                            </h3>
+                            <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold inline-flex items-center">
+                                <i class="fa-solid fa-photo-film mr-1 text-roseSoft"></i> ${topSix.length}/6 Foto
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2.5">
+                            ${slotsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderYearlyPortfolio(items) {
+            const yearlyContainer = document.getElementById('yearlyPortfolioContainer');
+            if (!yearlyContainer) return;
+
+            if (items.length === 0) {
+                yearlyContainer.innerHTML = `
+                    <div class="botanical-card text-center py-12 px-4 rounded-3xl text-muted text-sm">
+                        <i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada item portofolio. Tambahkan link konten atau foto saat mencatat project baru.
+                    </div>`;
+                return;
+            }
+
+            const yearGroups = {};
+            items.forEach(item => {
+                const yr = formatYearLabel(item.date);
+                if (!yearGroups[yr]) yearGroups[yr] = [];
+                yearGroups[yr].push(item);
+            });
+
+            const sortedYears = Object.keys(yearGroups).sort().reverse();
+            yearlyContainer.innerHTML = '';
+
+            sortedYears.forEach(yr => {
+                const yearItems = sortByRateAndPopularity(yearGroups[yr]);
+                const cardsHtml = yearItems.map(item => {
+                    const mediaHtml = item.photoData
+                        ? `<img src="${item.photoData}" alt="${escapeHtml(item.clientName)}" onclick="openPhotoModal('${item.id}')" class="w-full h-full object-contain cursor-pointer group-hover:scale-105 transition duration-300">`
+                        : `<div class="w-full h-full flex flex-col items-center justify-center bg-cream/80 text-sageDark p-6 text-center">
+                             <i class="fa-solid fa-clapperboard text-2xl mb-2 text-roseSoft"></i>
+                             <span class="text-xs font-medium">Konten Tersimpan</span>
+                           </div>`;
+
+                    const linkBtn = item.portfolioLink
+                        ? `<a href="${item.portfolioLink}" target="_blank" rel="noopener noreferrer" class="clay-pill inline-flex items-center gap-1.5 text-xs font-semibold text-sageDark px-3.5 py-1.5">
+                             <i class="fa-solid fa-link text-[10px]"></i> Lihat Karya <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                           </a>`
+                        : '';
+
+                    return `
+                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden group flex flex-col">
+                            <div class="aspect-[4/3] bg-cream overflow-hidden relative flex items-center justify-center">
+                                ${mediaHtml}
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col justify-between items-center text-center">
+                                <div class="w-full">
+                                    <p class="text-[11px] text-muted"><i class="fa-regular fa-calendar mr-1"></i>${item.date || ''}</p>
+                                    <h4 class="font-serif text-lg font-semibold text-espresso mt-1 text-center" style="transform:none;">${escapeHtml(item.clientName)}</h4>
+                                </div>
+                                ${linkBtn ? `<div class="mt-4">${linkBtn}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                yearlyContainer.innerHTML += `
+                    <section class="pt-2 border-t border-[#E6DACB]/70 first:border-t-0 first:pt-0">
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <h3 class="font-serif text-xl font-semibold text-espresso flex items-center gap-2">
+                                <i class="fa-solid fa-award text-sageDark text-base"></i>
+                                <span>Portofolio ${yr}</span>
+                            </h3>
+                            <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold">
+                                <i class="fa-solid fa-sparkles text-roseSoft mr-1"></i> ${yearItems.length} Karya
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${cardsHtml}
+                        </div>
+                    </section>
+                `;
+            });
+        }
+
+        window.renderPortfolio = () => {
+            const items = getPortfolioEligibleItems();
+            syncGreetingTexts();
+            updateShowcaseSocialIcons();
+            renderMonthlyCollages(items);
+            renderYearlyPortfolio(items);
+            syncJpgButtonState();
+        };
+
+        function buildShowcaseJpgSheetElement(pageItems, pageNum, totalPages, createdByLabel, introSentence) {
+            const page = document.createElement("div");
+            page.className = "jpg-landscape-sheet";
+
+            const cardsHtml = pageItems.map((item) => {
+                const eventDesc = escapeHtml(item.clientName || "Event Showcase");
+                const visualHtml = item.safePhotoSrc
+                    ? `<img src="${item.safePhotoSrc}" alt="${eventDesc}" style="width:100%; height:100%; object-fit:contain; display:block;">`
+                    : `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#F3ECE2; color:#4F6952; padding:32px; text-align:center;">
+                         <i class="fa-solid fa-clapperboard" style="font-size:64px; color:#D97D90; margin-bottom:14px;"></i>
+                         <span style="font-size:32px; font-weight:600;">Event Link</span>
+                       </div>`;
+
+                return `
+                    <div style="background:rgba(255,253,250,0.94); border:2.5px solid rgba(229,217,202,0.52); border-radius:42px; padding:34px 34px 40px 34px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 16px 36px -14px rgba(79,105,82,0.12); box-sizing:border-box;">
+                        <div style="width:100%; aspect-ratio:4 / 3; border-radius:28px; overflow:hidden; background:#F3ECE2; border:1.5px solid rgba(234,223,211,0.5); display:flex; align-items:center; justify-content:center;">
+                            ${visualHtml}
+                        </div>
+                        <div style="margin-top:34px; text-align:center; transform:none;">
+                            <p style="margin:0; font-size:36px; font-weight:700; color:#352B28; line-height:1.35; text-align:center; transform:none;">
+                                ${eventDesc}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            page.innerHTML = `
+                <svg style="position:absolute; top:-24px; left:-24px; width:420px; height:420px; pointer-events:none; opacity:0.9;" viewBox="0 0 170 170" fill="none">
+                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.4" stroke-linecap="round"/>
+                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
+                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
+                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
+                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
+                </svg>
+
+                <div style="position:relative; z-index:2; min-height:2361px; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <div style="text-align:center; margin-bottom:36px;">
+                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:92px; font-weight:700; color:#352B28; line-height:1.15; text-align:center; transform:none;">
+                                My Portofolio
+                            </h1>
+                            <p style="margin:12px 0 0 0; font-size:36px; font-weight:600; color:#4F6952; line-height:1.35; text-align:center;">
+                                Created by ${escapeHtml(createdByLabel)}
+                            </p>
+                        </div>
+
+                        <div style="background:rgba(255,253,250,0.92); border:2.5px solid rgba(229,217,202,0.52); border-radius:42px; padding:34px 56px; margin:0 auto 54px auto; text-align:center; box-shadow:0 14px 32px -12px rgba(79,105,82,0.1);">
+                            <p style="margin:0; font-size:36px; font-weight:600; color:#352B28; line-height:1.45; text-align:center;">
+                                ${escapeHtml(introSentence)}
+                            </p>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:54px;">
+                            ${cardsHtml}
+                        </div>
+                    </div>
+
+                    <div style="margin-top:56px; padding-top:24px; border-top:2px solid rgba(230,218,203,0.65); display:flex; justify-content:space-between; align-items:center; font-size:30px; color:#7A6C67;">
+                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:10px;"></i> Narravia.Studio</span>
+                        <span>Showcase ${pageNum} dari ${totalPages}</span>
+                    </div>
+                </div>
+            `;
+
+            return page;
+        }
+
+        window.exportPortfolioJPG = async () => {
+            const rawItems = sortByRateAndPopularity(getPortfolioEligibleItems());
+            if (rawItems.length < MIN_JPG_EVENTS) {
+                return alert(`Portofolio bisa di-export ke JPG HD minimal setelah ada ${MIN_JPG_EVENTS} event (saat ini baru ${rawItems.length} event).`);
+            }
+            if (typeof html2canvas === "undefined") {
+                return alert("Library export belum termuat. Coba refresh halaman.");
+            }
+
+            const btn = document.getElementById("btnExportJpg");
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG HD...`;
+
+            const staging = document.getElementById("jpgRenderStaging");
+            staging.innerHTML = "";
+
+            try {
+                const createdByLabel = getCreatedBySocialName();
+                const introSentence = buildIntroBubbleSentence();
+
+                const preparedItems = await Promise.all(
+                    rawItems.map(async (item) => ({
+                        ...item,
+                        safePhotoSrc: item.photoData ? await makeHd43Photo(item.photoData, 2400, 1800) : ""
+                    }))
+                );
+
+                const perPage = 3;
+                const chunks = [];
+                for (let i = 0; i < preparedItems.length; i += perPage) {
+                    chunks.push(preparedItems.slice(i, i + perPage));
+                }
+
+                for (let idx = 0; idx < chunks.length; idx++) {
+                    staging.innerHTML = "";
+                    const pageEl = buildShowcaseJpgSheetElement(
+                        chunks[idx],
+                        idx + 1,
+                        chunks.length,
+                        createdByLabel,
+                        introSentence
+                    );
+                    staging.appendChild(pageEl);
+
+                    const renderedCanvas = await html2canvas(pageEl, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: "#FAF7F2"
+                    });
+
+                    const hdJpgUrl = renderedCanvas.toDataURL("image/jpeg", 0.99);
+                    const fileName = chunks.length > 1
+                        ? `portofolio_showcase_hal_${idx + 1}_HD.jpg`
+                        : "portofolio_showcase_HD.jpg";
+                    triggerJpgDownload(hdJpgUrl, fileName);
+                }
+            } catch (err) {
+                alert("Gagal membuat JPG HD: " + err.message);
+            } finally {
+                staging.innerHTML = "";
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                syncJpgButtonState();
+            }
+        };
+
+        window.openPhotoModal = async (id) => {
+            const item = records.find(r => r.id === id);
+            if (!item || !item.photoData) return;
+            document.getElementById('modalTitle').innerText = item.clientName;
+            document.getElementById('modalSubtitle').innerText = `${formatMonthName((item.date || "").slice(0, 7))} • ${item.date || ''}`;
+            document.getElementById('modalImg').src = item.photoData;
+            const modal = document.getElementById('photoModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closePhotoModal = () => {
+            const modal = document.getElementById('photoModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.switchTab = (tab) => {
+            const isFinance = tab === 'finance';
+            const isPortfolio = tab === 'portfolio';
+            const isSocial = tab === 'social';
+
+            document.getElementById('viewFinance').classList.toggle('hidden', !isFinance);
+            document.getElementById('viewPortfolio').classList.toggle('hidden', !isPortfolio);
+            document.getElementById('viewSocial').classList.toggle('hidden', !isSocial);
+
+            const activeCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer";
+            const idleCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer";
+
+            document.getElementById('tabFinance').className = isFinance ? activeCls : idleCls;
+            document.getElementById('tabPortfolio').className = isPortfolio ? activeCls : idleCls;
+            document.getElementById('tabSocial').className = isSocial ? activeCls : idleCls;
+
+            if (isPortfolio) {
+                window.renderPortfolio();
+            } else if (isSocial) {
+                updateSocialProfileCard();
+            } else if (isFinance) {
+                renderMonthlyChart();
+            }
+        };
+
+        window.exportToCSV = () => {
+            if (records.length === 0) return alert('Belum ada data untuk di-export.');
+            let csv = 'Tanggal,Project Name,Kategori,Nominal Fee (Exclude Pajak),Nominal Pajak,Input Pajak Asli,Status,Management,Deadline,Estimasi Cair,Sosmed Platform,Sosmed Handle,Link\n';
+            records.forEach(r => {
+                const safeClient = String(r.clientName || '').replace(/"/g, '""');
+                const safeCat = String(r.category || '').replace(/"/g, '""');
+                const safeTaxRaw = String(r.taxInputRaw || '').replace(/"/g, '""');
+                const safeMgmt = String(r.managementName || '').replace(/"/g, '""');
+                const safeDeadline = String(r.deadlineDate || '').replace(/"/g, '""');
+                const safePayout = String(r.payoutDate || '').replace(/"/g, '""');
+                const safeSocPlat = String(r.projectSocialPlatform || '').replace(/"/g, '""');
+                const safeSocHandle = String(r.projectSocialHandle || '').replace(/"/g, '""');
+                const safeLink = String(r.portfolioLink || '').replace(/"/g, '""');
+                csv += `"${r.date || ''}","${safeClient}","${safeCat}",${Number(r.amount) || 0},${Number(r.taxAmount) || 0},"${safeTaxRaw}","${r.status}","${safeMgmt}","${safeDeadline}","${safePayout}","${safeSocPlat}","${safeSocHandle}","${safeLink}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'narravia_studio_pendapatan.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    </script>
+</body>
+</html>
