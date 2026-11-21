@@ -623,7 +623,7 @@
                         <div class="flex gap-2">
                             <input type="url" id="portfolioLink" placeholder="https://... link gambar / portofolio"
                                 class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3 py-2 text-xs focus:outline-none focus:border-sageDark">
-                            <label title="Pilih foto dari perangkat (kualitas HD)" class="clay-pill cursor-pointer text-espresso px-3 py-2 text-xs font-semibold flex items-center justify-center shrink-0">
+                            <label title="Pilih foto dari perangkat (otomatis dioptimalkan untuk cloud)" class="clay-pill cursor-pointer text-espresso px-3 py-2 text-xs font-semibold flex items-center justify-center shrink-0">
                                 <i class="fa-regular fa-image text-roseSoft"></i>
                                 <input type="file" id="portfolioPhoto" accept="image/*" class="hidden">
                             </label>
@@ -865,6 +865,7 @@
 
         const REMEMBER_KEY = "narravia_remember_pref";
         const MIN_JPG_EVENTS = 3;
+        const MAX_FIRESTORE_PHOTO_CHARS = 780000;
 
         let currentUser = null;
         let pendingVerifyUser = null;
@@ -1220,7 +1221,7 @@
                     ctx.imageSmoothingQuality = 'high';
                     ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
 
-                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.9);
+                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.88);
                     try {
                         localStorage.setItem(getAvatarStorageKey(currentUser.uid), avatarUrl);
                     } catch (_) {}
@@ -1321,26 +1322,48 @@
             } catch (_) {}
         }
 
-        function renderImageSourceToSuperHd(src, maxSide = 2400, quality = 0.99) {
+        // Kompresi foto otomatis agar selalu muat di batas 1MB Firestore (~1.048.576 bytes)
+        function compressPhotoForFirestore(src, initialMaxSide = 1400, initialQuality = 0.85) {
             return new Promise((resolve) => {
                 if (!src) return resolve("");
                 const img = new Image();
                 img.crossOrigin = "anonymous";
                 img.onload = () => {
                     try {
-                        const scale = Math.min(2, maxSide / Math.max(img.width || 1, img.height || 1));
-                        const outW = Math.max(1, Math.round((img.width || 1200) * scale));
-                        const outH = Math.max(1, Math.round((img.height || 900) * scale));
-                        const canvas = document.createElement('canvas');
-                        canvas.width = outW;
-                        canvas.height = outH;
-                        const ctx = canvas.getContext('2d');
-                        ctx.imageSmoothingEnabled = true;
-                        ctx.imageSmoothingQuality = 'high';
-                        ctx.drawImage(img, 0, 0, outW, outH);
-                        resolve(canvas.toDataURL('image/jpeg', quality));
+                        const steps = [
+                            { maxSide: initialMaxSide, quality: initialQuality },
+                            { maxSide: 1200, quality: 0.78 },
+                            { maxSide: 1000, quality: 0.72 },
+                            { maxSide: 800, quality: 0.65 },
+                            { maxSide: 640, quality: 0.58 }
+                        ];
+
+                        for (const step of steps) {
+                            const scale = Math.min(1, step.maxSide / Math.max(img.width || 1, img.height || 1));
+                            const outW = Math.max(1, Math.round((img.width || 800) * scale));
+                            const outH = Math.max(1, Math.round((img.height || 600) * scale));
+                            const canvas = document.createElement('canvas');
+                            canvas.width = outW;
+                            canvas.height = outH;
+                            const ctx = canvas.getContext('2d');
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
+                            ctx.drawImage(img, 0, 0, outW, outH);
+                            const dataUrl = canvas.toDataURL('image/jpeg', step.quality);
+                            if (dataUrl.length <= MAX_FIRESTORE_PHOTO_CHARS) {
+                                return resolve(dataUrl);
+                            }
+                        }
+
+                        // Fallback terakhir agar pasti di bawah batas Firestore
+                        const fallbackCanvas = document.createElement('canvas');
+                        fallbackCanvas.width = 500;
+                        fallbackCanvas.height = Math.max(1, Math.round((500 / (img.width || 1)) * (img.height || 1)));
+                        const fCtx = fallbackCanvas.getContext('2d');
+                        fCtx.drawImage(img, 0, 0, fallbackCanvas.width, fallbackCanvas.height);
+                        resolve(fallbackCanvas.toDataURL('image/jpeg', 0.5));
                     } catch (_) {
-                        resolve(src);
+                        resolve("");
                     }
                 };
                 img.onerror = () => resolve("");
@@ -1353,7 +1376,7 @@
             const trimmed = urlStr.trim();
             if (!/^https?:\/\//i.test(trimmed)) return "";
 
-            const directHd = await renderImageSourceToSuperHd(trimmed, 2400, 0.99);
+            const directHd = await compressPhotoForFirestore(trimmed, 1400, 0.85);
             if (directHd) return directHd;
 
             try {
@@ -1363,7 +1386,7 @@
                     const json = await res.json();
                     const candidateImg = json?.data?.image?.url || json?.data?.screenshot?.url || "";
                     if (candidateImg) {
-                        const extractedHd = await renderImageSourceToSuperHd(candidateImg, 2400, 0.99);
+                        const extractedHd = await compressPhotoForFirestore(candidateImg, 1400, 0.85);
                         if (extractedHd) return extractedHd;
                     }
                 }
@@ -1430,10 +1453,16 @@
             }
             const reader = new FileReader();
             reader.onload = async function(event) {
-                const superHd = await renderImageSourceToSuperHd(event.target.result, 2400, 0.99);
-                hdPhotoBase64 = superHd || event.target.result;
-                label.textContent = `Foto Super HD siap: ${file.name}`;
-                label.classList.remove('hidden');
+                const compressed = await compressPhotoForFirestore(event.target.result, 1400, 0.85);
+                hdPhotoBase64 = compressed || "";
+                if (hdPhotoBase64) {
+                    const kbSize = Math.round(hdPhotoBase64.length / 1024);
+                    label.textContent = `Foto siap disimpan (${kbSize} KB): ${file.name}`;
+                    label.classList.remove('hidden');
+                } else {
+                    label.textContent = `Gagal memproses foto: ${file.name}`;
+                    label.classList.remove('hidden');
+                }
             };
             reader.readAsDataURL(file);
         });
@@ -1612,8 +1641,12 @@
                 const projectSocialHandle = document.getElementById('projectSocialHandle').value.trim();
                 const rawLink = document.getElementById('portfolioLink').value.trim();
 
-                let finalPhoto = hdPhotoBase64;
-                if (!finalPhoto && rawLink) {
+                let finalPhoto = "";
+                if (hdPhotoBase64) {
+                    finalPhoto = hdPhotoBase64.length > MAX_FIRESTORE_PHOTO_CHARS
+                        ? await compressPhotoForFirestore(hdPhotoBase64, 1000, 0.72)
+                        : hdPhotoBase64;
+                } else if (rawLink) {
                     finalPhoto = await extractSuperHdFromLink(rawLink);
                 }
 
@@ -2754,10 +2787,9 @@
         window.openPhotoModal = async (id) => {
             const item = records.find(r => r.id === id);
             if (!item || !item.photoData) return;
-            const superHdView = await renderImageSourceToSuperHd(item.photoData, 2400, 0.99);
             document.getElementById('modalTitle').innerText = item.clientName;
             document.getElementById('modalSubtitle').innerText = `${formatMonthName((item.date || "").slice(0, 7))} • ${item.date || ''}`;
-            document.getElementById('modalImg').src = superHdView || item.photoData;
+            document.getElementById('modalImg').src = item.photoData;
             const modal = document.getElementById('photoModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
