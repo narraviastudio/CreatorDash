@@ -141,8 +141,30 @@
             background-position: 0 0, 28px 28px, 0 0, 0 0, 0 0, 0 0;
             position: relative;
             overflow: hidden;
-            padding: 64px 72px;
+            padding: 56px 64px;
             box-sizing: border-box;
+        }
+
+        .invoice-page-sheet {
+            width: 1000px;
+            min-height: 1414px;
+            background-color: #FAF7F2;
+            background-image:
+                radial-gradient(rgba(53, 43, 40, 0.065) 4.5px, transparent 5px),
+                radial-gradient(rgba(53, 43, 40, 0.065) 4.5px, transparent 5px),
+                radial-gradient(circle at 8% 8%, rgba(246, 216, 222, 0.55) 0%, transparent 36%),
+                radial-gradient(circle at 92% 12%, rgba(126, 150, 128, 0.22) 0%, transparent 38%),
+                radial-gradient(circle at 12% 90%, rgba(126, 150, 128, 0.18) 0%, transparent 36%),
+                radial-gradient(circle at 90% 90%, rgba(246, 216, 222, 0.5) 0%, transparent 40%);
+            background-size: 52px 52px, 52px 52px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            background-position: 0 0, 26px 26px, 0 0, 0 0, 0 0, 0 0;
+            border: 1px solid rgba(226, 212, 195, 0.85);
+            border-radius: 28px;
+            padding: 46px 52px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 14px 34px -14px rgba(53, 43, 40, 0.12);
         }
     </style>
 </head>
@@ -361,11 +383,14 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-2.5">
-                <button onclick="exportToCSV()" class="clay-pill text-sageDark px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-2 cursor-pointer">
+            <div class="flex flex-wrap items-center gap-2.5">
+                <button type="button" onclick="openInvoiceModal()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-file-invoice text-roseSoft"></i> Buat Invoice
+                </button>
+                <button type="button" onclick="exportToCSV()" class="clay-pill text-sageDark px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-file-csv"></i> Export CSV
                 </button>
-                <button id="btnLogout" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-1.5 cursor-pointer">
+                <button type="button" id="btnLogout" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-arrow-right-from-bracket text-roseSoft"></i> Keluar
                 </button>
             </div>
@@ -420,6 +445,9 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+                    <button type="button" onclick="openInvoiceModal()" class="clay-pill px-4 py-2 text-xs font-semibold text-espresso inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-file-invoice text-roseSoft"></i> <span>Buat Invoice Client</span>
+                    </button>
                     <button type="button" onclick="copyInvoiceTaxSummary()" class="clay-pill px-4 py-2 text-xs font-semibold text-espresso inline-flex items-center gap-2 cursor-pointer">
                         <i class="fa-regular fa-copy text-roseSoft"></i> <span id="btnCopySummaryLabel">Salin Rekap Invoice &amp; Pajak</span>
                     </button>
@@ -788,6 +816,166 @@
         </footer>
     </div>
 
+    <!-- MODAL BUILDER & PREVIEW INVOICE (2 HALAMAN) -->
+    <div id="invoiceModal" onclick="closeInvoiceModal()" class="fixed inset-0 z-50 bg-espresso/75 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div onclick="event.stopPropagation()" class="botanical-card max-w-6xl w-full rounded-3xl p-5 sm:p-7 my-auto max-h-[92vh] overflow-y-auto space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E6DACB] pb-4">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blush/55 text-roseSoft text-[11px] font-semibold">
+                        <i class="fa-solid fa-file-invoice"></i> Narravia Studio Invoice Builder
+                    </span>
+                    <h3 class="font-serif text-2xl font-semibold text-espresso mt-1">
+                        Invoice &amp; Syarat Ketentuan (2 Halaman)
+                    </h3>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="loadSampleInvoicePreset()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Template Contoh
+                    </button>
+                    <button type="button" id="btnExportInvoicePdf" onclick="exportClientInvoicePDF()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
+                        <i class="fa-solid fa-file-pdf mr-1.5 text-blush"></i> <span id="btnExportInvoicePdfLabel">Export PDF Invoice</span>
+                    </button>
+                    <button type="button" onclick="closeInvoiceModal()" class="clay-pill text-muted hover:text-espresso text-base px-3 py-1 cursor-pointer">&times;</button>
+                </div>
+            </div>
+
+            <!-- Form Pengaturan Invoice -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-5 space-y-4 bg-ivory/85 border border-[#E6DACB] rounded-3xl p-4 sm:p-5">
+                    <div class="flex items-center justify-between gap-2">
+                        <h4 class="font-serif text-base font-semibold text-espresso">Detail Invoice</h4>
+                        <select id="invoiceProjectPreset" onchange="applyProjectToInvoice(this.value)"
+                            class="bg-cream border border-[#DFD2C2] rounded-xl px-2.5 py-1 text-[11px] font-semibold text-espresso focus:outline-none max-w-[190px] truncate">
+                            <option value="">Isi dari Project...</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Invoice</label>
+                            <input type="text" id="invNumber" value="INV/NS/2026/10/020" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Status Pembayaran</label>
+                            <select id="invStatus" onchange="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                                <option value="Belum Lunas">Belum Lunas</option>
+                                <option value="DP" selected>DP</option>
+                                <option value="Lunas">Lunas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Kepada (Nama Client)</label>
+                            <input type="text" id="invClientName" value="Mami Mimich" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Keterangan Client / Paket</label>
+                            <input type="text" id="invClientSubtitle" value="Client - Paket Bloom + Aurora" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Tanggal Invoice</label>
+                            <input type="text" id="invDateText" value="25 Oktober 2026" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Tanggal Event</label>
+                            <input type="text" id="invEventDateText" value="31 Oktober 2026" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-[11px] font-semibold text-espresso/80">Item Paket / Jasa</label>
+                            <button type="button" onclick="addInvoiceLineItem()" class="text-[11px] font-semibold text-sageDark hover:underline cursor-pointer">
+                                + Tambah Item
+                            </button>
+                        </div>
+                        <div id="invItemsEditor" class="space-y-2.5 max-h-52 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Biaya Transport (Rp)</label>
+                            <input type="number" id="invTransport" value="100000" min="0" step="1000" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Persentase DP (%)</label>
+                            <input type="number" id="invDpPercent" value="50" min="0" max="100" step="1" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Bank</label>
+                            <input type="text" id="invBank" value="BCA" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Atas Nama</label>
+                            <input type="text" id="invAccountHolder" value="Anissa Nova Widanti" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Rekening</label>
+                            <input type="text" id="invAccountNumber" value="1450109637" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Kontak / WA</label>
+                            <input type="text" id="invPhone" value="089685273987" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Email Studio</label>
+                            <input type="text" id="invEmail" value="narraviastudio@gmail.com" oninput="refreshInvoicePreview()"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Catatan (1 baris per catatan)</label>
+                        <textarea id="invNotes" rows="4" oninput="refreshInvoicePreview()"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">Harga belum termasuk transport: sekitar Jakarta Rp50.000, di luar Jakarta Rp100.000
+Jam tambahan Rp100.000/jam RFC
+Down payment minimal H-7 sebelum acara sebesar 50% beserta transport
+Pembatalan paling lambat H-14 sebelum jadwal pengambilan konten
+Pelunasan H+1 acara pengambilan konten
+Syarat &amp; Ketentuan terlampir di halaman 2</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Syarat &amp; Ketentuan (Halaman 2, 1 poin per baris)</label>
+                        <textarea id="invTerms" rows="5" oninput="refreshInvoicePreview()"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">Paket yang dipilih sesuai rincian pada invoice.
+Harga belum termasuk biaya transport (exclude transport). Biaya transport ditanggung client: sekitar Jakarta Rp50.000 dan di luar Jakarta Rp100.000.
+Jam stand by dihitung sejak waktu mulai yang disepakati. Kelebihan jam dikenakan biaya tambahan Rp100.000 per jam.
+Video cinematic berdurasi 30-90 detik. Video trend TikTok/Reels mengikuti jumlah yang tertera pada masing-masing paket.
+Client mendapatkan unlimited raw footage. Color grading mengikuti paket: simple (Bloom) dan advanced (Aurora).
+Jadwal pengambilan konten disepakati bersama dan diinformasikan paling lambat H-1 sebelum hari pelaksanaan.
+Pembayaran dilakukan melalui transfer ke rekening yang tertera pada invoice. Bukti transfer dikirim ke penyedia jasa sebagai konfirmasi.
+Perubahan atau reschedule jadwal harus diinformasikan minimal 24 jam sebelumnya. Pembatalan dilakukan paling lambat H-14 sebelum jadwal pengambilan konten; pembatalan kurang dari H-14 dapat membuat DP tidak dapat dikembalikan.
+Revisi editing yang wajar dapat diajukan setelah hasil awal dikirim, dengan batas waktu yang disepakati bersama. Revisi besar di luar brief awal dapat dikenakan biaya tambahan.
+Hasil akhir dikirim secara digital (link/drive). Penyedia jasa berhak menggunakan hasil karya sebagai portofolio, kecuali client meminta sebaliknya.</textarea>
+                    </div>
+                </div>
+
+                <!-- Preview 2 Halaman Invoice -->
+                <div class="lg:col-span-7 space-y-6 overflow-x-auto pb-2">
+                    <div id="invoiceLivePreview" class="space-y-6 min-w-[760px]"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Container Tersembunyi untuk Render JPG HD & PDF Recap -->
     <div id="jpgRenderStaging" style="position: fixed; left: -25000px; top: 0; pointer-events: none; z-index: -1;"></div>
 
@@ -874,6 +1062,21 @@
             domicile: "Jakarta Timur"
         };
 
+        let invoiceLineItems = [
+            {
+                title: "Paket Bloom (Gold Package)",
+                desc: "3 Edit Video Cinematic (30-90 detik) 1 Video Trend TikTok / Reels 6 Jam Stand By Unlimited Raw Footage Simple Color Grading. Exclude Transport",
+                qty: 1,
+                price: 350000
+            },
+            {
+                title: "Paket Aurora (Platinum Package)",
+                desc: "4 Edit Video Cinematic (30-90 detik) 2 Video Trend TikTok/Reels 7 Jam Stand By Unlimited Raw Footage Advanced Color Grading. Exclude Transport",
+                qty: 1,
+                price: 400000
+            }
+        ];
+
         document.addEventListener("click", (e) => {
             const pill = e.target.closest(".clay-pill");
             if (!pill || pill.disabled) return;
@@ -913,7 +1116,6 @@
             } catch (_) {}
         }
 
-        // Otomatis kosong semua saat halaman dimuat kecuali Remember me dicentang
         try {
             const savedPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
             if (savedPref && savedPref.remember) {
@@ -1361,6 +1563,7 @@
             renderMonthlyChart();
             window.renderData();
             window.renderPortfolio();
+            populateInvoiceProjectDropdown();
         }
 
         async function refreshUserAndData() {
@@ -2082,6 +2285,500 @@
             });
         };
 
+        /* ================= INVOICE BUILDER & 2-PAGE PREVIEW / PDF ================= */
+        function populateInvoiceProjectDropdown() {
+            const sel = document.getElementById('invoiceProjectPreset');
+            if (!sel) return;
+            const currentVal = sel.value;
+            let html = `<option value="">Isi dari Project...</option>`;
+            records.forEach((r, idx) => {
+                html += `<option value="${idx}">${escapeHtml(r.clientName || 'Project')} (${r.date || '-'})</option>`;
+            });
+            sel.innerHTML = html;
+            if (currentVal && records[Number(currentVal)]) {
+                sel.value = currentVal;
+            }
+        }
+
+        window.applyProjectToInvoice = (idxStr) => {
+            if (idxStr === "") return;
+            const rec = records[Number(idxStr)];
+            if (!rec) return;
+
+            document.getElementById('invClientName').value = rec.clientName || "";
+            document.getElementById('invClientSubtitle').value = `Client - ${rec.category || "Event Content"}`;
+            if (rec.date) {
+                const parsed = new Date(rec.date + "T00:00:00");
+                if (!Number.isNaN(parsed.getTime())) {
+                    document.getElementById('invEventDateText').value = parsed.toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    });
+                }
+            }
+            invoiceLineItems = [
+                {
+                    title: rec.category || "Paket Konten",
+                    desc: rec.clientName || "Produksi konten & editing sesuai brief event.",
+                    qty: 1,
+                    price: Number(rec.amount) || 0
+                }
+            ];
+            renderInvoiceEditorItems();
+            refreshInvoicePreview();
+        };
+
+        window.loadSampleInvoicePreset = () => {
+            document.getElementById('invNumber').value = "INV/NS/2026/10/020";
+            document.getElementById('invClientName').value = "Mami Mimich";
+            document.getElementById('invClientSubtitle').value = "Client - Paket Bloom + Aurora";
+            document.getElementById('invDateText').value = "25 Oktober 2026";
+            document.getElementById('invEventDateText').value = "31 Oktober 2026";
+            document.getElementById('invTransport').value = "100000";
+            document.getElementById('invDpPercent').value = "50";
+            document.getElementById('invStatus').value = "DP";
+            document.getElementById('invBank').value = "BCA";
+            document.getElementById('invAccountHolder').value = "Anissa Nova Widanti";
+            document.getElementById('invAccountNumber').value = "1450109637";
+            document.getElementById('invPhone').value = "089685273987";
+            document.getElementById('invEmail').value = "narraviastudio@gmail.com";
+            document.getElementById('invNotes').value = [
+                "Harga belum termasuk transport: sekitar Jakarta Rp50.000, di luar Jakarta Rp100.000",
+                "Jam tambahan Rp100.000/jam RFC",
+                "Down payment minimal H-7 sebelum acara sebesar 50% beserta transport",
+                "Pembatalan paling lambat H-14 sebelum jadwal pengambilan konten",
+                "Pelunasan H+1 acara pengambilan konten",
+                "Syarat & Ketentuan terlampir di halaman 2"
+            ].join("\n");
+            document.getElementById('invTerms').value = [
+                "Paket yang dipilih adalah Bloom (Gold) dan Aurora (Platinum), dengan total biaya Rp750.000 sesuai rincian pada invoice.",
+                "Harga belum termasuk biaya transport (exclude transport). Biaya transport ditanggung client: sekitar Jakarta Rp50.000 dan di luar Jakarta Rp100.000.",
+                "Jam stand by dihitung sejak waktu mulai yang disepakati. Kelebihan jam dikenakan biaya tambahan Rp100.000 per jam.",
+                "Video cinematic berdurasi 30-90 detik. Video trend TikTok/Reels mengikuti jumlah yang tertera pada masing-masing paket.",
+                "Client mendapatkan unlimited raw footage. Color grading mengikuti paket: simple (Bloom) dan advanced (Aurora).",
+                "Jadwal pengambilan konten (Bloom dan Aurora) disepakati bersama dan diinformasikan paling lambat H-1 sebelum hari pelaksanaan.",
+                "Pembayaran dilakukan melalui transfer ke rekening yang tertera pada invoice. Bukti transfer dikirim ke penyedia jasa sebagai konfirmasi.",
+                "Perubahan atau reschedule jadwal harus diinformasikan minimal 24 jam sebelumnya. Pembatalan dilakukan paling lambat H-14 sebelum jadwal pengambilan konten; pembatalan kurang dari H-14 dapat membuat DP tidak dapat dikembalikan.",
+                "Revisi editing yang wajar dapat diajukan setelah hasil awal dikirim, dengan batas waktu yang disepakati bersama. Revisi besar di luar brief awal dapat dikenakan biaya tambahan.",
+                "Hasil akhir dikirim secara digital (link/drive). Penyedia jasa berhak menggunakan hasil karya sebagai portofolio, kecuali client meminta sebaliknya."
+            ].join("\n");
+
+            invoiceLineItems = [
+                {
+                    title: "Paket Bloom (Gold Package)",
+                    desc: "3 Edit Video Cinematic (30-90 detik) 1 Video Trend TikTok / Reels 6 Jam Stand By Unlimited Raw Footage Simple Color Grading. Exclude Transport",
+                    qty: 1,
+                    price: 350000
+                },
+                {
+                    title: "Paket Aurora (Platinum Package)",
+                    desc: "4 Edit Video Cinematic (30-90 detik) 2 Video Trend TikTok/Reels 7 Jam Stand By Unlimited Raw Footage Advanced Color Grading. Exclude Transport",
+                    qty: 1,
+                    price: 400000
+                }
+            ];
+            renderInvoiceEditorItems();
+            refreshInvoicePreview();
+        };
+
+        function renderInvoiceEditorItems() {
+            const container = document.getElementById('invItemsEditor');
+            if (!container) return;
+            container.innerHTML = invoiceLineItems.map((item, i) => `
+                <div class="bg-white border border-[#E6DACB] rounded-2xl p-2.5 space-y-1.5">
+                    <div class="flex items-center gap-1.5">
+                        <input type="text" value="${escapeHtml(item.title)}" placeholder="Nama paket"
+                            oninput="updateInvoiceItem(${i}, 'title', this.value)"
+                            class="flex-1 bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-xs font-semibold">
+                        <input type="number" min="1" value="${item.qty}" placeholder="Qty"
+                            oninput="updateInvoiceItem(${i}, 'qty', this.value)"
+                            class="w-14 bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-xs text-center">
+                        <input type="number" min="0" step="1000" value="${item.price}" placeholder="Harga"
+                            oninput="updateInvoiceItem(${i}, 'price', this.value)"
+                            class="w-28 bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-xs">
+                        ${invoiceLineItems.length > 1 ? `<button type="button" onclick="removeInvoiceItem(${i})" class="text-rose-600 px-1.5 text-xs cursor-pointer" title="Hapus item"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                    </div>
+                    <textarea rows="2" placeholder="Deskripsi paket"
+                        oninput="updateInvoiceItem(${i}, 'desc', this.value)"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-[11px] text-muted">${escapeHtml(item.desc)}</textarea>
+                </div>
+            `).join('');
+        }
+
+        window.updateInvoiceItem = (idx, field, val) => {
+            if (!invoiceLineItems[idx]) return;
+            if (field === 'qty') {
+                invoiceLineItems[idx].qty = Math.max(1, parseInt(val, 10) || 1);
+            } else if (field === 'price') {
+                invoiceLineItems[idx].price = Math.max(0, parseFloat(val) || 0);
+            } else {
+                invoiceLineItems[idx][field] = val;
+            }
+            refreshInvoicePreview();
+        };
+
+        window.addInvoiceLineItem = () => {
+            invoiceLineItems.push({
+                title: "Item Tambahan",
+                desc: "Deskripsi layanan atau paket tambahan.",
+                qty: 1,
+                price: 100000
+            });
+            renderInvoiceEditorItems();
+            refreshInvoicePreview();
+        };
+
+        window.removeInvoiceItem = (idx) => {
+            if (invoiceLineItems.length <= 1) return;
+            invoiceLineItems.splice(idx, 1);
+            renderInvoiceEditorItems();
+            refreshInvoicePreview();
+        };
+
+        function collectCurrentInvoiceData() {
+            const invNumber = (document.getElementById('invNumber')?.value || "INV/NS/2026/10/020").trim();
+            const invStatus = document.getElementById('invStatus')?.value || "DP";
+            const clientName = (document.getElementById('invClientName')?.value || "Client").trim();
+            const clientSubtitle = (document.getElementById('invClientSubtitle')?.value || "").trim();
+            const invDateText = (document.getElementById('invDateText')?.value || "-").trim();
+            const invEventDateText = (document.getElementById('invEventDateText')?.value || "-").trim();
+            const transport = Math.max(0, parseFloat(document.getElementById('invTransport')?.value || "0") || 0);
+            const dpPct = Math.min(100, Math.max(0, parseFloat(document.getElementById('invDpPercent')?.value || "50") || 0));
+            const bank = (document.getElementById('invBank')?.value || "BCA").trim();
+            const accountHolder = (document.getElementById('invAccountHolder')?.value || "Anissa Nova Widanti").trim();
+            const accountNumber = (document.getElementById('invAccountNumber')?.value || "1450109637").trim();
+            const phone = (document.getElementById('invPhone')?.value || "089685273987").trim();
+            const email = (document.getElementById('invEmail')?.value || "narraviastudio@gmail.com").trim();
+            const notesLines = (document.getElementById('invNotes')?.value || "")
+                .split("\n")
+                .map(s => s.trim())
+                .filter(Boolean);
+            const termsLines = (document.getElementById('invTerms')?.value || "")
+                .split("\n")
+                .map(s => s.trim())
+                .filter(Boolean);
+
+            const subTotal = invoiceLineItems.reduce((sum, it) => sum + ((Number(it.qty) || 1) * (Number(it.price) || 0)), 0);
+            const grandTotal = subTotal + transport;
+            const dpAmount = Math.round(subTotal * (dpPct / 100)) + transport;
+            const remainingBalance = Math.max(0, grandTotal - dpAmount);
+
+            const igHandle = normalizeSocialEntry(userSocials.instagram, "instagram")?.label || "@narravia.studio";
+            const ttHandle = normalizeSocialEntry(userSocials.tiktok, "tiktok")?.label || "@narravia.studio";
+
+            return {
+                invNumber,
+                invStatus,
+                clientName,
+                clientSubtitle,
+                invDateText,
+                invEventDateText,
+                items: invoiceLineItems,
+                subTotal,
+                transport,
+                grandTotal,
+                dpPct,
+                dpAmount,
+                remainingBalance,
+                bank,
+                accountHolder,
+                accountNumber,
+                phone,
+                email,
+                igHandle,
+                ttHandle,
+                notesLines,
+                termsLines
+            };
+        }
+
+        function buildInvoicePagesHtml(data) {
+            const itemRowsHtml = data.items.map((it, idx) => {
+                const lineTotal = (Number(it.qty) || 1) * (Number(it.price) || 0);
+                return `
+                    <tr style="border-bottom:1.5px solid rgba(226,212,195,0.75); background:rgba(255,253,250,0.88);">
+                        <td style="padding:14px 12px; font-weight:700; color:#352B28; vertical-align:top; width:44px;">${idx + 1}.</td>
+                        <td style="padding:14px 14px; vertical-align:top;">
+                            <div style="font-family:'Playfair Display',Georgia,serif; font-size:17px; font-weight:700; color:#352B28;">${escapeHtml(it.title)}</div>
+                            <div style="font-size:12.5px; color:#5F534E; line-height:1.55; margin-top:4px;">${escapeHtml(it.desc)}</div>
+                        </td>
+                        <td style="padding:14px 10px; font-weight:700; color:#4F6952; text-align:center; vertical-align:top; white-space:nowrap; width:74px;">${Number(it.qty) || 1}x</td>
+                        <td style="padding:14px 14px; font-weight:700; color:#352B28; text-align:right; vertical-align:top; white-space:nowrap; width:145px;">${formatRupiah(lineTotal)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const notesHtml = data.notesLines.map(line => `
+                <li style="margin-bottom:4px; line-height:1.45;">${escapeHtml(line)}</li>
+            `).join('');
+
+            const statusChip = (label, active) => {
+                const bg = active ? '#4F6952' : 'rgba(255,253,250,0.85)';
+                const color = active ? '#FFFFFF' : '#7A6C67';
+                const border = active ? '#4F6952' : '#D8C9B8';
+                return `<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:9999px; font-size:12px; font-weight:700; background:${bg}; color:${color}; border:1px solid ${border};">${active ? '✓ ' : ''}${escapeHtml(label)}</span>`;
+            };
+
+            const page1Html = `
+                <div class="invoice-page-sheet" data-invoice-page="1">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding-bottom:22px; border-bottom:2px solid rgba(126,150,128,0.28);">
+                        <div>
+                            <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">
+                                Narravia Studio • Official Invoice
+                            </span>
+                            <h1 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#352B28; letter-spacing:0.02em; line-height:1.1;">
+                                INVOICE
+                            </h1>
+                            <p style="margin:0; font-size:14px; font-weight:700; color:#4F6952;">
+                                ${escapeHtml(data.invNumber)}
+                            </p>
+                        </div>
+
+                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:14px 18px; min-width:250px; font-size:13px;">
+                            <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:6px;">
+                                <span style="color:#7A6C67; font-weight:600;">Tanggal Invoice</span>
+                                <span style="color:#352B28; font-weight:700;">: ${escapeHtml(data.invDateText)}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; gap:12px;">
+                                <span style="color:#7A6C67; font-weight:600;">Tanggal Event</span>
+                                <span style="color:#D97D90; font-weight:700;">: ${escapeHtml(data.invEventDateText)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px; background:rgba(243,236,226,0.75); border:1px solid #E2D4C3; border-radius:20px; padding:16px 22px;">
+                        <p style="margin:0; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67;">Kepada :</p>
+                        <p style="margin:4px 0 2px 0; font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:#352B28;">${escapeHtml(data.clientName)}</p>
+                        ${data.clientSubtitle ? `<p style="margin:0; font-size:13px; font-weight:600; color:#4F6952;">${escapeHtml(data.clientSubtitle)}</p>` : ''}
+                    </div>
+
+                    <div style="margin-top:22px; border-radius:20px; overflow:hidden; border:1px solid #E2D4C3; background:rgba(255,253,250,0.9);">
+                        <table style="width:100%; border-collapse:collapse; text-align:left;">
+                            <thead>
+                                <tr style="background:#4F6952; color:#FAF7F2; font-size:12px; text-transform:uppercase; letter-spacing:0.05em;">
+                                    <th style="padding:12px;">No</th>
+                                    <th style="padding:12px 14px;">Deskripsi</th>
+                                    <th style="padding:12px 10px; text-align:center;">Jumlah</th>
+                                    <th style="padding:12px 14px; text-align:right;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemRowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top:22px; display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px; align-items:start;">
+                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px;">
+                            <p style="margin:0 0 8px 0; font-family:'Playfair Display',Georgia,serif; font-size:16px; font-weight:700; color:#352B28;">
+                                Catatan:
+                            </p>
+                            <ul style="margin:0; padding-left:18px; list-style-type:disc; font-size:12px; color:#5F534E;">
+                                ${notesHtml}
+                            </ul>
+                        </div>
+
+                        <div style="background:rgba(255,253,250,0.95); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px; font-size:13px;">
+                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
+                                <span style="color:#7A6C67; font-weight:600;">Sub Total</span>
+                                <span style="color:#352B28; font-weight:700;">${formatRupiah(data.subTotal)}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
+                                <span style="color:#7A6C67; font-weight:600;">Biaya Transport</span>
+                                <span style="color:#352B28; font-weight:700;">${formatRupiah(data.transport)}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; margin:8px -4px; border-radius:14px; background:#F6D8DE;">
+                                <span style="color:#352B28; font-weight:800; font-size:14px;">TOTAL:</span>
+                                <span style="color:#352B28; font-weight:800; font-size:16px;">${formatRupiah(data.grandTotal)}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
+                                <span style="color:#4F6952; font-weight:700;">DP (${data.dpPct}%) + Transport</span>
+                                <span style="color:#4F6952; font-weight:700;">${formatRupiah(data.dpAmount)}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; padding:8px 0 2px 0;">
+                                <span style="color:#D97D90; font-weight:700;">Sisa Pembayaran</span>
+                                <span style="color:#D97D90; font-weight:800;">${formatRupiah(data.remainingBalance)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch;">
+                        <div style="background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; font-size:12.5px;">
+                            <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952;">
+                                Informasi Pembayaran
+                            </p>
+                            <div style="display:grid; grid-template-columns:110px 1fr; row-gap:5px; color:#352B28;">
+                                <span style="color:#7A6C67; font-weight:600;">Bank</span>
+                                <span style="font-weight:700;">: ${escapeHtml(data.bank)}</span>
+                                <span style="color:#7A6C67; font-weight:600;">Atas Nama</span>
+                                <span style="font-weight:700;">: ${escapeHtml(data.accountHolder)}</span>
+                                <span style="color:#7A6C67; font-weight:600;">No. Rekening</span>
+                                <span style="font-weight:700;">: ${escapeHtml(data.accountNumber)}</span>
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; display:flex; flex-direction:column; justify-content:space-between;">
+                            <div>
+                                <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67;">
+                                    Status Pembayaran:
+                                </p>
+                                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                                    ${statusChip("Belum Lunas", data.invStatus === "Belum Lunas")}
+                                    ${statusChip("DP", data.invStatus === "DP")}
+                                    ${statusChip("Lunas", data.invStatus === "Lunas")}
+                                </div>
+                            </div>
+                            <p style="margin:12px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:13px; color:#4F6952;">
+                                Terima kasih sudah mempercayakan momen pentingmu
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:22px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:flex-end; gap:16px; font-size:12px; color:#5F534E;">
+                        <div>
+                            <p style="margin:0 0 4px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952;">Kontak</p>
+                            <p style="margin:2px 0;">WA: ${escapeHtml(data.phone)} • Email: ${escapeHtml(data.email)}</p>
+                            <p style="margin:2px 0;">Instagram: ${escapeHtml(data.igHandle)} • TikTok: ${escapeHtml(data.ttHandle)}</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <p style="margin:0; font-size:12px; color:#7A6C67;">Hormat Kami,</p>
+                            <p style="margin:3px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28;">Narravia Studio</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const termsListHtml = data.termsLines.map(term => `
+                <li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#352B28;">
+                    ${escapeHtml(term)}
+                </li>
+            `).join('');
+
+            const page2Html = `
+                <div class="invoice-page-sheet" data-invoice-page="2" style="display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid rgba(126,150,128,0.28);">
+                            <div>
+                                <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#E6EFE7; color:#4F6952; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">
+                                    Halaman 2 • Ketentuan Layanan
+                                </span>
+                                <h2 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:34px; font-weight:700; color:#352B28;">
+                                    Syarat &amp; Ketentuan
+                                </h2>
+                                <p style="margin:0; font-size:13px; font-weight:700; color:#D97D90;">
+                                    ${escapeHtml(data.invNumber)} • ${escapeHtml(data.clientName)}
+                                </p>
+                            </div>
+                            <div style="text-align:right;">
+                                <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28;">Narravia Studio</p>
+                                <p style="margin:2px 0 0 0; font-size:12px; color:#7A6C67;">${escapeHtml(data.igHandle)}</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:24px; background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:24px; padding:26px 30px;">
+                            <ul style="margin:0; padding-left:20px; list-style-type:disc;">
+                                ${termsListHtml}
+                            </ul>
+                        </div>
+
+                        <div style="margin-top:22px; background:rgba(246,216,222,0.45); border:1px solid rgba(217,125,144,0.4); border-radius:20px; padding:16px 22px; text-align:center;">
+                            <p style="margin:0; font-size:13px; font-weight:600; color:#352B28;">
+                                Dengan melakukan pembayaran, client dianggap telah membaca dan menyetujui seluruh syarat &amp; ketentuan di atas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:24px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#7A6C67;">
+                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:6px;"></i> Created by Narravia.Studio</span>
+                        <span>${escapeHtml(data.invNumber)} • Halaman 2 dari 2</span>
+                    </div>
+                </div>
+            `;
+
+            return page1Html + page2Html;
+        }
+
+        window.refreshInvoicePreview = () => {
+            const previewEl = document.getElementById('invoiceLivePreview');
+            if (!previewEl) return;
+            const data = collectCurrentInvoiceData();
+            previewEl.innerHTML = buildInvoicePagesHtml(data);
+        };
+
+        window.openInvoiceModal = () => {
+            populateInvoiceProjectDropdown();
+            renderInvoiceEditorItems();
+            refreshInvoicePreview();
+            const modal = document.getElementById('invoiceModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeInvoiceModal = () => {
+            const modal = document.getElementById('invoiceModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.exportClientInvoicePDF = async () => {
+            if (typeof html2canvas === "undefined" || !window.jspdf?.jsPDF) {
+                return alert("Library PDF belum termuat. Coba refresh halaman.");
+            }
+
+            const btn = document.getElementById('btnExportInvoicePdf');
+            const label = document.getElementById('btnExportInvoicePdfLabel');
+            btn.disabled = true;
+            if (label) label.innerText = "Menyiapkan PDF...";
+
+            const staging = document.getElementById('jpgRenderStaging');
+            staging.innerHTML = "";
+
+            try {
+                const data = collectCurrentInvoiceData();
+                const wrapper = document.createElement("div");
+                wrapper.innerHTML = buildInvoicePagesHtml(data);
+                const pageElements = Array.from(wrapper.querySelectorAll("[data-invoice-page]"));
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+                const pdfW = pdf.internal.pageSize.getWidth();
+                const pdfH = pdf.internal.pageSize.getHeight();
+
+                for (let i = 0; i < pageElements.length; i++) {
+                    staging.innerHTML = "";
+                    const pageNode = pageElements[i];
+                    staging.appendChild(pageNode);
+
+                    const canvas = await html2canvas(pageNode, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: "#FAF7F2"
+                    });
+
+                    const imgData = canvas.toDataURL("image/jpeg", 0.99);
+                    if (i > 0) pdf.addPage();
+                    pdf.addImage(imgData, "JPEG", 0, 0, pdfW, pdfH);
+                }
+
+                const safeNum = (data.invNumber || "invoice").replace(/[^a-zA-Z0-9_-]+/g, "_");
+                pdf.save(`${safeNum}_narravia_studio.pdf`);
+            } catch (err) {
+                alert("Gagal membuat PDF Invoice: " + err.message);
+            } finally {
+                staging.innerHTML = "";
+                btn.disabled = false;
+                if (label) label.innerText = "Export PDF Invoice";
+            }
+        };
+
+        /* ================= REKAP INVOICE & TAX PDF ================= */
         function buildInvoiceTaxData() {
             const paidFeeTotal = records
                 .filter(r => r.status === 'Lunas')
