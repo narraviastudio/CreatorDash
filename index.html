@@ -107,24 +107,10 @@
             box-shadow: 0 14px 28px -12px rgba(53, 43, 40, 0.14);
         }
 
-        .jpg-page-sheet {
+        .jpg-photo-only-sheet {
             width: 2400px;
-            min-height: 3394px;
             background-color: #FAF7F2;
-            background-image:
-                radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
-                radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
-                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.58) 0%, transparent 36%),
-                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.25) 0%, transparent 38%),
-                radial-gradient(circle at 14% 52%, rgba(246, 216, 222, 0.36) 0%, transparent 34%),
-                radial-gradient(circle at 88% 55%, rgba(126, 150, 128, 0.2) 0%, transparent 34%),
-                radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.22) 0%, transparent 36%),
-                radial-gradient(circle at 86% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 40%);
-            background-size: 76px 76px, 76px 76px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-            background-position: 0 0, 38px 38px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
-            position: relative;
-            overflow: hidden;
-            padding: 112px 128px 104px 128px;
+            padding: 88px;
             box-sizing: border-box;
         }
 
@@ -673,7 +659,7 @@
                 </div>
             </div>
 
-            <!-- Banner Sambutan Portofolio (Persis di Gambar) -->
+            <!-- Banner Sambutan Portofolio -->
             <div class="botanical-card p-4 sm:px-6 rounded-3xl mb-6 flex items-center gap-3.5">
                 <span class="w-10 h-10 rounded-full bg-blush/65 text-roseSoft flex items-center justify-center shrink-0">
                     <i class="fa-solid fa-heart"></i>
@@ -1700,13 +1686,13 @@
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;");
 
-        const sanitizeSlug = (str) => String(str || "portofolio")
+        const sanitizeSlug = (str) => String(str || "foto")
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "_")
-            .replace(/^_+|_+$/g, "") || "portofolio";
+            .replace(/^_+|_+$/g, "") || "foto";
 
         function getPortfolioEligibleItems() {
-            return records.filter(r => (r.photoData && r.photoData !== "") || (r.portfolioLink && r.portfolioLink !== ""));
+            return records.filter(r => r.photoData && r.photoData !== "");
         }
 
         function syncJpgButtonState() {
@@ -1720,8 +1706,8 @@
             btn.disabled = !enough;
             label.innerText = enough ? "Export JPG (HD)" : `Export JPG (${eligibleCount}/${MIN_JPG_EVENTS})`;
             hint.innerText = enough
-                ? `${eligibleCount} event siap di-export JPG HD`
-                : `Minimal ${MIN_JPG_EVENTS} event untuk export JPG HD`;
+                ? `${eligibleCount} foto siap di-export JPG HD`
+                : `Minimal ${MIN_JPG_EVENTS} foto untuk export JPG HD`;
         }
 
         function syncRankSelectOptions(selectEl, listLength, topLabel) {
@@ -2044,91 +2030,6 @@
             }
         };
 
-        function buildFloralOverlayMarkup() {
-            return `
-                <svg style="position:absolute; top:-20px; left:-20px; width:340px; height:340px; pointer-events:none; opacity:0.9;" viewBox="0 0 170 170" fill="none">
-                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
-                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
-                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
-                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
-                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
-                    <circle cx="38" cy="118" r="7" fill="#F6D8DE" fill-opacity="0.8"/>
-                    <circle cx="38" cy="118" r="2.5" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; top:24px; left:46%; width:200px; height:200px; pointer-events:none; opacity:0.78;" viewBox="0 0 120 120" fill="none">
-                    <path d="M16 104C36 74 62 48 94 26" stroke="#7E9680" stroke-width="1.8" stroke-linecap="round"/>
-                    <ellipse cx="44" cy="72" rx="14" ry="7" transform="rotate(-32 44 72)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="94" cy="26" r="9" fill="#F6D8DE"/>
-                    <circle cx="102" cy="33" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="94" cy="31" r="3" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; top:-20px; right:20px; width:330px; height:330px; pointer-events:none; opacity:0.86;" viewBox="0 0 170 170" fill="none">
-                    <path d="M148 16C125 60 94 94 52 118" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
-                    <ellipse cx="114" cy="58" rx="18" ry="8.5" transform="rotate(28 114 58)" fill="#7E9680" fill-opacity="0.34"/>
-                    <ellipse cx="82" cy="92" rx="17" ry="8" transform="rotate(42 82 92)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="52" cy="118" r="10.5" fill="#F6D8DE"/>
-                    <circle cx="42" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="62" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="52" cy="114" r="3.8" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; top:45%; left:-22px; width:280px; height:330px; pointer-events:none; opacity:0.82;" viewBox="0 0 150 180" fill="none">
-                    <path d="M14 26C36 68 38 114 18 158" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
-                    <ellipse cx="30" cy="64" rx="16" ry="8" transform="rotate(24 30 64)" fill="#7E9680" fill-opacity="0.32"/>
-                    <ellipse cx="32" cy="116" rx="16" ry="8" transform="rotate(-22 32 116)" fill="#7E9680" fill-opacity="0.32"/>
-                    <circle cx="38" cy="90" r="10" fill="#F6D8DE"/>
-                    <circle cx="47" cy="96" r="7.5" fill="#E8A5B4" fill-opacity="0.72"/>
-                    <circle cx="38" cy="94" r="3.5" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; top:42%; right:-22px; width:280px; height:330px; pointer-events:none; opacity:0.82;" viewBox="0 0 150 180" fill="none">
-                    <path d="M132 22C108 66 106 112 126 154" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
-                    <ellipse cx="114" cy="62" rx="16" ry="8" transform="rotate(-24 114 62)" fill="#7E9680" fill-opacity="0.32"/>
-                    <ellipse cx="112" cy="112" rx="16" ry="8" transform="rotate(22 112 112)" fill="#7E9680" fill-opacity="0.32"/>
-                    <circle cx="106" cy="88" r="10" fill="#F6D8DE"/>
-                    <circle cx="97" cy="94" r="7.5" fill="#E8A5B4" fill-opacity="0.72"/>
-                    <circle cx="106" cy="92" r="3.5" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; bottom:-24px; left:30px; width:330px; height:285px; pointer-events:none; opacity:0.84;" viewBox="0 0 170 150" fill="none">
-                    <path d="M22 132C55 110 88 94 128 84" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
-                    <ellipse cx="64" cy="112" rx="17" ry="8" transform="rotate(-18 64 112)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="128" cy="84" r="9.5" fill="#F6D8DE"/>
-                    <circle cx="136" cy="90" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="128" cy="88" r="3.5" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; bottom:150px; right:64px; width:220px; height:220px; pointer-events:none; opacity:0.78;" viewBox="0 0 130 130" fill="none">
-                    <path d="M106 24C84 54 58 80 26 102" stroke="#7E9680" stroke-width="1.9" stroke-linecap="round"/>
-                    <ellipse cx="74" cy="56" rx="15" ry="7.5" transform="rotate(34 74 56)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="26" cy="102" r="9.5" fill="#F6D8DE"/>
-                    <circle cx="18" cy="95" r="7" fill="#E8A5B4" fill-opacity="0.76"/>
-                    <circle cx="26" cy="99" r="3.4" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; bottom:-24px; right:-24px; width:380px; height:380px; pointer-events:none; opacity:0.9;" viewBox="0 0 180 180" fill="none">
-                    <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
-                    <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
-                    <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
-                    <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
-                    <circle cx="96" cy="96" r="7.5" fill="#F6D8DE" fill-opacity="0.85"/>
-                    <circle cx="96" cy="96" r="2.8" fill="#E4A853"/>
-                </svg>
-                <svg style="position:absolute; top:210px; right:190px; width:110px; height:110px; pointer-events:none; opacity:0.86;" viewBox="0 0 80 80" fill="none">
-                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
-                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
-                    <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.3"/>
-                    <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.3"/>
-                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <svg style="position:absolute; bottom:270px; left:170px; width:98px; height:98px; pointer-events:none; opacity:0.82;" viewBox="0 0 80 80" fill="none">
-                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.5"/>
-                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.5"/>
-                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            `;
-        }
-
         function buildInvoiceTaxPdfElement(username) {
             const { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax } = buildInvoiceTaxData();
             const sheet = document.createElement("div");
@@ -2183,7 +2084,6 @@
                 : `<p style="margin:0; font-size:14px; color:#4F6952;">Semua invoice/project sudah lunas.</p>`;
 
             sheet.innerHTML = `
-                ${buildFloralOverlayMarkup()}
                 <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
                         <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; padding:28px 32px; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.1);">
@@ -2351,7 +2251,8 @@
             document.body.removeChild(a);
         }
 
-        function makeHd43Thumbnail(src, targetW = 2400, targetH = 1800) {
+        // Membuat foto beresolusi tinggi rasio 4:3 (2400x1800) tanpa teks agar tidak pecah saat di-zoom
+        function makeHd43PhotoOnly(src, targetW = 2400, targetH = 1800) {
             return new Promise((resolve) => {
                 if (!src) return resolve("");
                 const img = new Image();
@@ -2390,72 +2291,15 @@
             });
         }
 
-        // Render 1 foto portofolio tunggal dalam format 4:3 HD + judul di bawah lurus di tengah
+        // Download 1 foto portofolio tunggal 4:3 HD murni foto tanpa kata-kata
         window.downloadSinglePortfolioPhotoJPG = async (id) => {
             const item = records.find(r => r.id === id);
-            if (!item || (!item.photoData && !item.portfolioLink)) {
+            if (!item || !item.photoData) {
                 return alert("Foto portofolio tidak tersedia untuk diunduh.");
             }
-            if (typeof html2canvas === "undefined") {
-                return alert("Library render belum termuat.");
-            }
-
-            const staging = document.getElementById("jpgRenderStaging");
-            staging.innerHTML = "";
-
-            try {
-                const hd43Url = item.photoData ? await makeHd43Thumbnail(item.photoData, 2400, 1800) : "";
-                const cardSheet = document.createElement("div");
-                cardSheet.style.cssText = `
-                    width: 2400px;
-                    height: 1960px;
-                    background-color: #FAF7F2;
-                    background-image:
-                        radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
-                        radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
-                        radial-gradient(circle at 12% 15%, rgba(246, 216, 222, 0.52) 0%, transparent 40%),
-                        radial-gradient(circle at 88% 85%, rgba(126, 150, 128, 0.22) 0%, transparent 40%);
-                    background-size: 76px 76px, 76px 76px, 100% 100%, 100% 100%;
-                    background-position: 0 0, 38px 38px, 0 0, 0 0;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 72px 140px;
-                    box-sizing: border-box;
-                `;
-
-                cardSheet.innerHTML = `
-                    <div style="width: 1680px; background: rgba(255,253,250,0.98); border: 2px solid #E5D9CA; border-radius: 44px; padding: 36px 36px 44px 36px; box-shadow: 0 18px 40px -16px rgba(79,105,82,0.16); box-sizing: border-box;">
-                        <div style="width: 1608px; height: 1206px; aspect-ratio: 4 / 3; border-radius: 32px; overflow: hidden; background: #F3ECE2; border: 1px solid #EADFD3; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                            ${hd43Url
-                                ? `<img src="${hd43Url}" alt="${escapeHtml(item.clientName)}" style="width:100%; height:100%; object-fit:contain; display:block;">`
-                                : `<span style="font-size:32px; font-weight:600; color:#4F6952;">Portofolio Link</span>`
-                            }
-                        </div>
-                        <div style="width: 100%; margin-top: 34px; text-align: center; transform: none;">
-                            <p style="margin: 0 auto; max-width: 1520px; font-family: 'Playfair Display', Georgia, serif; font-size: 46px; font-weight: 700; color: #352B28; line-height: 1.3; text-align: center; transform: none;">
-                                ${escapeHtml(item.clientName || "Project Showcase")}
-                            </p>
-                        </div>
-                    </div>
-                `;
-
-                staging.appendChild(cardSheet);
-                const rendered = await html2canvas(cardSheet, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: "#FAF7F2"
-                });
-
-                const jpgUrl = rendered.toDataURL("image/jpeg", 0.99);
-                triggerJpgDownload(jpgUrl, `${sanitizeSlug(item.clientName)}_4x3_HD.jpg`);
-            } catch (err) {
-                alert("Gagal mengunduh JPG HD: " + err.message);
-            } finally {
-                staging.innerHTML = "";
-            }
+            const hd43Url = await makeHd43PhotoOnly(item.photoData, 2400, 1800);
+            if (!hd43Url) return alert("Gagal memproses foto HD.");
+            triggerJpgDownload(hd43Url, `${sanitizeSlug(item.clientName)}_4x3_HD.jpg`);
         };
 
         window.downloadModalPhotoJpg = () => {
@@ -2472,7 +2316,7 @@
             if (photoItems.length === 0) {
                 collageContainer.innerHTML = `
                     <div class="col-span-full botanical-card text-center py-8 px-4 rounded-3xl text-muted text-xs">
-                        <i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto atau link gambar saat mencatat project untuk membentuk kolase per bulan.
+                        <i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto saat mencatat project untuk membentuk kolase per bulan.
                     </div>`;
                 return;
             }
@@ -2549,7 +2393,7 @@
             if (items.length === 0) {
                 yearlyContainer.innerHTML = `
                     <div class="botanical-card text-center py-12 px-4 rounded-3xl text-muted text-sm">
-                        <i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada item portofolio. Tambahkan link konten atau foto saat mencatat project baru.
+                        <i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada foto portofolio. Tambahkan foto saat mencatat project baru.
                     </div>`;
                 return;
             }
@@ -2633,177 +2477,30 @@
             syncJpgButtonState();
         };
 
-        function getSocialBadgesMarkup() {
-            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
-            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
-            const th = normalizeSocialEntry(userSocials.threads, "threads");
-            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
-            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+        // Membangun lembaran JPG HD murni foto portofolio (tanpa kata-kata/teks apa pun)
+        function buildPhotoOnlySheetElement(photoUrls43) {
+            const sheet = document.createElement("div");
+            sheet.className = "jpg-photo-only-sheet";
 
-            const entries = [
-                ig ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-instagram" style="color:#D97D90; margin-right:8px;"></i>${escapeHtml(ig.label)}</span>` : "",
-                tt ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-tiktok" style="color:#4F6952; margin-right:8px;"></i>${escapeHtml(tt.label)}</span>` : "",
-                th ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-solid fa-at" style="color:#D97D90; margin-right:8px;"></i>${escapeHtml(th.label)}</span>` : "",
-                fb ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-facebook" style="color:#4F6952; margin-right:8px;"></i>${escapeHtml(fb.label)}</span>` : "",
-                tw ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-twitter" style="color:#D97D90; margin-right:8px;"></i>${escapeHtml(tw.label)}</span>` : ""
-            ].filter(Boolean);
+            const cellsHtml = photoUrls43.map((src) => `
+                <div style="width: 100%; aspect-ratio: 4 / 3; border-radius: 28px; overflow: hidden; background: #F3ECE2; border: 2px solid #E5D9CA;">
+                    <img src="${src}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </div>
+            `).join("");
 
-            return entries.join("");
-        }
-
-        function buildBridgingPageElement(username, totalProjects) {
-            const page = document.createElement("div");
-            page.className = "jpg-page-sheet";
-
-            page.innerHTML = `
-                ${buildFloralOverlayMarkup()}
-                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
-                    <div style="text-align:center; padding-top:24px;">
-                        <span style="display:inline-block; padding:10px 28px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:22px; font-weight:700; letter-spacing:0.04em;">
-                            CREATIVE BRIDGING &amp; STORYTELLING
-                        </span>
-                        <h1 style="margin:24px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:84px; font-weight:700; color:#352B28; line-height:1.15; text-align:center; transform:none;">
-                            My Portofolio
-                        </h1>
-                        <p style="margin:14px 0 0 0; font-size:32px; font-weight:600; color:#4F6952; text-align:center;">
-                            Created by ${escapeHtml(username)}
-                        </p>
-                    </div>
-
-                    <div style="background:rgba(255,253,250,0.95); border:2px solid #E5D9CA; border-radius:48px; padding:64px 72px; box-shadow:0 18px 40px -16px rgba(79,105,82,0.14); text-align:center;">
-                        <i class="fa-solid fa-spa" style="font-size:42px; color:#D97D90; margin-bottom:20px;"></i>
-                        <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:46px; font-weight:700; color:#352B28; line-height:1.4; text-align:center; transform:none;">
-                            ${escapeHtml(buildIntroBubbleSentence())}
-                        </h2>
-                        <p style="margin:24px auto 0 auto; max-width:1420px; font-size:26px; color:#7A6C67; line-height:1.65; text-align:center;">
-                            Setiap karya di portofolio ini dikurasi dalam rasio 4:3 Super HD dari pengalaman dokumentasi event, brand activation, dan visual storytelling yang hangat dan estetik.
-                        </p>
-                        <div style="display:flex; justify-content:center; gap:36px; margin-top:44px; flex-wrap:wrap;">
-                            <div style="background:#FAF7F2; border:1.5px solid #EADFD3; border-radius:28px; padding:24px 40px;">
-                                <p style="margin:0; font-size:18px; text-transform:uppercase; font-weight:700; color:#7A6C67;">Kurasi Karya</p>
-                                <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#4F6952;">${totalProjects} Project</p>
-                            </div>
-                            <div style="background:#FAF7F2; border:1.5px solid #EADFD3; border-radius:28px; padding:24px 40px;">
-                                <p style="margin:0; font-size:18px; text-transform:uppercase; font-weight:700; color:#7A6C67;">Format Visual</p>
-                                <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#D97D90;">4:3 Super HD</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="padding-top:24px; border-top:2px solid rgba(230,218,203,0.9); display:flex; justify-content:space-between; align-items:center; font-size:24px; color:#7A6C67;">
-                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:10px;"></i> Narravia.Studio</span>
-                        <span>Bridging Page</span>
-                    </div>
+            sheet.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px;">
+                    ${cellsHtml}
                 </div>
             `;
 
-            return page;
-        }
-
-        function buildGalleryPageElement(pageItems, galleryPageNum, totalGalleryPages, username, includeIntroBubble) {
-            const page = document.createElement("div");
-            page.className = "jpg-page-sheet";
-
-            const bubbleBlockHtml = includeIntroBubble
-                ? `
-                    <div style="background:rgba(255,253,250,0.96); border:2px solid #E5D9CA; border-radius:36px; padding:26px 40px; margin:0 auto 44px auto; max-width:1840px; text-align:center; box-shadow:0 12px 28px -12px rgba(79,105,82,0.12);">
-                        <p style="margin:0; font-size:26px; font-weight:600; color:#352B28; line-height:1.5; text-align:center;">
-                            ${escapeHtml(buildIntroBubbleSentence())}
-                        </p>
-                    </div>
-                `
-                : "";
-
-            const collageCardsHtml = pageItems.map((item) => {
-                const eventDesc = escapeHtml(item.clientName || "Event Showcase");
-                const visualHtml = item.safePhotoSrc
-                    ? `<img src="${item.safePhotoSrc}" alt="${eventDesc}" style="width:100%; height:100%; object-fit:contain; display:block;">`
-                    : `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#F3ECE2; color:#4F6952; padding:24px; text-align:center;">
-                         <i class="fa-solid fa-clapperboard" style="font-size:44px; color:#D97D90; margin-bottom:10px;"></i>
-                         <span style="font-size:22px; font-weight:600;">Event Link</span>
-                       </div>`;
-
-                return `
-                    <div style="background:rgba(255,253,250,0.96); border:2px solid #E5D9CA; border-radius:38px; padding:22px 22px 28px 22px; display:flex; flex-direction:column; justify-content:flex-start; box-shadow:0 12px 28px -12px rgba(79,105,82,0.14);">
-                        <div style="width:100%; aspect-ratio:4 / 3; border-radius:28px; overflow:hidden; background:#F3ECE2; border:1px solid #EFE5D8; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
-                            ${visualHtml}
-                        </div>
-                        <div style="margin-top:22px; padding:4px 12px 6px 12px; display:flex; align-items:center; justify-content:center; text-align:center; gap:10px; min-height:60px; transform:none;">
-                            <p style="margin:0; font-size:26px; font-weight:700; color:#352B28; line-height:1.4; text-align:center; word-break:break-word; transform:none;">
-                                ${eventDesc}
-                            </p>
-                        </div>
-                    </div>
-                `;
-            }).join("");
-
-            page.innerHTML = `
-                ${buildFloralOverlayMarkup()}
-                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
-                    <div>
-                        <div style="text-align:center; margin-bottom:36px;">
-                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:74px; font-weight:700; color:#352B28; letter-spacing:-0.01em; line-height:1.2; text-align:center; transform:none;">
-                                My Portofolio
-                            </h1>
-                            <p style="margin:12px 0 0 0; font-size:28px; font-weight:600; color:#4F6952; line-height:1.4; text-align:center;">
-                                Created by ${escapeHtml(username)}
-                            </p>
-                        </div>
-
-                        ${bubbleBlockHtml}
-
-                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:38px;">
-                            ${collageCardsHtml}
-                        </div>
-                    </div>
-
-                    <div style="margin-top:50px; padding-top:22px; border-top:2px solid rgba(230,218,203,0.9); display:flex; justify-content:space-between; align-items:center; font-size:22px; color:#7A6C67;">
-                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:8px;"></i> Narravia.Studio</span>
-                        <span>Showcase ${galleryPageNum} dari ${totalGalleryPages}</span>
-                    </div>
-                </div>
-            `;
-
-            return page;
-        }
-
-        function buildThankYouPageElement(username) {
-            const page = document.createElement("div");
-            page.className = "jpg-page-sheet";
-            const socialChips = getSocialBadgesMarkup();
-
-            page.innerHTML = `
-                ${buildFloralOverlayMarkup()}
-                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
-                    <div></div>
-
-                    <div style="background:rgba(255,253,250,0.96); border:2px solid #E5D9CA; border-radius:52px; padding:84px 80px; box-shadow:0 20px 44px -16px rgba(79,105,82,0.16); text-align:center;">
-                        <span style="display:inline-block; padding:10px 28px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:22px; font-weight:700;">
-                            LET'S COLLABORATE
-                        </span>
-                        <h1 style="margin:26px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:90px; font-weight:700; color:#352B28; line-height:1.15; text-align:center; transform:none;">
-                            Thank You!
-                        </h1>
-                        <p style="margin:22px auto 0 auto; max-width:1360px; font-size:30px; color:#7A6C67; line-height:1.6; text-align:center;">
-                            Terima kasih sudah meluangkan waktu melihat portofolio <strong style="color:#352B28;">${escapeHtml(username)}</strong>. Untuk diskusi project, kolaborasi brand, atau event berikutnya, hubungi kami melalui kanal di bawah ini.
-                        </p>
-                        ${socialChips ? `<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:42px;">${socialChips}</div>` : ""}
-                    </div>
-
-                    <div style="padding-top:24px; border-top:2px solid rgba(230,218,203,0.9); display:flex; justify-content:space-between; align-items:center; font-size:24px; color:#7A6C67;">
-                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:10px;"></i> Created by Narravia.Studio</span>
-                        <span>Thank You Page</span>
-                    </div>
-                </div>
-            `;
-
-            return page;
+            return sheet;
         }
 
         window.exportPortfolioJPG = async () => {
             const rawItems = sortByRateAndPopularity(getPortfolioEligibleItems());
             if (rawItems.length < MIN_JPG_EVENTS) {
-                return alert(`Portofolio bisa di-export ke JPG minimal setelah ada ${MIN_JPG_EVENTS} event (saat ini baru ${rawItems.length} event).`);
+                return alert(`Portofolio bisa di-export ke JPG minimal setelah ada ${MIN_JPG_EVENTS} foto (saat ini baru ${rawItems.length} foto).`);
             }
             if (typeof html2canvas === "undefined") {
                 return alert("Library export belum termuat. Coba refresh halaman.");
@@ -2812,93 +2509,53 @@
             const btn = document.getElementById("btnExportJpg");
             const originalHtml = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG Super HD...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG HD...`;
 
             const staging = document.getElementById("jpgRenderStaging");
             staging.innerHTML = "";
 
             try {
-                const rawName = (document.getElementById("userDisplayName").innerText || "").trim();
-                const username = (!rawName || rawName.toLowerCase() === "creator") ? "Cachaoo" : rawName;
+                const hdPhotos43 = (await Promise.all(
+                    rawItems.map((item) => makeHd43PhotoOnly(item.photoData, 2400, 1800))
+                )).filter(Boolean);
 
-                const preparedItems = await Promise.all(
-                    rawItems.map(async (item) => ({
-                        ...item,
-                        safePhotoSrc: item.photoData ? await makeHd43Thumbnail(item.photoData, 2400, 1800) : ""
-                    }))
-                );
-
-                const perPage = 9;
-                const chunks = [];
-                for (let i = 0; i < preparedItems.length; i += perPage) {
-                    chunks.push(preparedItems.slice(i, i + perPage));
+                if (hdPhotos43.length < MIN_JPG_EVENTS) {
+                    return alert("Foto portofolio tidak cukup untuk di-export.");
                 }
 
-                const pageElements = [
-                    { el: buildBridgingPageElement(username, preparedItems.length), name: "01_portofolio_bridging_super_hd.jpg" },
-                    ...chunks.map((chunk, idx) => ({
-                        el: buildGalleryPageElement(chunk, idx + 1, chunks.length, username, idx === 0),
-                        name: chunks.length > 1
-                            ? `02_portofolio_showcase_hal_${idx + 1}_super_hd.jpg`
-                            : "02_portofolio_showcase_super_hd.jpg"
-                    })),
-                    { el: buildThankYouPageElement(username), name: "03_portofolio_thankyou_super_hd.jpg" }
-                ];
-
-                for (let p = 0; p < pageElements.length; p++) {
-                    staging.innerHTML = "";
-                    staging.appendChild(pageElements[p].el);
-
-                    const renderedCanvas = await html2canvas(pageElements[p].el, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: "#FAF7F2"
-                    });
-
-                    const hdJpgUrl = renderedCanvas.toDataURL("image/jpeg", 0.99);
-                    triggerJpgDownload(hdJpgUrl, pageElements[p].name);
-                }
-
-                // Unduh juga masing-masing foto 4:3 HD dengan judul project di tengah secara terpisah
-                for (let i = 0; i < preparedItems.length; i++) {
-                    const pItem = preparedItems[i];
-                    if (!pItem.safePhotoSrc) continue;
-                    staging.innerHTML = "";
-                    const singleSheet = document.createElement("div");
-                    singleSheet.style.cssText = `
-                        width: 2400px;
-                        height: 1960px;
-                        background-color: #FAF7F2;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 72px 140px;
-                        box-sizing: border-box;
-                    `;
-                    singleSheet.innerHTML = `
-                        <div style="width: 1680px; background: rgba(255,253,250,0.98); border: 2px solid #E5D9CA; border-radius: 44px; padding: 36px 36px 44px 36px; box-sizing: border-box;">
-                            <div style="width: 1608px; height: 1206px; aspect-ratio: 4 / 3; border-radius: 32px; overflow: hidden; background: #F3ECE2; border: 1px solid #EADFD3; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                <img src="${pItem.safePhotoSrc}" alt="${escapeHtml(pItem.clientName)}" style="width:100%; height:100%; object-fit:contain; display:block;">
-                            </div>
-                            <div style="width: 100%; margin-top: 34px; text-align: center; transform: none;">
-                                <p style="margin: 0 auto; max-width: 1520px; font-family: 'Playfair Display', Georgia, serif; font-size: 46px; font-weight: 700; color: #352B28; line-height: 1.3; text-align: center; transform: none;">
-                                    ${escapeHtml(pItem.clientName || "Project Showcase")}
-                                </p>
-                            </div>
-                        </div>
-                    `;
-                    staging.appendChild(singleSheet);
-                    const singleCanvas = await html2canvas(singleSheet, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: "#FAF7F2"
-                    });
+                // Export setiap foto individual 4:3 HD murni foto (tanpa teks)
+                for (let i = 0; i < hdPhotos43.length; i++) {
+                    const slug = sanitizeSlug(rawItems[i]?.clientName || `foto_${i + 1}`);
                     triggerJpgDownload(
-                        singleCanvas.toDataURL("image/jpeg", 0.99),
-                        `foto_${String(i + 1).padStart(2, "0")}_${sanitizeSlug(pItem.clientName)}_4x3_HD.jpg`
+                        hdPhotos43[i],
+                        `portofolio_${String(i + 1).padStart(2, "0")}_${slug}_4x3_HD.jpg`
                     );
+                }
+
+                // Export lembar kolase foto HD (4 foto per lembar 2x2 rasio 4:3, murni foto tanpa kata-kata)
+                const perSheet = 4;
+                const sheets = [];
+                for (let i = 0; i < hdPhotos43.length; i += perSheet) {
+                    sheets.push(hdPhotos43.slice(i, i + perSheet));
+                }
+
+                for (let s = 0; s < sheets.length; s++) {
+                    staging.innerHTML = "";
+                    const sheetEl = buildPhotoOnlySheetElement(sheets[s]);
+                    staging.appendChild(sheetEl);
+
+                    const renderedCanvas = await html2canvas(sheetEl, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: "#FAF7F2"
+                    });
+
+                    const sheetJpgUrl = renderedCanvas.toDataURL("image/jpeg", 0.99);
+                    const fileName = sheets.length > 1
+                        ? `portofolio_kolase_${s + 1}_HD.jpg`
+                        : "portofolio_kolase_HD.jpg";
+                    triggerJpgDownload(sheetJpgUrl, fileName);
                 }
             } catch (err) {
                 alert("Gagal membuat JPG HD: " + err.message);
