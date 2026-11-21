@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -165,6 +165,11 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 14px 34px -14px rgba(53, 43, 40, 0.12);
+            font-style: normal;
+        }
+
+        .invoice-page-sheet * {
+            font-style: normal !important;
         }
     </style>
 </head>
@@ -833,7 +838,7 @@
                         <i class="fa-solid fa-eraser mr-1"></i> Kosongkan Form
                     </button>
                     <button type="button" id="btnExportInvoicePdf" onclick="exportClientInvoicePDF()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
-                        <i class="fa-solid fa-file-pdf mr-1.5 text-blush"></i> <span id="btnExportInvoicePdfLabel">Export PDF Invoice</span>
+                        <i class="fa-solid fa-file-pdf mr-1.5 text-blush"></i> <span id="btnExportInvoicePdfLabel">Export PDF HD</span>
                     </button>
                     <button type="button" onclick="closeInvoiceModal()" class="clay-pill text-muted hover:text-espresso text-base px-3 py-1 cursor-pointer">&times;</button>
                 </div>
@@ -2269,7 +2274,7 @@
             });
         };
 
-        /* ================= INVOICE BUILDER & 2-PAGE PREVIEW / PDF ================= */
+        /* ================= INVOICE BUILDER & 2-PAGE PREVIEW / HD PDF ================= */
         window.clearInvoiceForm = () => {
             const catDrop = document.getElementById('invoiceCategoryDropdown');
             if (catDrop) catDrop.value = "";
@@ -2415,7 +2420,6 @@
             const remainingBalance = Math.max(0, grandTotal - dpAmount);
 
             const igHandle = normalizeSocialEntry(userSocials.instagram, "instagram")?.label || "";
-            const ttHandle = normalizeSocialEntry(userSocials.tiktok, "tiktok")?.label || "";
 
             return {
                 invNumber,
@@ -2437,7 +2441,6 @@
                 phone,
                 email,
                 igHandle,
-                ttHandle,
                 notesLines,
                 termsLines
             };
@@ -2448,69 +2451,69 @@
                 const lineTotal = (Number(it.qty) || 1) * (Number(it.price) || 0);
                 return `
                     <tr style="border-bottom:1.5px solid rgba(226,212,195,0.75); background:rgba(255,253,250,0.92);">
-                        <td style="padding:14px 12px; font-weight:700; color:#352B28; vertical-align:top; width:44px;">${idx + 1}.</td>
+                        <td style="padding:14px 12px; font-weight:700; color:#352B28; vertical-align:top; width:44px; font-style:normal;">${idx + 1}.</td>
                         <td style="padding:14px 14px; vertical-align:top;">
-                            <div style="font-family:'Playfair Display',Georgia,serif; font-size:17px; font-weight:700; color:#352B28; min-height:22px;">${escapeHtml(it.title)}</div>
-                            <div style="font-size:12.5px; color:#5F534E; line-height:1.55; margin-top:4px; min-height:18px;">${escapeHtml(it.desc)}</div>
+                            <div style="font-family:'Playfair Display',Georgia,serif; font-size:17px; font-weight:700; color:#352B28; min-height:22px; font-style:normal;">${escapeHtml(it.title)}</div>
+                            <div style="font-size:12.5px; color:#5F534E; line-height:1.55; margin-top:4px; min-height:18px; font-style:normal;">${escapeHtml(it.desc)}</div>
                         </td>
-                        <td style="padding:14px 10px; font-weight:700; color:#4F6952; text-align:center; vertical-align:top; white-space:nowrap; width:74px;">${Number(it.qty) || 1}x</td>
-                        <td style="padding:14px 14px; font-weight:700; color:#352B28; text-align:right; vertical-align:top; white-space:nowrap; width:145px;">${formatRupiah(lineTotal)}</td>
+                        <td style="padding:14px 10px; font-weight:700; color:#4F6952; text-align:center; vertical-align:top; white-space:nowrap; width:74px; font-style:normal;">${Number(it.qty) || 1}x</td>
+                        <td style="padding:14px 14px; font-weight:700; color:#352B28; text-align:right; vertical-align:top; white-space:nowrap; width:145px; font-style:normal;">${formatRupiah(lineTotal)}</td>
                     </tr>
                 `;
             }).join('');
 
             const notesHtml = data.notesLines.length > 0
-                ? data.notesLines.map(line => `<li style="margin-bottom:4px; line-height:1.45;">${escapeHtml(line)}</li>`).join('')
-                : `<li style="margin-bottom:4px; line-height:1.45; color:#9C8E89;">-</li>`;
+                ? data.notesLines.map(line => `<li style="margin-bottom:4px; line-height:1.45; font-style:normal;">${escapeHtml(line)}</li>`).join('')
+                : `<li style="margin-bottom:4px; line-height:1.45; color:#9C8E89; font-style:normal;">-</li>`;
 
             const statusChip = (label, active) => {
                 const bg = active ? '#4F6952' : 'rgba(255,253,250,0.88)';
                 const color = active ? '#FFFFFF' : '#7A6C67';
                 const border = active ? '#4F6952' : '#D8C9B8';
-                return `<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:9999px; font-size:12px; font-weight:700; background:${bg}; color:${color}; border:1px solid ${border};">${active ? '✓ ' : ''}${escapeHtml(label)}</span>`;
+                return `<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:9999px; font-size:12px; font-weight:700; background:${bg}; color:${color}; border:1px solid ${border}; font-style:normal;">${active ? '✓ ' : ''}${escapeHtml(label)}</span>`;
             };
 
             const page1Html = `
                 <div class="invoice-page-sheet" data-invoice-page="1">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding-bottom:22px; border-bottom:2px solid rgba(126,150,128,0.28);">
                         <div>
-                            <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">
+                            <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-style:normal;">
                                 Narravia Studio • Official Invoice
                             </span>
-                            <h1 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#352B28; letter-spacing:0.02em; line-height:1.1;">
+                            <h1 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#352B28; letter-spacing:0.02em; line-height:1.1; font-style:normal;">
                                 INVOICE
                             </h1>
-                            <p style="margin:0; font-size:14px; font-weight:700; color:#4F6952; min-height:20px;">
+                            <p style="margin:0; font-size:14px; font-weight:700; color:#4F6952; min-height:20px; font-style:normal;">
                                 ${escapeHtml(data.invNumber)}
                             </p>
                         </div>
 
-                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:14px 18px; min-width:255px; font-size:13px;">
+                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:14px 18px; min-width:255px; font-size:13px; font-style:normal;">
                             <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:6px;">
-                                <span style="color:#7A6C67; font-weight:600;">Tanggal Invoice</span>
-                                <span style="color:#352B28; font-weight:700;">: ${escapeHtml(data.invDateText)}</span>
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Tanggal Invoice</span>
+                                <span style="color:#352B28; font-weight:700; font-style:normal;">: ${escapeHtml(data.invDateText)}</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; gap:12px;">
-                                <span style="color:#7A6C67; font-weight:600;">Tanggal Event</span>
-                                <span style="color:#D97D90; font-weight:700;">: ${escapeHtml(data.invEventDateText)}</span>
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Tanggal Event</span>
+                                <span style="color:#D97D90; font-weight:700; font-style:normal;">: ${escapeHtml(data.invEventDateText)}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div style="margin-top:20px; background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 22px;">
-                        <p style="margin:0; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67;">Kepada :</p>
-                        <p style="margin:4px 0 2px 0; font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:#352B28; min-height:28px;">${escapeHtml(data.clientName)}</p>
-                        <p style="margin:0; font-size:13px; font-weight:600; color:#4F6952; min-height:18px;">${escapeHtml(data.clientSubtitle)}</p>
+                    <div style="margin-top:20px; background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 22px; font-style:normal;">
+                        <p style="margin:0; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67; font-style:normal;">Kepada :</p>
+                        <p style="margin:4px 0 2px 0; font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:#352B28; min-height:28px; font-style:normal;">${escapeHtml(data.clientName)}</p>
+                        <p style="margin:0; font-size:13px; font-weight:600; color:#4F6952; min-height:18px; font-style:normal;">${escapeHtml(data.clientSubtitle)}</p>
                     </div>
 
                     <div style="margin-top:22px; border-radius:20px; overflow:hidden; border:1px solid #E2D4C3; background:rgba(255,253,250,0.92);">
-                        <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <table style="width:100%; border-collapse:collapse; text-align:left; font-style:normal;">
                             <thead>
                                 <tr style="background:#4F6952; color:#FAF7F2; font-size:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                                    <th style="padding:12px;">No</th>
-                                    <th style="padding:12px 14px;">Deskripsi</th>
-                                    <th style="padding:12px 10px; text-align:center;">Jumlah</th>
-                                    <th style="padding:12px 14px; text-align:right;">Total</th>
+                                    <th style="padding:12px; font-style:normal;">No</th>
+                                    <th style="padding:12px 14px; font-style:normal;">Deskripsi</th>
+                                    <th style="padding:12px 10px; text-align:center; font-style:normal;">Jumlah</th>
+                                    <th style="padding:12px 14px; text-align:right; font-style:normal;">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2520,57 +2523,57 @@
                     </div>
 
                     <div style="margin-top:22px; display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px; align-items:start;">
-                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px;">
-                            <p style="margin:0 0 8px 0; font-family:'Playfair Display',Georgia,serif; font-size:16px; font-weight:700; color:#352B28;">
+                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px; font-style:normal;">
+                            <p style="margin:0 0 8px 0; font-family:'Playfair Display',Georgia,serif; font-size:16px; font-weight:700; color:#352B28; font-style:normal;">
                                 Catatan:
                             </p>
-                            <ul style="margin:0; padding-left:18px; list-style-type:disc; font-size:12px; color:#5F534E;">
+                            <ul style="margin:0; padding-left:18px; list-style-type:disc; font-size:12px; color:#5F534E; font-style:normal;">
                                 ${notesHtml}
                             </ul>
                         </div>
 
-                        <div style="background:rgba(255,253,250,0.95); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px; font-size:13px;">
+                        <div style="background:rgba(255,253,250,0.95); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px; font-size:13px; font-style:normal;">
                             <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
-                                <span style="color:#7A6C67; font-weight:600;">Sub Total</span>
-                                <span style="color:#352B28; font-weight:700;">${formatRupiah(data.subTotal)}</span>
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Sub Total</span>
+                                <span style="color:#352B28; font-weight:700; font-style:normal;">${formatRupiah(data.subTotal)}</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
-                                <span style="color:#7A6C67; font-weight:600;">Biaya Transport</span>
-                                <span style="color:#352B28; font-weight:700;">${formatRupiah(data.transport)}</span>
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Biaya Transport</span>
+                                <span style="color:#352B28; font-weight:700; font-style:normal;">${formatRupiah(data.transport)}</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; margin:8px -4px; border-radius:14px; background:#F6D8DE;">
-                                <span style="color:#352B28; font-weight:800; font-size:14px;">TOTAL:</span>
-                                <span style="color:#352B28; font-weight:800; font-size:16px;">${formatRupiah(data.grandTotal)}</span>
+                                <span style="color:#352B28; font-weight:800; font-size:14px; font-style:normal;">TOTAL:</span>
+                                <span style="color:#352B28; font-weight:800; font-size:16px; font-style:normal;">${formatRupiah(data.grandTotal)}</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
-                                <span style="color:#4F6952; font-weight:700;">DP (${data.dpPct}%) + Transport</span>
-                                <span style="color:#4F6952; font-weight:700;">${formatRupiah(data.dpAmount)}</span>
+                                <span style="color:#4F6952; font-weight:700; font-style:normal;">DP (${data.dpPct}%) + Transport</span>
+                                <span style="color:#4F6952; font-weight:700; font-style:normal;">${formatRupiah(data.dpAmount)}</span>
                             </div>
                             <div style="display:flex; justify-content:space-between; padding:8px 0 2px 0;">
-                                <span style="color:#D97D90; font-weight:700;">Sisa Pembayaran</span>
-                                <span style="color:#D97D90; font-weight:800;">${formatRupiah(data.remainingBalance)}</span>
+                                <span style="color:#D97D90; font-weight:700; font-style:normal;">Sisa Pembayaran</span>
+                                <span style="color:#D97D90; font-weight:800; font-style:normal;">${formatRupiah(data.remainingBalance)}</span>
                             </div>
                         </div>
                     </div>
 
                     <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch;">
-                        <div style="background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; font-size:12.5px;">
-                            <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952;">
+                        <div style="background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; font-size:12.5px; font-style:normal;">
+                            <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952; font-style:normal;">
                                 Informasi Pembayaran
                             </p>
-                            <div style="display:grid; grid-template-columns:110px 1fr; row-gap:5px; color:#352B28;">
-                                <span style="color:#7A6C67; font-weight:600;">Bank</span>
-                                <span style="font-weight:700;">: ${escapeHtml(data.bank)}</span>
-                                <span style="color:#7A6C67; font-weight:600;">Atas Nama</span>
-                                <span style="font-weight:700;">: ${escapeHtml(data.accountHolder)}</span>
-                                <span style="color:#7A6C67; font-weight:600;">No. Rekening</span>
-                                <span style="font-weight:700;">: ${escapeHtml(data.accountNumber)}</span>
+                            <div style="display:grid; grid-template-columns:110px 1fr; row-gap:5px; color:#352B28; font-style:normal;">
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Bank</span>
+                                <span style="font-weight:700; font-style:normal;">: ${escapeHtml(data.bank)}</span>
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Atas Nama</span>
+                                <span style="font-weight:700; font-style:normal;">: ${escapeHtml(data.accountHolder)}</span>
+                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">No. Rekening</span>
+                                <span style="font-weight:700; font-style:normal;">: ${escapeHtml(data.accountNumber)}</span>
                             </div>
                         </div>
 
-                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; display:flex; flex-direction:column; justify-content:space-between; font-style:normal;">
                             <div>
-                                <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67;">
+                                <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67; font-style:normal;">
                                     Status Pembayaran:
                                 </p>
                                 <div style="display:flex; flex-wrap:wrap; gap:8px;">
@@ -2585,81 +2588,77 @@
                         </div>
                     </div>
 
-                    <div style="margin-top:22px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:flex-end; gap:16px; font-size:12.5px; color:#4A3F3B;">
+                    <div style="margin-top:22px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:flex-end; gap:16px; font-size:12.5px; color:#4A3F3B; font-style:normal;">
                         <div>
-                            <p style="margin:0 0 6px 0; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952;">
+                            <p style="margin:0 0 6px 0; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952; font-style:normal;">
                                 KONTAK
                             </p>
-                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-bottom:4px;">
-                                <span style="display:inline-flex; align-items:center; gap:6px;">
+                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-bottom:5px; font-style:normal;">
+                                <span style="display:inline-flex; align-items:center; gap:6px; font-style:normal;">
                                     <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:14px;"></i>
                                     <span>${escapeHtml(data.phone)}</span>
                                 </span>
-                                <span style="display:inline-flex; align-items:center; gap:6px;">
+                                <span style="display:inline-flex; align-items:center; gap:6px; font-style:normal;">
                                     <i class="fa-regular fa-envelope" style="color:#D97D90; font-size:13px;"></i>
                                     <span>${escapeHtml(data.email)}</span>
                                 </span>
                             </div>
-                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
-                                <span style="display:inline-flex; align-items:center; gap:6px;">
+                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px; font-style:normal;">
+                                <span style="display:inline-flex; align-items:center; gap:6px; font-style:normal;">
                                     <i class="fa-brands fa-instagram" style="color:#E1306C; font-size:14px;"></i>
                                     <span>${escapeHtml(data.igHandle)}</span>
                                 </span>
-                                <span style="display:inline-flex; align-items:center; gap:6px;">
-                                    <i class="fa-brands fa-tiktok" style="color:#352B28; font-size:13px;"></i>
-                                    <span>${escapeHtml(data.ttHandle)}</span>
-                                </span>
                             </div>
                         </div>
-                        <div style="text-align:right;">
-                            <p style="margin:0; font-size:12px; color:#7A6C67;">Hormat Kami,</p>
-                            <p style="margin:3px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28;">Narravia Studio</p>
+                        <div style="text-align:right; font-style:normal;">
+                            <p style="margin:0; font-size:12px; color:#7A6C67; font-style:normal;">Hormat Kami,</p>
+                            <p style="margin:3px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28; font-style:normal;">Narravia Studio</p>
                         </div>
                     </div>
                 </div>
             `;
 
             const termsListHtml = data.termsLines.length > 0
-                ? data.termsLines.map(term => `<li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#352B28;">${escapeHtml(term)}</li>`).join('')
-                : `<li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#9C8E89;">-</li>`;
+                ? data.termsLines.map(term => `<li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#352B28; font-style:normal;">${escapeHtml(term)}</li>`).join('')
+                : `<li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#9C8E89; font-style:normal;">-</li>`;
 
             const page2Html = `
                 <div class="invoice-page-sheet" data-invoice-page="2" style="display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid rgba(126,150,128,0.28);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid rgba(126,150,128,0.28); font-style:normal;">
                             <div>
-                                <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#E6EFE7; color:#4F6952; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">
+                                <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#E6EFE7; color:#4F6952; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-style:normal;">
                                     Halaman 2 • Ketentuan Layanan
                                 </span>
-                                <h2 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:34px; font-weight:700; color:#352B28;">
+                                <h2 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:34px; font-weight:700; color:#352B28; font-style:normal;">
                                     Syarat &amp; Ketentuan
                                 </h2>
-                                <p style="margin:0; font-size:13px; font-weight:700; color:#D97D90; min-height:18px;">
+                                <p style="margin:0; font-size:13px; font-weight:700; color:#D97D90; min-height:18px; font-style:normal;">
                                     ${escapeHtml([data.invNumber, data.clientName].filter(Boolean).join(" • "))}
                                 </p>
                             </div>
-                            <div style="text-align:right;">
-                                <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28;">Narravia Studio</p>
-                                <p style="margin:2px 0 0 0; font-size:12px; color:#7A6C67;">${escapeHtml(data.igHandle)}</p>
+                            <div style="text-align:right; font-style:normal;">
+                                <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28; font-style:normal;">Narravia Studio</p>
+                                <p style="margin:2px 0 0 0; font-size:12px; color:#7A6C67; font-style:normal;">${escapeHtml(data.igHandle)}</p>
                             </div>
                         </div>
 
-                        <div style="margin-top:24px; background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:24px; padding:26px 30px;">
-                            <ul style="margin:0; padding-left:20px; list-style-type:disc;">
+                        <div style="margin-top:24px; background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:24px; padding:26px 30px; font-style:normal;">
+                            <ul style="margin:0; padding-left:20px; list-style-type:disc; font-style:normal;">
                                 ${termsListHtml}
                             </ul>
                         </div>
 
-                        <div style="margin-top:22px; background:rgba(246,216,222,0.45); border:1px solid rgba(217,125,144,0.4); border-radius:20px; padding:16px 22px; text-align:center;">
+                        <div style="margin-top:22px; background:rgba(246,216,222,0.45); border:1px solid rgba(217,125,144,0.4); border-radius:20px; padding:16px 22px; text-align:center; font-style:normal;">
                             <p style="margin:0; font-style:normal; font-size:13.5px; font-weight:600; color:#352B28; text-align:center; width:100%;">
                                 Dengan melakukan pembayaran, client dianggap telah membaca dan menyetujui seluruh syarat &amp; ketentuan di atas.
                             </p>
                         </div>
                     </div>
 
-                    <div style="margin-top:24px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#7A6C67;">
-                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:6px;"></i> Created by Narravia.Studio</span>
-                        <span>${escapeHtml(data.invNumber)} • Halaman 2 dari 2</span>
+                    <div style="margin-top:24px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#7A6C67; font-style:normal;">
+                        <span style="font-style:normal;"><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:6px;"></i> Created by Narravia.Studio</span>
+                        <span style="font-style:normal;">${escapeHtml(data.invNumber)} • Halaman 2 dari 2</span>
                     </div>
                 </div>
             `;
@@ -2693,10 +2692,14 @@
                 return alert("Library PDF belum termuat. Coba refresh halaman.");
             }
 
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
+
             const btn = document.getElementById('btnExportInvoicePdf');
             const label = document.getElementById('btnExportInvoicePdfLabel');
             btn.disabled = true;
-            if (label) label.innerText = "Menyiapkan PDF...";
+            if (label) label.innerText = "Menyiapkan PDF HD...";
 
             const staging = document.getElementById('jpgRenderStaging');
             staging.innerHTML = "";
@@ -2711,7 +2714,8 @@
                 const pdf = new jsPDF({
                     orientation: "portrait",
                     unit: "mm",
-                    format: "a4"
+                    format: "a4",
+                    compress: false
                 });
 
                 const pdfW = pdf.internal.pageSize.getWidth();
@@ -2723,25 +2727,31 @@
                     staging.appendChild(pageNode);
 
                     const canvas = await html2canvas(pageNode, {
-                        scale: 2,
+                        scale: 3,
                         useCORS: true,
                         allowTaint: true,
-                        backgroundColor: "#FAF7F2"
+                        backgroundColor: "#FAF7F2",
+                        logging: false,
+                        onclone: (clonedDoc) => {
+                            clonedDoc.querySelectorAll(".invoice-page-sheet, .invoice-page-sheet *").forEach((el) => {
+                                el.style.fontStyle = "normal";
+                            });
+                        }
                     });
 
-                    const imgData = canvas.toDataURL("image/jpeg", 0.99);
+                    const imgData = canvas.toDataURL("image/png");
                     if (i > 0) pdf.addPage();
-                    pdf.addImage(imgData, "JPEG", 0, 0, pdfW, pdfH);
+                    pdf.addImage(imgData, "PNG", 0, 0, pdfW, pdfH, undefined, "FAST");
                 }
 
                 const safeNum = (data.invNumber || "invoice").replace(/[^a-zA-Z0-9_-]+/g, "_");
-                pdf.save(`${safeNum}_narravia_studio.pdf`);
+                pdf.save(`${safeNum}_narravia_studio_HD.pdf`);
             } catch (err) {
                 alert("Gagal membuat PDF Invoice: " + err.message);
             } finally {
                 staging.innerHTML = "";
                 btn.disabled = false;
-                if (label) label.innerText = "Export PDF Invoice";
+                if (label) label.innerText = "Export PDF HD";
             }
         };
 
@@ -2943,10 +2953,14 @@
                 return alert("Library PDF belum termuat. Coba refresh halaman.");
             }
 
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
+
             const btn = document.getElementById("btnExportTaxPdf");
             const originalHtml = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan PDF...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan PDF HD...`;
 
             const staging = document.getElementById("jpgRenderStaging");
             staging.innerHTML = "";
@@ -2957,18 +2971,20 @@
                 staging.appendChild(sheetEl);
 
                 const canvas = await html2canvas(sheetEl, {
-                    scale: 2,
+                    scale: 3,
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: "#FAF7F2"
+                    backgroundColor: "#FAF7F2",
+                    logging: false
                 });
 
-                const imgData = canvas.toDataURL("image/jpeg", 0.99);
+                const imgData = canvas.toDataURL("image/png");
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({
                     orientation: "portrait",
                     unit: "mm",
-                    format: "a4"
+                    format: "a4",
+                    compress: false
                 });
 
                 const pdfW = pdf.internal.pageSize.getWidth();
@@ -2978,21 +2994,21 @@
                 const renderH = pdfW / ratio;
 
                 if (renderH <= pdfH) {
-                    pdf.addImage(imgData, "JPEG", 0, 0, pdfW, renderH);
+                    pdf.addImage(imgData, "PNG", 0, 0, pdfW, renderH, undefined, "FAST");
                 } else {
                     let heightLeft = renderH;
                     let position = 0;
-                    pdf.addImage(imgData, "JPEG", 0, position, pdfW, renderH);
+                    pdf.addImage(imgData, "PNG", 0, position, pdfW, renderH, undefined, "FAST");
                     heightLeft -= pdfH;
                     while (heightLeft > 0) {
                         position = heightLeft - renderH;
                         pdf.addPage();
-                        pdf.addImage(imgData, "JPEG", 0, position, pdfW, renderH);
+                        pdf.addImage(imgData, "PNG", 0, position, pdfW, renderH, undefined, "FAST");
                         heightLeft -= pdfH;
                     }
                 }
 
-                pdf.save("narravia_rekap_invoice_tax.pdf");
+                pdf.save("narravia_rekap_invoice_tax_HD.pdf");
             } catch (err) {
                 alert("Gagal membuat PDF: " + err.message);
             } finally {
