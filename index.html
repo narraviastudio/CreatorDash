@@ -1,0 +1,2822 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narravia Studio — Creator Income & Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        ivory: '#FAF7F2',
+                        cream: '#F3ECE2',
+                        blush: '#F6D8DE',
+                        roseSoft: '#D97D90',
+                        sage: '#7E9680',
+                        sageDark: '#4F6952',
+                        espresso: '#352B28',
+                        muted: '#7A6C67'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .polka-layer {
+            background-image:
+                radial-gradient(rgba(53, 43, 40, 0.085) 5.5px, transparent 6px),
+                radial-gradient(rgba(53, 43, 40, 0.085) 5.5px, transparent 6px);
+            background-size: 56px 56px;
+            background-position: 0 0, 28px 28px;
+        }
+
+        body {
+            background-color: #FAF7F2;
+            color: #352B28;
+            background-image:
+                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.56) 0%, transparent 36%),
+                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.22) 0%, transparent 38%),
+                radial-gradient(circle at 12% 72%, rgba(126, 150, 128, 0.16) 0%, transparent 34%),
+                radial-gradient(circle at 85% 88%, rgba(246, 216, 222, 0.48) 0%, transparent 40%);
+        }
+
+        .botanical-card {
+            background: rgba(255, 253, 250, 0.94);
+            backdrop-filter: blur(8px);
+            border: 1px solid #EADFD3;
+            box-shadow: 0 10px 30px -12px rgba(79, 105, 82, 0.08);
+        }
+
+        /* Soft Clay Pill */
+        .clay-pill {
+            border-radius: 9999px;
+            background: linear-gradient(145deg, #FFFDF9, #EFE5D8);
+            border: 1px solid #E2D4C3;
+            box-shadow:
+                4px 4px 10px rgba(53, 43, 40, 0.09),
+                -3px -3px 8px rgba(255, 255, 255, 0.9),
+                inset 0 1px 1px rgba(255, 255, 255, 0.85);
+            transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 180ms ease;
+        }
+        .clay-pill:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow:
+                6px 7px 14px rgba(53, 43, 40, 0.12),
+                -3px -3px 8px rgba(255, 255, 255, 0.95),
+                inset 0 1px 2px rgba(255, 255, 255, 0.9);
+        }
+        .clay-pill:active:not(:disabled) {
+            transform: translateY(1px) scale(0.98);
+            box-shadow:
+                inset 2px 2px 6px rgba(53, 43, 40, 0.14),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Micro-Interactions */
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(3deg); }
+        }
+        @keyframes butterflyFlutter {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(-4deg); }
+            35% { transform: translateY(-7px) translateX(4px) rotate(5deg); }
+            70% { transform: translateY(-3px) translateX(-3px) rotate(-3deg); }
+        }
+        .micro-float {
+            animation: gentleFloat 3.6s ease-in-out infinite;
+        }
+        .butterfly-float {
+            animation: butterflyFlutter 5.2s ease-in-out infinite;
+        }
+        .micro-card-lift {
+            transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms ease;
+        }
+        .micro-card-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px -12px rgba(53, 43, 40, 0.14);
+        }
+
+        .jpg-page-sheet {
+            width: 2400px;
+            min-height: 3394px;
+            background-color: #FAF7F2;
+            background-image:
+                radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
+                radial-gradient(rgba(53, 43, 40, 0.08) 7px, transparent 8px),
+                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.58) 0%, transparent 36%),
+                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.25) 0%, transparent 38%),
+                radial-gradient(circle at 14% 52%, rgba(246, 216, 222, 0.36) 0%, transparent 34%),
+                radial-gradient(circle at 88% 55%, rgba(126, 150, 128, 0.2) 0%, transparent 34%),
+                radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.22) 0%, transparent 36%),
+                radial-gradient(circle at 86% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 40%);
+            background-size: 76px 76px, 76px 76px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            background-position: 0 0, 38px 38px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+            position: relative;
+            overflow: hidden;
+            padding: 112px 128px 104px 128px;
+            box-sizing: border-box;
+        }
+
+        .pdf-report-sheet {
+            width: 1240px;
+            min-height: 1754px;
+            background-color: #FAF7F2;
+            background-image:
+                radial-gradient(rgba(53, 43, 40, 0.07) 5px, transparent 5.5px),
+                radial-gradient(rgba(53, 43, 40, 0.07) 5px, transparent 5.5px),
+                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.54) 0%, transparent 36%),
+                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.22) 0%, transparent 38%),
+                radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.18) 0%, transparent 36%),
+                radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.48) 0%, transparent 40%);
+            background-size: 56px 56px, 56px 56px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            background-position: 0 0, 28px 28px, 0 0, 0 0, 0 0, 0 0;
+            position: relative;
+            overflow: hidden;
+            padding: 64px 72px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen antialiased selection:bg-blush selection:text-espresso">
+
+    <!-- Lapisan Polkadot Background Website -->
+    <div class="fixed inset-0 pointer-events-none select-none z-0 polka-layer"></div>
+
+    <!-- Dekorasi Bunga & Kupu-Kupu Latar Belakang -->
+    <div class="fixed inset-0 pointer-events-none select-none z-0 overflow-hidden">
+        <!-- Bunga Kiri Atas -->
+        <svg class="absolute -top-3 -left-3 w-44 h-44 opacity-90" viewBox="0 0 170 170" fill="none">
+            <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+            <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
+            <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
+            <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
+            <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+            <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+            <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
+            <circle cx="38" cy="118" r="7" fill="#F6D8DE" fill-opacity="0.8"/>
+            <circle cx="38" cy="118" r="2.5" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Atas Tengah Kiri -->
+        <svg class="hidden md:block top-2 left-1/3 w-28 h-28 opacity-75 absolute" viewBox="0 0 120 120" fill="none">
+            <path d="M16 104C36 74 62 48 94 26" stroke="#7E9680" stroke-width="1.8" stroke-linecap="round"/>
+            <ellipse cx="44" cy="72" rx="14" ry="7" transform="rotate(-32 44 72)" fill="#7E9680" fill-opacity="0.34"/>
+            <circle cx="94" cy="26" r="9" fill="#F6D8DE"/>
+            <circle cx="102" cy="33" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
+            <circle cx="94" cy="31" r="3" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Kanan Atas -->
+        <svg class="absolute -top-4 right-4 w-44 h-44 opacity-85" viewBox="0 0 170 170" fill="none">
+            <path d="M148 16C125 60 94 94 52 118" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="114" cy="58" rx="18" ry="8.5" transform="rotate(28 114 58)" fill="#7E9680" fill-opacity="0.34"/>
+            <ellipse cx="82" cy="92" rx="17" ry="8" transform="rotate(42 82 92)" fill="#7E9680" fill-opacity="0.34"/>
+            <circle cx="52" cy="118" r="10.5" fill="#F6D8DE"/>
+            <circle cx="42" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
+            <circle cx="62" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
+            <circle cx="52" cy="114" r="3.8" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Sisi Kiri Tengah -->
+        <svg class="hidden sm:block absolute top-1/2 -left-6 -translate-y-1/2 w-40 h-48 opacity-80" viewBox="0 0 150 180" fill="none">
+            <path d="M14 26C36 68 38 114 18 158" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="30" cy="64" rx="16" ry="8" transform="rotate(24 30 64)" fill="#7E9680" fill-opacity="0.32"/>
+            <ellipse cx="32" cy="116" rx="16" ry="8" transform="rotate(-22 32 116)" fill="#7E9680" fill-opacity="0.32"/>
+            <circle cx="38" cy="90" r="10" fill="#F6D8DE"/>
+            <circle cx="47" cy="96" r="7.5" fill="#E8A5B4" fill-opacity="0.72"/>
+            <circle cx="38" cy="94" r="3.5" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Sisi Kanan Tengah -->
+        <svg class="hidden sm:block absolute top-1/3 -right-5 w-40 h-48 opacity-80" viewBox="0 0 150 180" fill="none">
+            <path d="M132 22C108 66 106 112 126 154" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="114" cy="62" rx="16" ry="8" transform="rotate(-24 114 62)" fill="#7E9680" fill-opacity="0.32"/>
+            <ellipse cx="112" cy="112" rx="16" ry="8" transform="rotate(22 112 112)" fill="#7E9680" fill-opacity="0.32"/>
+            <circle cx="106" cy="88" r="10" fill="#F6D8DE"/>
+            <circle cx="97" cy="94" r="7.5" fill="#E8A5B4" fill-opacity="0.72"/>
+            <circle cx="106" cy="92" r="3.5" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Tambahan Kanan Bawah Tengah -->
+        <svg class="hidden md:block bottom-28 right-12 w-32 h-32 opacity-75 absolute" viewBox="0 0 130 130" fill="none">
+            <path d="M106 24C84 54 58 80 26 102" stroke="#7E9680" stroke-width="1.9" stroke-linecap="round"/>
+            <ellipse cx="74" cy="56" rx="15" ry="7.5" transform="rotate(34 74 56)" fill="#7E9680" fill-opacity="0.34"/>
+            <circle cx="26" cy="102" r="9.5" fill="#F6D8DE"/>
+            <circle cx="18" cy="95" r="7" fill="#E8A5B4" fill-opacity="0.76"/>
+            <circle cx="26" cy="99" r="3.4" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Kiri Bawah -->
+        <svg class="absolute -bottom-5 left-6 w-44 h-40 opacity-85" viewBox="0 0 170 150" fill="none">
+            <path d="M22 132C55 110 88 94 128 84" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="64" cy="112" rx="17" ry="8" transform="rotate(-18 64 112)" fill="#7E9680" fill-opacity="0.34"/>
+            <circle cx="128" cy="84" r="9.5" fill="#F6D8DE"/>
+            <circle cx="136" cy="90" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
+            <circle cx="128" cy="88" r="3.5" fill="#E4A853"/>
+        </svg>
+
+        <!-- Bunga Kanan Bawah -->
+        <svg class="fixed -bottom-6 -right-6 w-52 h-52 opacity-90" viewBox="0 0 180 180" fill="none">
+            <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+            <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
+            <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
+            <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
+            <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+            <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+            <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
+            <circle cx="96" cy="96" r="7.5" fill="#F6D8DE" fill-opacity="0.85"/>
+            <circle cx="96" cy="96" r="2.8" fill="#E4A853"/>
+        </svg>
+
+        <!-- Kupu-Kupu 1 (Kanan Atas) -->
+        <svg class="butterfly-float top-24 right-24 w-14 h-14 opacity-85 absolute" viewBox="0 0 80 80" fill="none">
+            <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
+            <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
+            <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.3"/>
+            <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.3"/>
+            <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
+            <path d="M39 28C35 21 31 20 29 21" stroke="#352B28" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M41 28C45 21 49 20 51 21" stroke="#352B28" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+
+        <!-- Kupu-Kupu 2 (Kiri Bawah) -->
+        <svg class="butterfly-float bottom-28 left-24 w-12 h-12 opacity-80 absolute" style="animation-delay: -2.1s;" viewBox="0 0 80 80" fill="none">
+            <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.5"/>
+            <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.5"/>
+            <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#7E9680" fill-opacity="0.35" stroke="#7E9680" stroke-width="1.3"/>
+            <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#7E9680" fill-opacity="0.35" stroke="#7E9680" stroke-width="1.3"/>
+            <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+
+        <!-- Kupu-Kupu 3 (Kanan Tengah Bawah) -->
+        <svg class="butterfly-float hidden sm:block bottom-44 right-36 w-11 h-11 opacity-75 absolute" style="animation-delay: -3.6s;" viewBox="0 0 80 80" fill="none">
+            <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
+            <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
+            <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <!-- HALAMAN LOGIN / REGISTER -->
+    <div id="authSection" class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="botanical-card p-8 sm:p-10 rounded-3xl max-w-md w-full relative overflow-hidden">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blush/50 text-roseSoft text-xs font-semibold mb-3">
+                    <i class="fa-solid fa-seedling"></i> Event Content Creator Studio <i class="fa-solid fa-spa"></i>
+                </div>
+                <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-espresso tracking-tight">
+                    Narravia Studio
+                </h1>
+                <p class="text-muted text-sm mt-2">
+                    Mencatat achievement kamu &amp; showcase portofolio dalam satu ruang hangat.
+                </p>
+            </div>
+
+            <form id="authForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
+                        <i class="fa-regular fa-user text-sageDark mr-1"></i> Username <span class="text-muted font-normal">(untuk akun baru)</span>
+                    </label>
+                    <input type="text" id="authUsername" placeholder="Contoh: Narravia"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
+                        <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email
+                    </label>
+                    <input type="email" id="authEmail" required placeholder="halo@narraviastudio.com"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
+                        <i class="fa-solid fa-key text-sageDark mr-1"></i> Password
+                    </label>
+                    <input type="password" id="authPassword" required placeholder="Minimal 6 karakter"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                </div>
+
+                <div class="flex items-center justify-between pt-0.5">
+                    <label class="inline-flex items-center gap-2 text-xs text-espresso/85 cursor-pointer select-none">
+                        <input type="checkbox" id="rememberMe" checked
+                            class="w-4 h-4 rounded border-[#D8C9B8] text-sageDark focus:ring-sageDark accent-[#4F6952]">
+                        <span>Remember me</span>
+                    </label>
+                </div>
+
+                <div id="authNotice" class="text-sageDark bg-sage/15 border border-sage/35 rounded-2xl px-3.5 py-2.5 text-xs hidden space-y-2">
+                    <p id="authNoticeText"></p>
+                    <button type="button" id="btnResendVerify" class="hidden underline font-semibold text-espresso hover:text-sageDark">
+                        Kirim ulang link verifikasi ke email ini
+                    </button>
+                </div>
+
+                <p id="authError" class="text-rose-600 bg-rose-50 border border-rose-200 rounded-2xl px-3 py-2 text-xs hidden"></p>
+
+                <div class="pt-2 flex flex-col gap-2.5">
+                    <button type="submit" id="btnLogin" class="clay-pill w-full text-espresso font-semibold py-2.5 text-sm cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-1.5 text-sageDark"></i> Masuk ke Studio
+                    </button>
+                    <button type="button" id="btnRegister" class="clay-pill w-full text-espresso font-semibold py-2.5 text-sm cursor-pointer">
+                        <i class="fa-solid fa-user-plus mr-1.5 text-roseSoft"></i> Daftar Akun Baru (Kirim Verifikasi Email)
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <footer class="mt-5 text-center text-xs text-muted">
+            <i class="fa-solid fa-leaf text-sageDark mr-1"></i> Created by Narravia.Studio
+        </footer>
+    </div>
+
+    <!-- HALAMAN UTAMA APLIKASI -->
+    <div id="appSection" class="hidden relative z-10 max-w-6xl mx-auto p-4 sm:p-8">
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-7 gap-4 border-b border-[#E6DACB] pb-6">
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-espresso">
+                        Narravia Studio
+                    </h1>
+                    <i class="fa-solid fa-spa text-roseSoft text-lg micro-float"></i>
+                </div>
+
+                <!-- Foto Profil User & Username Permanen (Sync Lintas Device via Firestore) -->
+                <div class="mt-2.5 flex items-center gap-3">
+                    <label title="Klik untuk ganti foto profil user" class="relative w-11 h-11 rounded-full overflow-hidden border-2 border-sage/50 bg-blush/45 flex items-center justify-center cursor-pointer shrink-0 group shadow-xs micro-card-lift">
+                        <img id="userAvatarImg" src="" alt="Foto Profil User" class="w-full h-full object-cover hidden">
+                        <span id="userAvatarInitial" class="font-serif text-base font-semibold text-espresso">N</span>
+                        <span class="absolute inset-0 bg-espresso/45 text-white text-[9px] font-semibold flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                            <i class="fa-solid fa-camera"></i>
+                        </span>
+                        <input type="file" id="userAvatarInput" accept="image/*" class="hidden">
+                    </label>
+                    <div>
+                        <p id="greetingDisplay" class="text-sm font-medium text-espresso inline-flex items-center gap-1.5">
+                            Hallo, <span id="userDisplayName" class="font-semibold text-sageDark">Creator</span>
+                            <span id="verifiedBadge" title="Akun Email Terverifikasi" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                        </p>
+                        <p id="userEmailDisplay" class="text-muted text-xs"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+                <button onclick="exportToCSV()" class="clay-pill text-sageDark px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button id="btnLogout" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-roseSoft"></i> Keluar
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigasi Tab -->
+        <div class="flex flex-wrap gap-2.5 mb-7">
+            <button onclick="switchTab('finance')" id="tabFinance" class="clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
+                <i class="fa-solid fa-heart mr-1.5 text-blush"></i> Pendapatan &amp; Project
+            </button>
+            <button onclick="switchTab('portfolio')" id="tabPortfolio" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
+                <i class="fa-solid fa-images mr-1.5 text-roseSoft"></i> Galeri Portofolio
+            </button>
+            <button onclick="switchTab('social')" id="tabSocial" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
+                <i class="fa-solid fa-share-nodes mr-1.5 text-sageDark"></i> Social Media
+            </button>
+        </div>
+
+        <!-- TAB 1: TRACKING PENDAPATAN -->
+        <div id="viewFinance">
+            <!-- Ringkasan Utama -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div class="botanical-card micro-card-lift p-5 rounded-3xl">
+                    <div class="flex items-center justify-between">
+                        <p class="text-muted text-xs uppercase tracking-wider font-semibold">Total Pendapatan</p>
+                        <i class="fa-solid fa-seedling text-sageDark text-sm micro-float"></i>
+                    </div>
+                    <h2 id="totalPaid" class="font-serif text-2xl sm:text-3xl font-semibold text-sageDark mt-1.5">Rp 0</h2>
+                </div>
+                <div class="botanical-card micro-card-lift p-5 rounded-3xl">
+                    <div class="flex items-center justify-between">
+                        <p class="text-muted text-xs uppercase tracking-wider font-semibold">Menunggu Pelunasan</p>
+                        <i class="fa-solid fa-clock text-roseSoft text-sm"></i>
+                    </div>
+                    <h2 id="totalPending" class="font-serif text-2xl sm:text-3xl font-semibold text-roseSoft mt-1.5">Rp 0</h2>
+                </div>
+                <div class="botanical-card micro-card-lift p-5 rounded-3xl">
+                    <div class="flex items-center justify-between">
+                        <p class="text-muted text-xs uppercase tracking-wider font-semibold">Total Event / Project</p>
+                        <i class="fa-solid fa-camera-retro text-espresso/75 text-sm"></i>
+                    </div>
+                    <h2 id="totalProjects" class="font-serif text-2xl sm:text-3xl font-semibold text-espresso mt-1.5">0</h2>
+                </div>
+            </div>
+
+            <!-- Bar Rekap Invoice & Pajak + Keamanan Data -->
+            <div class="botanical-card micro-card-lift p-4 sm:px-6 rounded-3xl mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="text-xs text-muted space-y-1">
+                    <p class="font-semibold text-espresso text-sm">
+                        <i class="fa-solid fa-file-invoice-dollar text-sageDark mr-1.5"></i> Invoice &amp; Tax Recap Ready
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-shield-halved text-sageDark mr-1"></i> Data terenkripsi &amp; siap export ke CSV.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+                    <button type="button" onclick="copyInvoiceTaxSummary()" class="clay-pill px-4 py-2 text-xs font-semibold text-espresso inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fa-regular fa-copy text-roseSoft"></i> <span id="btnCopySummaryLabel">Salin Rekap Invoice &amp; Pajak</span>
+                    </button>
+                    <button type="button" id="btnExportTaxPdf" onclick="exportInvoiceTaxPDF()" class="clay-pill px-4 py-2 text-xs font-semibold text-sageDark inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-file-pdf text-roseSoft"></i> <span id="btnExportPdfLabel">Export PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Insight Kategori Tertinggi & Terpopuler dengan Dropdown Peringkat -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div class="botanical-card micro-card-lift p-4 sm:px-6 rounded-3xl flex items-start justify-between gap-3">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <p class="text-[11px] uppercase tracking-wider font-semibold text-sageDark">
+                                <i class="fa-solid fa-crown mr-1 text-amber-500"></i> Kategori Pendapatan Tertinggi
+                            </p>
+                            <select id="rankIncomeSelect" onchange="updateSummary()"
+                                class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso focus:outline-none cursor-pointer">
+                                <option value="0">Peringkat 1 — Tertinggi</option>
+                            </select>
+                        </div>
+                        <h3 id="topIncomeCategory" class="font-serif text-lg font-semibold text-espresso mt-1 truncate">Belum ada achievement</h3>
+                        <p id="topIncomeAmount" class="text-xs text-muted mt-0.5">Rp 0</p>
+                    </div>
+                    <span class="w-10 h-10 rounded-full bg-sage/15 text-sageDark flex items-center justify-center shrink-0 mt-1">
+                        <i class="fa-solid fa-coins"></i>
+                    </span>
+                </div>
+
+                <div class="botanical-card micro-card-lift p-4 sm:px-6 rounded-3xl flex items-start justify-between gap-3">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <p class="text-[11px] uppercase tracking-wider font-semibold text-roseSoft">
+                                <i class="fa-solid fa-fire mr-1"></i> Kategori Terpopuler (Portofolio)
+                            </p>
+                            <select id="rankPopularSelect" onchange="updateSummary()"
+                                class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso focus:outline-none cursor-pointer">
+                                <option value="0">Peringkat 1 — Terpopuler</option>
+                            </select>
+                        </div>
+                        <h3 id="popularPortfolioCategory" class="font-serif text-lg font-semibold text-espresso mt-1 truncate">Belum ada data</h3>
+                        <p id="popularPortfolioCount" class="text-xs text-muted mt-0.5">0 project</p>
+                    </div>
+                    <span class="w-10 h-10 rounded-full bg-blush/60 text-roseSoft flex items-center justify-center shrink-0 mt-1">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Grafik Progress Bulanan (Hanya Bar Kuning & Pink Tanpa Garis) -->
+            <div class="botanical-card p-5 sm:p-6 rounded-3xl mb-8">
+                <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blush/50 text-roseSoft text-[11px] font-semibold">
+                                <i class="fa-solid fa-chart-column"></i> Monthly Progress Tracker
+                            </span>
+                            <span id="monthProgressBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sage/15 text-sageDark text-[11px] font-semibold">
+                                <i class="fa-solid fa-arrow-trend-up"></i> Progress Bulanan
+                            </span>
+                        </div>
+                        <h3 class="font-serif text-xl font-semibold text-espresso mt-1.5">
+                            Achievement Kamu <i class="fa-solid fa-spa text-roseSoft text-base ml-1 micro-float"></i>
+                        </h3>
+                        <p id="monthProgressSubtitle" class="text-xs text-muted">Bar progress pendapatan bulanan (Lunas &amp; DP/Pending)</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4 text-xs text-muted">
+                        <span class="inline-flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-xs bg-[#EAB308] inline-block"></span> Lunas
+                        </span>
+                        <span class="inline-flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-xs bg-[#F472B6] inline-block"></span> DP / Pending
+                        </span>
+                    </div>
+                </div>
+                <div class="h-56 sm:h-60 w-full relative">
+                    <canvas id="incomeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Form Input Project Baru -->
+            <div class="botanical-card p-6 sm:p-7 rounded-3xl mb-8">
+                <h3 class="font-serif text-xl font-semibold mb-4 text-espresso">
+                    <i class="fa-solid fa-feather-pointed text-sageDark mr-1.5 text-base"></i> Input Project Baru
+                </h3>
+                <form id="incomeForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-sparkles text-roseSoft mr-1"></i> Project Name
+                        </label>
+                        <input type="text" id="clientName" required placeholder="Contoh: Intimate Wedding Clara & Dimas"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-tag text-sageDark mr-1"></i> Kategori Konten
+                        </label>
+                        <select id="category" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                            <option value="Event Coverage (Reels/TikTok)">Event Coverage (Reels/TikTok)</option>
+                            <option value="Same Day Edit (SDE)">Same Day Edit (SDE)</option>
+                            <option value="Brand Launch / Activation">Brand Launch / Activation</option>
+                            <option value="UGC / Behind The Scenes">UGC / Behind The Scenes</option>
+                            <option value="Visit Venue">Visit Venue</option>
+                            <option value="Visit Booth">Visit Booth</option>
+                            <option value="Visit Restaurant / Cafe">Visit Restaurant / Cafe</option>
+                            <option value="Visit Hotel">Visit Hotel</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-regular fa-calendar text-sageDark mr-1"></i> Tanggal Event
+                        </label>
+                        <input type="date" id="date" required
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-wallet text-sageDark mr-1"></i> Nominal Fee (Exclude Pajak) (Rp)
+                        </label>
+                        <input type="number" id="amount" required min="0" step="any" placeholder="Contoh: 2500000"
+                            oninput="updateTaxPreviewHint()"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-percent text-roseSoft mr-1"></i> Pajak (Nominal Rp atau Persen %)
+                        </label>
+                        <input type="text" id="taxInput" placeholder="Contoh: 125000 atau 5%"
+                            oninput="updateTaxPreviewHint()"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                        <p id="taxCalcPreview" class="text-[11px] text-sageDark mt-1 hidden"></p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-circle-check text-sageDark mr-1"></i> Status Pembayaran
+                        </label>
+                        <select id="status" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                            <option value="Lunas">Lunas</option>
+                            <option value="DP 50%">DP 50%</option>
+                            <option value="Pending / Invoice Sent">Pending / Invoice Sent</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-building-user text-sageDark mr-1"></i> Nama Management (Opsional)
+                        </label>
+                        <input type="text" id="managementName" placeholder="Contoh: Narravia Talent Mgmt"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-regular fa-calendar-check text-roseSoft mr-1"></i> Deadline Project (Opsional)
+                        </label>
+                        <input type="date" id="deadlineDate"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-regular fa-clock text-sageDark mr-1"></i> Estimasi Tanggal Cair (Opsional)
+                        </label>
+                        <input type="date" id="payoutDate"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-hashtag text-sageDark mr-1"></i> Sosial Media Project (Opsional)
+                        </label>
+                        <div class="flex gap-2">
+                            <select id="projectSocialPlatform" class="bg-ivory border border-[#E4D8CA] rounded-2xl px-2.5 py-2 text-xs focus:outline-none focus:border-sageDark shrink-0">
+                                <option value="Instagram">Instagram</option>
+                                <option value="TikTok">TikTok</option>
+                                <option value="Threads">Threads</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Twitter / X">Twitter / X</option>
+                            </select>
+                            <input type="text" id="projectSocialHandle" placeholder="@handle atau link postingan"
+                                class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3 py-2 text-xs focus:outline-none focus:border-sageDark">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-regular fa-image text-roseSoft mr-1"></i> Link Portofolio / Foto HD (Opsional)
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="url" id="portfolioLink" placeholder="https://... link gambar / portofolio"
+                                class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3 py-2 text-xs focus:outline-none focus:border-sageDark">
+                            <label title="Pilih foto dari perangkat (kualitas HD)" class="clay-pill cursor-pointer text-espresso px-3 py-2 text-xs font-semibold flex items-center justify-center shrink-0">
+                                <i class="fa-regular fa-image text-roseSoft"></i>
+                                <input type="file" id="portfolioPhoto" accept="image/*" class="hidden">
+                            </label>
+                        </div>
+                        <p id="photoFileName" class="text-[11px] text-sageDark mt-1 truncate hidden"></p>
+                    </div>
+                    <div class="flex items-end justify-end">
+                        <button type="submit" id="btnSubmitProject" class="clay-pill text-espresso font-semibold py-2.5 px-6 text-sm cursor-pointer w-full sm:w-auto">
+                            <i class="fa-solid fa-plus mr-1 text-sageDark"></i> Simpan Project
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabel Riwayat -->
+            <div class="botanical-card rounded-3xl overflow-hidden">
+                <div class="p-4 sm:px-6 border-b border-[#EADFD3] flex flex-wrap justify-between items-center gap-3">
+                    <div>
+                        <h3 class="font-serif text-lg font-semibold text-espresso">
+                            <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Riwayat Pemasukan
+                        </h3>
+                        <p class="text-[11px] text-muted">Klik status DP / Pending untuk menandai lunas dan otomatis masuk ke Total Pendapatan</p>
+                    </div>
+                    <select id="filterStatus" onchange="renderData()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso focus:outline-none cursor-pointer">
+                        <option value="ALL">Semua Status</option>
+                        <option value="Lunas">Lunas</option>
+                        <option value="DP 50%">DP 50%</option>
+                        <option value="Pending / Invoice Sent">Pending</option>
+                    </select>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-cream/80 text-muted text-[11px] uppercase tracking-wider border-b border-[#EADFD3]">
+                                <th class="p-4">Tanggal</th>
+                                <th class="p-4">Project Name</th>
+                                <th class="p-4">Kategori</th>
+                                <th class="p-4">Nominal Fee</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-[#F0E6DA] text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: GALERI PORTOFOLIO -->
+        <div id="viewPortfolio" class="hidden">
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+                <div>
+                    <h2 class="font-serif text-2xl font-semibold text-espresso flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-roseSoft text-lg"></i>
+                        <span>Portofolio Showcase</span>
+                        <i class="fa-solid fa-spa text-sageDark text-base micro-float"></i>
+                    </h2>
+                    <!-- Icon Sosial Media Langsung di Portofolio Showcase (Klik menuju profil sosmed) -->
+                    <div id="showcaseSocialIconsRow" class="flex flex-wrap items-center gap-3 mt-1.5 text-xs font-semibold text-sageDark hidden"></div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                    <button type="button" id="btnExportJpg" onclick="exportPortfolioJPG()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-file-image text-sageDark"></i> <span id="btnExportJpgLabel">Export JPG (HD)</span>
+                    </button>
+                    <span id="jpgRequirementHint" class="text-[11px] text-muted">Minimal 3 event untuk export JPG HD</span>
+                </div>
+            </div>
+
+            <!-- Kolase Portofolio Perbulan (Rasio 4:3 Tanpa Terpotong) -->
+            <div class="mb-8">
+                <div id="monthlyCollageContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Karya Berdasarkan Tahun (Rasio 4:3 Tanpa Terpotong, Dipisah Per Tahun) -->
+            <div>
+                <div id="yearlyPortfolioContainer" class="space-y-8"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: SOCIAL MEDIA -->
+        <div id="viewSocial" class="hidden space-y-6">
+            <!-- Kartu Creator's Profile Biodata & Foto User -->
+            <div id="socialProfileBubbleCard" class="botanical-card p-6 sm:p-7 rounded-3xl max-w-3xl hidden">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
+                        <i class="fa-solid fa-id-badge"></i> Creator's Profile
+                    </span>
+                </div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0">
+                        <img id="socialProfileAvatarImg" src="" alt="Foto Profil User" class="w-full h-full object-cover hidden">
+                        <span id="socialProfileAvatarInitial" class="font-serif text-2xl font-semibold text-espresso">N</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="relative bg-cream/90 border border-[#E2D4C3] rounded-3xl px-5 py-4 text-sm text-espresso leading-relaxed">
+                            <p id="socialIntroBubbleText" class="font-medium"></p>
+                        </div>
+                        <div id="socialHandlesPreviewRow" class="flex flex-wrap gap-2 mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Input Link Sosial Media & Domisili -->
+            <div class="botanical-card p-6 sm:p-8 rounded-3xl max-w-3xl">
+                <div class="mb-6">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blush/50 text-roseSoft text-[11px] font-semibold">
+                        <i class="fa-solid fa-share-nodes"></i> Creator Social Handles
+                    </span>
+                    <h2 class="font-serif text-2xl font-semibold text-espresso mt-1.5">
+                        Social Media Kamu
+                    </h2>
+                    <p class="text-xs text-muted mt-1">
+                        Info sosial media dan domisili kamu
+                    </p>
+                </div>
+
+                <form id="socialForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-brands fa-instagram text-roseSoft mr-1.5"></i> Link Instagram
+                        </label>
+                        <input type="url" id="socInstagram" placeholder="https://instagram.com/username"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-brands fa-tiktok text-espresso mr-1.5"></i> Link TikTok
+                        </label>
+                        <input type="url" id="socTiktok" placeholder="https://tiktok.com/@username"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-at text-sageDark mr-1.5"></i> Link Threads
+                        </label>
+                        <input type="url" id="socThreads" placeholder="https://threads.net/@username"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-brands fa-facebook text-sageDark mr-1.5"></i> Link Facebook
+                        </label>
+                        <input type="url" id="socFacebook" placeholder="https://facebook.com/username"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-brands fa-twitter text-roseSoft mr-1.5"></i> Link Twitter / X
+                        </label>
+                        <input type="url" id="socTwitter" placeholder="https://x.com/username"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-location-dot text-sageDark mr-1.5"></i> Domisili
+                        </label>
+                        <input type="text" id="socDomicile" placeholder="Contoh: Jakarta Timur"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+
+                    <div class="sm:col-span-2 pt-2 flex flex-wrap items-center justify-between gap-3">
+                        <span id="socialSaveStatus" class="text-xs text-sageDark font-medium"></span>
+                        <button type="submit" id="btnSaveSocial" class="clay-pill text-espresso font-semibold py-2.5 px-6 text-sm cursor-pointer">
+                            <i class="fa-solid fa-check mr-1.5 text-sageDark"></i> Simpan Sosial Media
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer Dashboard -->
+        <footer class="mt-12 pt-5 border-t border-[#E6DACB]/80 text-center text-xs text-muted">
+            <i class="fa-solid fa-leaf text-sageDark mr-1"></i> Created by Narravia.Studio
+        </footer>
+    </div>
+
+    <!-- Container Tersembunyi untuk Render Kolase JPG HD & PDF Recap -->
+    <div id="jpgRenderStaging" style="position: fixed; left: -20000px; top: 0; pointer-events: none; z-index: -1;"></div>
+
+    <!-- MODAL PREVIEW FOTO HD -->
+    <div id="photoModal" onclick="closePhotoModal()" class="fixed inset-0 z-50 bg-espresso/75 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="botanical-card max-w-4xl w-full rounded-3xl overflow-hidden p-4 sm:p-5">
+            <div class="flex justify-between items-center mb-3 px-1">
+                <div>
+                    <h4 id="modalTitle" class="font-serif text-lg font-semibold text-espresso"></h4>
+                    <p id="modalSubtitle" class="text-xs text-muted"></p>
+                </div>
+                <button onclick="closePhotoModal()" class="clay-pill text-muted hover:text-espresso text-lg px-3 py-1 cursor-pointer">&times;</button>
+            </div>
+            <div class="w-full max-h-[75vh] overflow-auto rounded-2xl bg-cream flex items-center justify-center p-2">
+                <img id="modalImg" src="" alt="" class="max-w-full max-h-[70vh] object-contain rounded-xl transition-transform duration-200">
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Modular v10) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import {
+            getAuth,
+            setPersistence,
+            browserLocalPersistence,
+            browserSessionPersistence,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            sendEmailVerification,
+            updateProfile,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            onSnapshot,
+            getDoc,
+            getDocs,
+            updateDoc,
+            deleteDoc,
+            doc,
+            setDoc,
+            query,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8b9mNIl0UH_rFw9EARCq4MvhYGpldNaA",
+            authDomain: "narravia-studio.firebaseapp.com",
+            projectId: "narravia-studio",
+            storageBucket: "narravia-studio.firebasestorage.app",
+            messagingSenderId: "88190375836",
+            appId: "1:88190375836:web:6f33391c5d8d9ee55d5a59",
+            measurementId: "G-TRE4Z7N1ZS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const REMEMBER_KEY = "narravia_remember_pref";
+        const MIN_JPG_EVENTS = 3;
+
+        let currentUser = null;
+        let pendingVerifyUser = null;
+        let unsubscribeRecords = null;
+        let unsubscribeProfile = null;
+        let autoRefreshTimer = null;
+        let records = [];
+        let hdPhotoBase64 = "";
+        let incomeChartInstance = null;
+        let currentAvatarDataUrl = "";
+        let userSocials = {
+            instagram: "",
+            tiktok: "",
+            threads: "",
+            facebook: "",
+            twitter: "",
+            domicile: ""
+        };
+
+        document.addEventListener("click", (e) => {
+            const pill = e.target.closest(".clay-pill");
+            if (!pill || pill.disabled) return;
+            pill.animate(
+                [
+                    { transform: "scale(1)" },
+                    { transform: "scale(0.95)" },
+                    { transform: "scale(1.03)" },
+                    { transform: "scale(1)" }
+                ],
+                { duration: 230, easing: "ease-out" }
+            );
+        });
+
+        const authError = document.getElementById('authError');
+        const authNotice = document.getElementById('authNotice');
+        const authNoticeText = document.getElementById('authNoticeText');
+        const btnResendVerify = document.getElementById('btnResendVerify');
+        const rememberMeCheckbox = document.getElementById('rememberMe');
+
+        try {
+            const savedPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
+            if (savedPref) {
+                rememberMeCheckbox.checked = Boolean(savedPref.remember);
+                if (savedPref.remember) {
+                    if (savedPref.username) document.getElementById('authUsername').value = savedPref.username;
+                    if (savedPref.email) document.getElementById('authEmail').value = savedPref.email;
+                }
+            }
+        } catch (_) {}
+
+        function saveRememberPreference(remember, username = "", email = "") {
+            try {
+                if (remember) {
+                    localStorage.setItem(REMEMBER_KEY, JSON.stringify({
+                        remember: true,
+                        username,
+                        email
+                    }));
+                } else {
+                    localStorage.removeItem(REMEMBER_KEY);
+                }
+            } catch (_) {}
+        }
+
+        function getAvatarStorageKey(uid) {
+            return `narravia_avatar_${uid || "guest"}`;
+        }
+
+        function getSocialStorageKey(uid) {
+            return `narravia_socials_${uid || "guest"}`;
+        }
+
+        function normalizeSocialEntry(raw, platform) {
+            const trimmed = String(raw || "").trim();
+            if (!trimmed) return null;
+
+            let href = trimmed;
+            let label = trimmed;
+
+            if (/^https?:\/\//i.test(trimmed)) {
+                href = trimmed;
+                try {
+                    const u = new URL(trimmed);
+                    const segments = u.pathname.split("/").filter(Boolean);
+                    if (segments.length > 0) {
+                        const slug = decodeURIComponent(segments[segments.length - 1]);
+                        if (platform === "facebook") {
+                            label = slug;
+                        } else {
+                            label = slug.startsWith("@") ? slug : `@${slug}`;
+                        }
+                    } else {
+                        label = u.hostname.replace(/^www\./, "");
+                    }
+                } catch (_) {
+                    label = trimmed;
+                }
+            } else {
+                const cleanHandle = trimmed.replace(/^@+/, "");
+                if (platform === "instagram") {
+                    href = `https://instagram.com/${cleanHandle}`;
+                    label = `@${cleanHandle}`;
+                } else if (platform === "tiktok") {
+                    href = `https://www.tiktok.com/@${cleanHandle}`;
+                    label = `@${cleanHandle}`;
+                } else if (platform === "threads") {
+                    href = `https://www.threads.net/@${cleanHandle}`;
+                    label = `@${cleanHandle}`;
+                } else if (platform === "facebook") {
+                    href = `https://facebook.com/${cleanHandle}`;
+                    label = cleanHandle;
+                } else if (platform === "twitter") {
+                    href = `https://x.com/${cleanHandle}`;
+                    label = `@${cleanHandle}`;
+                }
+            }
+
+            return { href, label };
+        }
+
+        function buildIntroBubbleSentence() {
+            const username = (document.getElementById('userDisplayName')?.innerText || "Creator").trim();
+            const domicile = (userSocials.domicile || "").trim();
+            const locPart = domicile || "...";
+            return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator yang berdomisili di ${locPart}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
+        }
+
+        function updateShowcaseSocialIcons() {
+            const row = document.getElementById('showcaseSocialIconsRow');
+            if (!row) return;
+
+            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
+            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
+            const th = normalizeSocialEntry(userSocials.threads, "threads");
+            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
+            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+
+            const iconLinks = [
+                ig ? `<a href="${escapeHtml(ig.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-instagram text-roseSoft text-sm"></i><span>${escapeHtml(ig.label)}</span></a>` : "",
+                tt ? `<a href="${escapeHtml(tt.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-tiktok text-espresso text-sm"></i><span>${escapeHtml(tt.label)}</span></a>` : "",
+                th ? `<a href="${escapeHtml(th.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-solid fa-at text-sageDark text-sm"></i><span>${escapeHtml(th.label)}</span></a>` : "",
+                fb ? `<a href="${escapeHtml(fb.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-facebook text-sageDark text-sm"></i><span>${escapeHtml(fb.label)}</span></a>` : "",
+                tw ? `<a href="${escapeHtml(tw.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-twitter text-roseSoft text-sm"></i><span>${escapeHtml(tw.label)}</span></a>` : ""
+            ].filter(Boolean);
+
+            if (iconLinks.length === 0) {
+                row.innerHTML = "";
+                row.classList.add('hidden');
+            } else {
+                row.innerHTML = iconLinks.join(`<span class="text-muted/60">•</span>`);
+                row.classList.remove('hidden');
+            }
+        }
+
+        function updateSocialProfileCard() {
+            const cardEl = document.getElementById('socialProfileBubbleCard');
+            const bubbleEl = document.getElementById('socialIntroBubbleText');
+            const chipsRow = document.getElementById('socialHandlesPreviewRow');
+            const avatarImg = document.getElementById('socialProfileAvatarImg');
+            const avatarInitial = document.getElementById('socialProfileAvatarInitial');
+
+            updateShowcaseSocialIcons();
+
+            if (!cardEl || !bubbleEl || !chipsRow) return;
+
+            const hasAnySocial = Boolean(
+                userSocials.instagram ||
+                userSocials.tiktok ||
+                userSocials.threads ||
+                userSocials.facebook ||
+                userSocials.twitter
+            );
+
+            if (!hasAnySocial) {
+                cardEl.classList.add('hidden');
+                return;
+            }
+
+            const username = (document.getElementById('userDisplayName')?.innerText || "Creator").trim();
+            bubbleEl.innerText = buildIntroBubbleSentence();
+
+            if (avatarInitial) {
+                avatarInitial.innerText = (username.charAt(0) || "N").toUpperCase();
+            }
+            if (avatarImg && avatarInitial) {
+                if (currentAvatarDataUrl) {
+                    avatarImg.src = currentAvatarDataUrl;
+                    avatarImg.classList.remove('hidden');
+                    avatarInitial.classList.add('hidden');
+                } else {
+                    avatarImg.src = "";
+                    avatarImg.classList.add('hidden');
+                    avatarInitial.classList.remove('hidden');
+                }
+            }
+
+            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
+            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
+            const th = normalizeSocialEntry(userSocials.threads, "threads");
+            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
+            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+
+            const clickableBadges = [
+                ig ? `<a href="${escapeHtml(ig.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="fa-brands fa-instagram text-roseSoft"></i><span>${escapeHtml(ig.label)}</span></a>` : "",
+                tt ? `<a href="${escapeHtml(tt.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-sageDark"><i class="fa-brands fa-tiktok text-sageDark"></i><span>${escapeHtml(tt.label)}</span></a>` : "",
+                th ? `<a href="${escapeHtml(th.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="fa-solid fa-at text-roseSoft"></i><span>${escapeHtml(th.label)}</span></a>` : "",
+                fb ? `<a href="${escapeHtml(fb.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-sageDark"><i class="fa-brands fa-facebook text-sageDark"></i><span>${escapeHtml(fb.label)}</span></a>` : "",
+                tw ? `<a href="${escapeHtml(tw.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="fa-brands fa-twitter text-roseSoft"></i><span>${escapeHtml(tw.label)}</span></a>` : ""
+            ].filter(Boolean);
+
+            chipsRow.innerHTML = clickableBadges.join("");
+            cardEl.classList.remove('hidden');
+        }
+
+        function clearSocialFormInputs() {
+            const ids = ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socDomicile'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+        }
+
+        function applySocialsToUi(socialObj = {}, uid = "") {
+            let cached = {};
+            try {
+                cached = JSON.parse(localStorage.getItem(getSocialStorageKey(uid || currentUser?.uid)) || "{}");
+            } catch (_) {}
+
+            userSocials = {
+                instagram: (socialObj.instagram ?? cached.instagram ?? "").trim(),
+                tiktok: (socialObj.tiktok ?? cached.tiktok ?? "").trim(),
+                threads: (socialObj.threads ?? cached.threads ?? "").trim(),
+                facebook: (socialObj.facebook ?? cached.facebook ?? "").trim(),
+                twitter: (socialObj.twitter ?? cached.twitter ?? "").trim(),
+                domicile: (socialObj.domicile ?? cached.domicile ?? "").trim()
+            };
+
+            try {
+                localStorage.setItem(getSocialStorageKey(uid || currentUser?.uid), JSON.stringify(userSocials));
+            } catch (_) {}
+
+            const hasAnySocial = Boolean(
+                userSocials.instagram ||
+                userSocials.tiktok ||
+                userSocials.threads ||
+                userSocials.facebook ||
+                userSocials.twitter
+            );
+
+            if (hasAnySocial) {
+                clearSocialFormInputs();
+            }
+
+            updateSocialProfileCard();
+        }
+
+        document.getElementById('socialForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            const btn = document.getElementById('btnSaveSocial');
+            const statusEl = document.getElementById('socialSaveStatus');
+            btn.disabled = true;
+
+            const nextSocials = {
+                instagram: document.getElementById('socInstagram').value.trim(),
+                tiktok: document.getElementById('socTiktok').value.trim(),
+                threads: document.getElementById('socThreads').value.trim(),
+                facebook: document.getElementById('socFacebook').value.trim(),
+                twitter: document.getElementById('socTwitter').value.trim(),
+                domicile: document.getElementById('socDomicile').value.trim()
+            };
+
+            applySocialsToUi(nextSocials, currentUser.uid);
+            clearSocialFormInputs();
+
+            try {
+                await setDoc(
+                    doc(db, `users/${currentUser.uid}`),
+                    { socials: nextSocials },
+                    { merge: true }
+                );
+                statusEl.innerText = "Creator's Profile berhasil dibuat & tersimpan!";
+                setTimeout(() => { statusEl.innerText = ""; }, 2500);
+            } catch (err) {
+                statusEl.innerText = "Tersimpan lokal (sinkron cloud: " + err.message + ")";
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        function renderUserAvatar(uid, displayName, remotePhotoUrl = "") {
+            const imgEl = document.getElementById('userAvatarImg');
+            const initialEl = document.getElementById('userAvatarInitial');
+            const initialChar = (displayName || "N").trim().charAt(0).toUpperCase() || "N";
+            initialEl.innerText = initialChar;
+
+            let savedAvatar = "";
+            try {
+                savedAvatar = localStorage.getItem(getAvatarStorageKey(uid)) || "";
+            } catch (_) {}
+
+            const finalAvatar = remotePhotoUrl || savedAvatar || "";
+            currentAvatarDataUrl = finalAvatar;
+
+            if (remotePhotoUrl) {
+                try {
+                    localStorage.setItem(getAvatarStorageKey(uid), remotePhotoUrl);
+                } catch (_) {}
+            }
+
+            if (finalAvatar) {
+                imgEl.src = finalAvatar;
+                imgEl.classList.remove('hidden');
+                initialEl.classList.add('hidden');
+            } else {
+                imgEl.src = "";
+                imgEl.classList.add('hidden');
+                initialEl.classList.remove('hidden');
+            }
+
+            updateSocialProfileCard();
+        }
+
+        document.getElementById('userAvatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file || !currentUser) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = async function() {
+                    const canvas = document.createElement('canvas');
+                    const size = 240;
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#F6D8DE';
+                    ctx.fillRect(0, 0, size, size);
+
+                    const ratio = img.width / img.height;
+                    let drawW, drawH, offsetX, offsetY;
+                    if (ratio > 1) {
+                        drawH = size;
+                        drawW = size * ratio;
+                        offsetX = (size - drawW) / 2;
+                        offsetY = 0;
+                    } else {
+                        drawW = size;
+                        drawH = size / ratio;
+                        offsetX = 0;
+                        offsetY = (size - drawH) / 2;
+                    }
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+
+                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.9);
+                    try {
+                        localStorage.setItem(getAvatarStorageKey(currentUser.uid), avatarUrl);
+                    } catch (_) {}
+
+                    const currentName = document.getElementById('userDisplayName').innerText;
+                    renderUserAvatar(currentUser.uid, currentName, avatarUrl);
+
+                    try {
+                        await setDoc(
+                            doc(db, `users/${currentUser.uid}`),
+                            { photoURL: avatarUrl },
+                            { merge: true }
+                        );
+                    } catch (err) {
+                        console.error("Gagal sinkron foto profil ke cloud:", err);
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function showAuthError(msg) {
+            authNotice.classList.add('hidden');
+            authError.innerText = msg;
+            authError.classList.remove('hidden');
+        }
+
+        function showAuthNotice(msg, allowResend = false) {
+            authError.classList.add('hidden');
+            authNoticeText.innerText = msg;
+            btnResendVerify.classList.toggle('hidden', !allowResend);
+            authNotice.classList.remove('hidden');
+        }
+
+        function stopRealtimeSync() {
+            if (unsubscribeRecords) {
+                unsubscribeRecords();
+                unsubscribeRecords = null;
+            }
+            if (unsubscribeProfile) {
+                unsubscribeProfile();
+                unsubscribeProfile = null;
+            }
+            if (autoRefreshTimer) {
+                clearInterval(autoRefreshTimer);
+                autoRefreshTimer = null;
+            }
+            records = [];
+        }
+
+        function setHeaderUserInfo(user, profileData = {}) {
+            const firestoreUsername = typeof profileData === "string" ? profileData : (profileData?.username || "");
+            const firestorePhotoUrl = typeof profileData === "object" ? (profileData?.photoURL || "") : "";
+            const fallbackName = (user.email || "Creator").split("@")[0];
+            const finalName = (firestoreUsername || user.displayName || fallbackName).trim();
+
+            document.getElementById('userDisplayName').innerText = finalName;
+            document.getElementById('userEmailDisplay').innerText = user.email || "";
+            document.getElementById('verifiedBadge').classList.toggle('hidden', !user.emailVerified);
+            renderUserAvatar(user.uid, finalName, firestorePhotoUrl);
+
+            if (typeof profileData === "object") {
+                applySocialsToUi(profileData?.socials || {}, user.uid);
+            }
+
+            try {
+                const rawPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
+                if (rawPref && rawPref.remember) {
+                    localStorage.setItem(REMEMBER_KEY, JSON.stringify({
+                        ...rawPref,
+                        username: finalName,
+                        email: user.email || rawPref.email || ""
+                    }));
+                }
+            } catch (_) {}
+        }
+
+        function applySnapshotRecords(snapshotDocs) {
+            records = snapshotDocs.map(d => ({ id: d.id, ...d.data() }));
+            updateSummary();
+            renderMonthlyChart();
+            window.renderData();
+            window.renderPortfolio();
+        }
+
+        async function refreshUserAndData() {
+            if (!currentUser) return;
+            try {
+                await currentUser.reload();
+                const userSnap = await getDoc(doc(db, `users/${currentUser.uid}`));
+                const profileObj = userSnap.exists() ? userSnap.data() : {};
+                setHeaderUserInfo(currentUser, profileObj);
+
+                const q = query(collection(db, `users/${currentUser.uid}/projects`), orderBy("date", "desc"));
+                const projSnap = await getDocs(q);
+                applySnapshotRecords(projSnap.docs);
+            } catch (_) {}
+        }
+
+        function renderImageSourceToSuperHd(src, maxSide = 2400, quality = 0.99) {
+            return new Promise((resolve) => {
+                if (!src) return resolve("");
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    try {
+                        const scale = Math.min(2, maxSide / Math.max(img.width || 1, img.height || 1));
+                        const outW = Math.max(1, Math.round((img.width || 1200) * scale));
+                        const outH = Math.max(1, Math.round((img.height || 900) * scale));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = outW;
+                        canvas.height = outH;
+                        const ctx = canvas.getContext('2d');
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(img, 0, 0, outW, outH);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    } catch (_) {
+                        resolve(src);
+                    }
+                };
+                img.onerror = () => resolve("");
+                img.src = src;
+            });
+        }
+
+        async function extractSuperHdFromLink(urlStr) {
+            if (!urlStr) return "";
+            const trimmed = urlStr.trim();
+            if (!/^https?:\/\//i.test(trimmed)) return "";
+
+            const directHd = await renderImageSourceToSuperHd(trimmed, 2400, 0.99);
+            if (directHd) return directHd;
+
+            try {
+                const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(trimmed)}`;
+                const res = await fetch(apiUrl);
+                if (res.ok) {
+                    const json = await res.json();
+                    const candidateImg = json?.data?.image?.url || json?.data?.screenshot?.url || "";
+                    if (candidateImg) {
+                        const extractedHd = await renderImageSourceToSuperHd(candidateImg, 2400, 0.99);
+                        if (extractedHd) return extractedHd;
+                    }
+                }
+            } catch (_) {}
+
+            return "";
+        }
+
+        function parseTaxValue(rawTaxInput, feeAmount) {
+            const rawStr = String(rawTaxInput || "").trim().replace(/\s+/g, "");
+            if (!rawStr) {
+                return { taxAmount: 0, taxDisplayLabel: "Rp 0" };
+            }
+
+            if (rawStr.endsWith("%")) {
+                const cleanedPct = rawStr.slice(0, -1).replace(/,/g, ".");
+                const pctNum = parseFloat(cleanedPct);
+                if (Number.isNaN(pctNum) || pctNum < 0) {
+                    return { taxAmount: 0, taxDisplayLabel: "Rp 0" };
+                }
+                const computedTax = Math.round((Number(feeAmount) || 0) * (pctNum / 100));
+                return {
+                    taxAmount: computedTax,
+                    taxDisplayLabel: `${pctNum}% (${formatRupiah(computedTax)})`
+                };
+            }
+
+            const cleanedNum = rawStr.replace(/[^0-9.,-]/g, "").replace(/,/g, ".");
+            const numVal = parseFloat(cleanedNum);
+            if (Number.isNaN(numVal) || numVal < 0) {
+                return { taxAmount: 0, taxDisplayLabel: "Rp 0" };
+            }
+            const roundedTax = Math.round(numVal);
+            return {
+                taxAmount: roundedTax,
+                taxDisplayLabel: formatRupiah(roundedTax)
+            };
+        }
+
+        window.updateTaxPreviewHint = () => {
+            const feeVal = parseFloat(document.getElementById('amount')?.value || "0") || 0;
+            const rawTax = document.getElementById('taxInput')?.value || "";
+            const previewEl = document.getElementById('taxCalcPreview');
+            if (!previewEl) return;
+
+            if (!rawTax.trim()) {
+                previewEl.classList.add('hidden');
+                previewEl.textContent = "";
+                return;
+            }
+
+            const parsed = parseTaxValue(rawTax, feeVal);
+            previewEl.textContent = `Nominal pajak: ${formatRupiah(parsed.taxAmount)}`;
+            previewEl.classList.remove('hidden');
+        };
+
+        document.getElementById('portfolioPhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const label = document.getElementById('photoFileName');
+            if (!file) {
+                hdPhotoBase64 = "";
+                label.classList.add('hidden');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const superHd = await renderImageSourceToSuperHd(event.target.result, 2400, 0.99);
+                hdPhotoBase64 = superHd || event.target.result;
+                label.textContent = `Foto Super HD siap: ${file.name}`;
+                label.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usernameInput = document.getElementById('authUsername').value.trim();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const remember = rememberMeCheckbox.checked;
+
+            authError.classList.add('hidden');
+            authNotice.classList.add('hidden');
+
+            try {
+                await setPersistence(
+                    auth,
+                    remember ? browserLocalPersistence : browserSessionPersistence
+                );
+                saveRememberPreference(remember, usernameInput, email);
+
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                await cred.user.reload();
+                if (!cred.user.emailVerified) {
+                    pendingVerifyUser = cred.user;
+                    await signOut(auth);
+                    showAuthNotice(
+                        `Email ${email} belum diverifikasi. Cek inbox atau folder Spam lo lalu klik link verifikasi sebelum masuk.`,
+                        true
+                    );
+                    return;
+                }
+                if (usernameInput && !cred.user.displayName) {
+                    await updateProfile(cred.user, { displayName: usernameInput });
+                    await setDoc(doc(db, `users/${cred.user.uid}`), { username: usernameInput }, { merge: true });
+                }
+            } catch (err) {
+                showAuthError("Gagal login: Pastikan email dan password sudah benar.");
+            }
+        });
+
+        document.getElementById('btnRegister').addEventListener('click', async () => {
+            const usernameInput = document.getElementById('authUsername').value.trim();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const remember = rememberMeCheckbox.checked;
+
+            authError.classList.add('hidden');
+            authNotice.classList.add('hidden');
+
+            if (!email || password.length < 6) {
+                showAuthError("Isi email dan password minimal 6 karakter.");
+                return;
+            }
+
+            try {
+                await setPersistence(
+                    auth,
+                    remember ? browserLocalPersistence : browserSessionPersistence
+                );
+                const chosenName = usernameInput || email.split("@")[0];
+                saveRememberPreference(remember, chosenName, email);
+
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(cred.user, { displayName: chosenName });
+                await setDoc(doc(db, `users/${cred.user.uid}`), { username: chosenName, email }, { merge: true });
+
+                pendingVerifyUser = cred.user;
+                await sendEmailVerification(cred.user);
+                await signOut(auth);
+                showAuthNotice(
+                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email lo, klik link verifikasinya, lalu login di sini.`,
+                    true
+                );
+            } catch (err) {
+                showAuthError("Gagal daftar: " + err.message);
+            }
+        });
+
+        btnResendVerify.addEventListener('click', async () => {
+            if (!pendingVerifyUser) return;
+            try {
+                await sendEmailVerification(pendingVerifyUser);
+                showAuthNotice("Link verifikasi baru sudah dikirim ulang. Cek inbox atau folder Spam lo ya.");
+            } catch (err) {
+                showAuthError("Tunggu sebentar sebelum kirim ulang verifikasi: " + err.message);
+            }
+        });
+
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            stopRealtimeSync();
+            signOut(auth);
+        });
+
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && currentUser) {
+                refreshUserAndData();
+            }
+        });
+
+        window.addEventListener("pageshow", () => {
+            if (currentUser) {
+                refreshUserAndData();
+            }
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user && user.emailVerified) {
+                currentUser = user;
+                pendingVerifyUser = null;
+                document.getElementById('authSection').classList.add('hidden');
+                document.getElementById('appSection').classList.remove('hidden');
+                setHeaderUserInfo(user);
+                applySocialsToUi({}, user.uid);
+                subscribeProfileAndRecords();
+                refreshUserAndData();
+            } else {
+                currentUser = null;
+                stopRealtimeSync();
+                document.getElementById('authSection').classList.remove('hidden');
+                document.getElementById('appSection').classList.add('hidden');
+            }
+        });
+
+        function subscribeProfileAndRecords() {
+            stopRealtimeSync();
+            if (!currentUser) return;
+
+            unsubscribeProfile = onSnapshot(
+                doc(db, `users/${currentUser.uid}`),
+                (snap) => {
+                    const profileObj = snap.exists() ? snap.data() : {};
+                    setHeaderUserInfo(currentUser, profileObj);
+                },
+                (err) => console.error("Profile sync error:", err)
+            );
+
+            const q = query(collection(db, `users/${currentUser.uid}/projects`), orderBy("date", "desc"));
+            unsubscribeRecords = onSnapshot(
+                q,
+                (snapshot) => {
+                    applySnapshotRecords(snapshot.docs);
+                },
+                (err) => {
+                    console.error("Realtime sync error:", err);
+                }
+            );
+
+            autoRefreshTimer = setInterval(() => {
+                if (!document.hidden && currentUser) {
+                    refreshUserAndData();
+                }
+            }, 30000);
+        }
+
+        document.getElementById('incomeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const btn = document.getElementById('btnSubmitProject');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
+
+            try {
+                const clientName = document.getElementById('clientName').value.trim();
+                const category = document.getElementById('category').value;
+                const date = document.getElementById('date').value;
+                const amount = parseFloat(document.getElementById('amount').value) || 0;
+                const rawTaxInput = document.getElementById('taxInput').value.trim();
+                const parsedTax = parseTaxValue(rawTaxInput, amount);
+                const status = document.getElementById('status').value;
+                const managementName = document.getElementById('managementName').value.trim();
+                const deadlineDate = document.getElementById('deadlineDate').value || "";
+                const payoutDate = document.getElementById('payoutDate').value || "";
+                const projectSocialPlatform = document.getElementById('projectSocialPlatform').value;
+                const projectSocialHandle = document.getElementById('projectSocialHandle').value.trim();
+                const rawLink = document.getElementById('portfolioLink').value.trim();
+
+                let finalPhoto = hdPhotoBase64;
+                if (!finalPhoto && rawLink) {
+                    finalPhoto = await extractSuperHdFromLink(rawLink);
+                }
+
+                await addDoc(collection(db, `users/${currentUser.uid}/projects`), {
+                    clientName,
+                    category,
+                    date,
+                    amount,
+                    taxAmount: parsedTax.taxAmount,
+                    taxInputRaw: rawTaxInput,
+                    status,
+                    managementName,
+                    deadlineDate,
+                    payoutDate,
+                    projectSocialPlatform,
+                    projectSocialHandle,
+                    portfolioLink: rawLink,
+                    photoData: finalPhoto,
+                    createdAt: Date.now()
+                });
+
+                this.reset();
+                hdPhotoBase64 = "";
+                document.getElementById('photoFileName').classList.add('hidden');
+                document.getElementById('taxCalcPreview').classList.add('hidden');
+            } catch (err) {
+                alert("Gagal menyimpan data: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-plus mr-1 text-sageDark"></i> Simpan Project`;
+            }
+        });
+
+        window.toggleStatus = async (id, currentStatus) => {
+            if (!currentUser) return;
+            const nextStatus = currentStatus === 'Lunas' ? 'DP 50%' : 'Lunas';
+            await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), { status: nextStatus });
+        };
+
+        window.deleteRecord = async (id) => {
+            if (!currentUser) return;
+            if (!confirm('Hapus catatan project ini?')) return;
+            await deleteDoc(doc(db, `users/${currentUser.uid}/projects`, id));
+        };
+
+        const formatRupiah = (num) => new Intl.NumberFormat('id-ID', {
+            style: 'currency', currency: 'IDR', minimumFractionDigits: 0
+        }).format(num || 0);
+
+        const formatMonthName = (ym) => {
+            if (!ym || !/^\d{4}-\d{2}$/.test(ym)) return "Bulan Ini";
+            const [year, month] = ym.split("-");
+            const dateObj = new Date(Number(year), Number(month) - 1, 1);
+            return dateObj.toLocaleDateString("id-ID", { month: "long", year: "numeric" });
+        };
+
+        const formatYearLabel = (dateStr) => {
+            if (dateStr && /^\d{4}/.test(dateStr)) return dateStr.slice(0, 4);
+            return String(new Date().getFullYear());
+        };
+
+        const escapeHtml = (str) => String(str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+
+        function getPortfolioEligibleItems() {
+            return records.filter(r => (r.photoData && r.photoData !== "") || (r.portfolioLink && r.portfolioLink !== ""));
+        }
+
+        function syncJpgButtonState() {
+            const btn = document.getElementById("btnExportJpg");
+            const label = document.getElementById("btnExportJpgLabel");
+            const hint = document.getElementById("jpgRequirementHint");
+            if (!btn || !label || !hint) return;
+
+            const eligibleCount = getPortfolioEligibleItems().length;
+            const enough = eligibleCount >= MIN_JPG_EVENTS;
+            btn.disabled = !enough;
+            label.innerText = enough ? "Export JPG (HD)" : `Export JPG (${eligibleCount}/${MIN_JPG_EVENTS})`;
+            hint.innerText = enough
+                ? `${eligibleCount} event siap di-export JPG HD`
+                : `Minimal ${MIN_JPG_EVENTS} event untuk export JPG HD`;
+        }
+
+        function syncRankSelectOptions(selectEl, listLength, topLabel) {
+            if (!selectEl) return;
+            const prevVal = parseInt(selectEl.value || "0", 10) || 0;
+            const count = Math.max(1, listLength);
+            let html = "";
+            for (let i = 0; i < count; i++) {
+                const labelText = i === 0
+                    ? `Peringkat 1 — ${topLabel}`
+                    : `Peringkat ${i + 1} — Berikutnya`;
+                html += `<option value="${i}">${labelText}</option>`;
+            }
+            selectEl.innerHTML = html;
+            selectEl.value = String(Math.min(prevVal, count - 1));
+        }
+
+        function computeCategoryRankings(subset = records) {
+            const paidIncomeByCat = {};
+            const portfolioCountByCat = {};
+            const allCountByCat = {};
+
+            subset.forEach(r => {
+                const cat = r.category || 'Lainnya';
+                const amt = Number(r.amount) || 0;
+                allCountByCat[cat] = (allCountByCat[cat] || 0) + 1;
+
+                if (r.status === 'Lunas') {
+                    paidIncomeByCat[cat] = (paidIncomeByCat[cat] || 0) + amt;
+                }
+                if (r.photoData || r.portfolioLink) {
+                    portfolioCountByCat[cat] = (portfolioCountByCat[cat] || 0) + 1;
+                }
+            });
+
+            const incomeRanked = Object.entries(paidIncomeByCat)
+                .filter(([, total]) => total > 0)
+                .sort((a, b) => b[1] - a[1])
+                .map(([category, total]) => ({ category, total }));
+
+            const hasPortfolioItems = Object.keys(portfolioCountByCat).length > 0;
+            const popSource = hasPortfolioItems ? portfolioCountByCat : allCountByCat;
+            const popularRanked = Object.entries(popSource)
+                .sort((a, b) => b[1] - a[1])
+                .map(([category, count]) => ({ category, count, isFromPortfolio: hasPortfolioItems }));
+
+            return { incomeRanked, popularRanked };
+        }
+
+        function renderMonthlyChart() {
+            const canvas = document.getElementById('incomeChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+
+            const monthMap = {};
+            records.forEach(r => {
+                const ym = (r.date && r.date.length >= 7) ? r.date.slice(0, 7) : "Lainnya";
+                if (!monthMap[ym]) monthMap[ym] = { paid: 0, pending: 0, count: 0 };
+                const amt = Number(r.amount) || 0;
+                if (r.status === 'Lunas') {
+                    monthMap[ym].paid += amt;
+                } else {
+                    monthMap[ym].pending += amt;
+                }
+                monthMap[ym].count += 1;
+            });
+
+            const sortedMonths = Object.keys(monthMap).sort();
+            const labels = sortedMonths.length > 0 ? sortedMonths.map(formatMonthName) : ["Bulan Ini"];
+            const paidSeries = sortedMonths.length > 0 ? sortedMonths.map(m => monthMap[m].paid) : [0];
+            const pendingSeries = sortedMonths.length > 0 ? sortedMonths.map(m => monthMap[m].pending) : [0];
+            const totalPaidRunning = paidSeries.reduce((s, v) => s + v, 0);
+
+            const badgeEl = document.getElementById('monthProgressBadge');
+            const subEl = document.getElementById('monthProgressSubtitle');
+            if (sortedMonths.length >= 2 && badgeEl && subEl) {
+                const prevVal = paidSeries[paidSeries.length - 2];
+                const currVal = paidSeries[paidSeries.length - 1];
+                if (prevVal > 0) {
+                    const pctChange = Math.round(((currVal - prevVal) / prevVal) * 100);
+                    const sign = pctChange >= 0 ? "+" : "";
+                    badgeEl.innerHTML = `<i class="fa-solid ${pctChange >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down'}"></i> ${sign}${pctChange}% vs bulan lalu`;
+                    subEl.innerText = `Total bar Lunas s.d. ${labels[labels.length - 1]}: ${formatRupiah(totalPaidRunning)}`;
+                } else {
+                    badgeEl.innerHTML = `<i class="fa-solid fa-sparkles"></i> ${sortedMonths.length} Bulan Terpantau`;
+                    subEl.innerText = `Total bar Lunas: ${formatRupiah(totalPaidRunning)}`;
+                }
+            } else if (badgeEl && subEl) {
+                badgeEl.innerHTML = `<i class="fa-solid fa-seedling"></i> Progress Bulanan`;
+                subEl.innerText = `Bar progress pendapatan bulanan (Lunas & DP/Pending)`;
+            }
+
+            if (incomeChartInstance) {
+                incomeChartInstance.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            incomeChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Lunas',
+                            data: paidSeries,
+                            backgroundColor: 'rgba(234, 179, 8, 0.85)',
+                            borderColor: '#CA8A04',
+                            borderWidth: 1.5,
+                            borderRadius: 10,
+                            maxBarThickness: 44
+                        },
+                        {
+                            type: 'bar',
+                            label: 'DP / Pending',
+                            data: pendingSeries,
+                            backgroundColor: 'rgba(244, 114, 182, 0.85)',
+                            borderColor: '#DB2777',
+                            borderWidth: 1.5,
+                            borderRadius: 10,
+                            maxBarThickness: 44
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#352B28',
+                            titleColor: '#FAF7F2',
+                            bodyColor: '#FDE68A',
+                            padding: 10,
+                            cornerRadius: 12,
+                            callbacks: {
+                                label: (c) => `${c.dataset.label}: ${formatRupiah(c.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#7A6C67', font: { size: 11 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(234, 223, 211, 0.55)' },
+                            ticks: {
+                                color: '#7A6C67',
+                                font: { size: 11 },
+                                maxTicksLimit: 5,
+                                callback: (val) => {
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000).toFixed(1).replace(/\.0$/, '') + 'jt';
+                                    if (val >= 1000) return 'Rp ' + Math.round(val / 1000) + 'rb';
+                                    return 'Rp ' + val;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.updateSummary = () => {
+            const totalPendapatan = records
+                .filter(r => r.status === 'Lunas')
+                .reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+            const menungguPelunasan = records
+                .filter(r => r.status !== 'Lunas')
+                .reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+
+            document.getElementById('totalPaid').innerText = formatRupiah(totalPendapatan);
+            document.getElementById('totalPending').innerText = formatRupiah(menungguPelunasan);
+            document.getElementById('totalProjects').innerText = records.length;
+
+            const { incomeRanked, popularRanked } = computeCategoryRankings(records);
+
+            const incomeSelect = document.getElementById('rankIncomeSelect');
+            syncRankSelectOptions(incomeSelect, incomeRanked.length, "Tertinggi");
+            const incomeIdx = parseInt(incomeSelect.value || "0", 10) || 0;
+            const selectedIncome = incomeRanked[incomeIdx];
+
+            document.getElementById('topIncomeCategory').innerText = selectedIncome ? selectedIncome.category : 'Belum ada achievement';
+            document.getElementById('topIncomeAmount').innerText = selectedIncome ? `Total: ${formatRupiah(selectedIncome.total)}` : 'Rp 0';
+
+            const popularSelect = document.getElementById('rankPopularSelect');
+            syncRankSelectOptions(popularSelect, popularRanked.length, "Terpopuler");
+            const popularIdx = parseInt(popularSelect.value || "0", 10) || 0;
+            const selectedPopular = popularRanked[popularIdx];
+
+            document.getElementById('popularPortfolioCategory').innerText = selectedPopular ? selectedPopular.category : 'Belum ada data';
+            document.getElementById('popularPortfolioCount').innerText = selectedPopular
+                ? `${selectedPopular.count} ${selectedPopular.isFromPortfolio ? 'item portofolio' : 'project'}`
+                : '0 project';
+
+            syncJpgButtonState();
+        };
+
+        window.renderData = () => {
+            const filter = document.getElementById('filterStatus').value;
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const filtered = filter === 'ALL' ? records : records.filter(r => r.status === filter);
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-muted"><i class="fa-regular fa-folder-open mr-1.5 text-sageDark"></i> Belum ada project yang tercatat di bagian ini.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(r => {
+                let badgeClass = 'bg-sage/20 text-sageDark border-sage/40';
+                if (r.status === 'DP 50%') badgeClass = 'bg-amber-100/80 text-amber-800 border-amber-300';
+                if (r.status === 'Pending / Invoice Sent') badgeClass = 'bg-blush/70 text-rose-800 border-roseSoft/50';
+
+                const portfolioBadge = (r.photoData || r.portfolioLink)
+                    ? `<span class="ml-1.5 text-roseSoft text-xs" title="Tersimpan di Portofolio"><i class="fa-solid fa-wand-magic-sparkles"></i></span>`
+                    : '';
+
+                const metaLines = [];
+                if (r.managementName) {
+                    metaLines.push(`<span class="text-[11px] text-sageDark font-medium"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(r.managementName)}</span>`);
+                }
+                if (r.projectSocialHandle) {
+                    metaLines.push(`<span class="text-[11px] text-roseSoft font-medium"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(r.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(r.projectSocialHandle)}</span>`);
+                }
+                if (r.deadlineDate) {
+                    metaLines.push(`<span class="text-[11px] text-muted"><i class="fa-regular fa-calendar-check mr-1 text-roseSoft"></i>Deadline: ${escapeHtml(r.deadlineDate)}</span>`);
+                }
+                if (r.payoutDate) {
+                    metaLines.push(`<span class="text-[11px] text-roseSoft"><i class="fa-regular fa-clock mr-1"></i>Cair: ${escapeHtml(r.payoutDate)}</span>`);
+                }
+                const extraMetaHtml = metaLines.length > 0
+                    ? `<div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">${metaLines.join('')}</div>`
+                    : '';
+
+                const taxSubHtml = (Number(r.taxAmount) > 0)
+                    ? `<p class="text-[11px] text-muted mt-0.5">Pajak: ${formatRupiah(Number(r.taxAmount))}${r.taxInputRaw && String(r.taxInputRaw).includes('%') ? ` (${escapeHtml(r.taxInputRaw)})` : ''}</p>`
+                    : '';
+
+                const statusTitle = r.status === 'Lunas'
+                    ? 'Sudah Lunas (klik untuk ubah ke DP 50%)'
+                    : 'Klik untuk ubah menjadi Lunas & masuk ke Total Pendapatan';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-cream/50 transition">
+                        <td class="p-4 text-muted whitespace-nowrap">${r.date || '-'}</td>
+                        <td class="p-4 font-semibold text-espresso">${escapeHtml(r.clientName)} ${portfolioBadge}${extraMetaHtml}</td>
+                        <td class="p-4 text-muted text-xs">${escapeHtml(r.category)}</td>
+                        <td class="p-4 font-semibold text-espresso whitespace-nowrap">${formatRupiah(r.amount)}${taxSubHtml}</td>
+                        <td class="p-4 whitespace-nowrap">
+                            <button onclick="toggleStatus('${r.id}', '${r.status}')" title="${statusTitle}" class="clay-pill px-3.5 py-1 text-xs font-semibold border ${badgeClass} cursor-pointer">
+                                ${r.status}
+                            </button>
+                        </td>
+                        <td class="p-4 text-right whitespace-nowrap">
+                            <button onclick="deleteRecord('${r.id}')" class="clay-pill text-muted hover:text-rose-600 px-2.5 py-1.5 text-xs cursor-pointer" title="Hapus">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        };
+
+        function buildInvoiceTaxData() {
+            const paidFeeTotal = records
+                .filter(r => r.status === 'Lunas')
+                .reduce((s, r) => s + (Number(r.amount) || 0), 0);
+            const unpaidItems = records.filter(r => r.status !== 'Lunas');
+            const unpaidFeeTotal = unpaidItems.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+            const totalTax = records.reduce((s, r) => s + (Number(r.taxAmount) || 0), 0);
+            return { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax };
+        }
+
+        window.copyInvoiceTaxSummary = async () => {
+            const { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax } = buildInvoiceTaxData();
+
+            const perProjectTaxLines = records.length > 0
+                ? records.map(item => {
+                    const fee = formatRupiah(Number(item.amount) || 0);
+                    const tax = formatRupiah(Number(item.taxAmount) || 0);
+                    const taxPctNote = item.taxInputRaw && String(item.taxInputRaw).includes('%') ? ` [${item.taxInputRaw}]` : '';
+                    const mgmtPart = item.managementName ? ` | Mgmt: ${item.managementName}` : '';
+                    return `- ${item.clientName}${mgmtPart} | Fee (Excl. Pajak): ${fee} | Pajak: ${tax}${taxPctNote} (${item.status})`;
+                }).join('\n')
+                : '- Belum ada data project';
+
+            const unpaidLines = unpaidItems.length > 0
+                ? unpaidItems.map(u => {
+                    const mgmtPart = u.managementName ? ` | Mgmt: ${u.managementName}` : '';
+                    const dlPart = u.deadlineDate ? ` | Deadline: ${u.deadlineDate}` : '';
+                    const poPart = u.payoutDate ? ` | Estimasi cair: ${u.payoutDate}` : '';
+                    return `- ${u.clientName}${mgmtPart} (${u.status}) — Fee: ${formatRupiah(u.amount)}${dlPart}${poPart}`;
+                }).join('\n')
+                : '- Tidak ada tagihan tertunda';
+
+            const summaryText = [
+                `NARRAVIA STUDIO — REKAP INVOICE & TAX`,
+                `Total Fee Lunas (Exclude Pajak): ${formatRupiah(paidFeeTotal)}`,
+                `Total Fee Belum Lunas (Exclude Pajak): ${formatRupiah(unpaidFeeTotal)}`,
+                `Total Nominal Pajak: ${formatRupiah(totalTax)}`,
+                ``,
+                `Rincian Fee (Exclude Pajak) & Pajak per Project:`,
+                perProjectTaxLines,
+                ``,
+                `Rincian Tagihan Belum Lunas:`,
+                unpaidLines
+            ].join('\n');
+
+            try {
+                await navigator.clipboard.writeText(summaryText);
+                const lbl = document.getElementById('btnCopySummaryLabel');
+                if (lbl) {
+                    lbl.innerText = 'Rekap Tersalin!';
+                    setTimeout(() => { lbl.innerText = 'Salin Rekap Invoice & Pajak'; }, 2000);
+                }
+            } catch (_) {
+                alert(summaryText);
+            }
+        };
+
+        function buildFloralOverlayMarkup() {
+            return `
+                <svg style="position:absolute; top:-20px; left:-20px; width:340px; height:340px; pointer-events:none; opacity:0.9;" viewBox="0 0 170 170" fill="none">
+                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
+                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
+                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
+                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
+                    <circle cx="38" cy="118" r="7" fill="#F6D8DE" fill-opacity="0.8"/>
+                    <circle cx="38" cy="118" r="2.5" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; top:24px; left:46%; width:200px; height:200px; pointer-events:none; opacity:0.78;" viewBox="0 0 120 120" fill="none">
+                    <path d="M16 104C36 74 62 48 94 26" stroke="#7E9680" stroke-width="1.8" stroke-linecap="round"/>
+                    <ellipse cx="44" cy="72" rx="14" ry="7" transform="rotate(-32 44 72)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="94" cy="26" r="9" fill="#F6D8DE"/>
+                    <circle cx="102" cy="33" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="94" cy="31" r="3" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; top:-20px; right:20px; width:330px; height:330px; pointer-events:none; opacity:0.86;" viewBox="0 0 170 170" fill="none">
+                    <path d="M148 16C125 60 94 94 52 118" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="114" cy="58" rx="18" ry="8.5" transform="rotate(28 114 58)" fill="#7E9680" fill-opacity="0.34"/>
+                    <ellipse cx="82" cy="92" rx="17" ry="8" transform="rotate(42 82 92)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="52" cy="118" r="10.5" fill="#F6D8DE"/>
+                    <circle cx="42" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="62" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="52" cy="114" r="3.8" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; top:45%; left:-22px; width:280px; height:330px; pointer-events:none; opacity:0.82;" viewBox="0 0 150 180" fill="none">
+                    <path d="M14 26C36 68 38 114 18 158" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="30" cy="64" rx="16" ry="8" transform="rotate(24 30 64)" fill="#7E9680" fill-opacity="0.32"/>
+                    <ellipse cx="32" cy="116" rx="16" ry="8" transform="rotate(-22 32 116)" fill="#7E9680" fill-opacity="0.32"/>
+                    <circle cx="38" cy="90" r="10" fill="#F6D8DE"/>
+                    <circle cx="47" cy="96" r="7.5" fill="#E8A5B4" fill-opacity="0.72"/>
+                    <circle cx="38" cy="94" r="3.5" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; top:42%; right:-22px; width:280px; height:330px; pointer-events:none; opacity:0.82;" viewBox="0 0 150 180" fill="none">
+                    <path d="M132 22C108 66 106 112 126 154" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="114" cy="62" rx="16" ry="8" transform="rotate(-24 114 62)" fill="#7E9680" fill-opacity="0.32"/>
+                    <ellipse cx="112" cy="112" rx="16" ry="8" transform="rotate(22 112 112)" fill="#7E9680" fill-opacity="0.32"/>
+                    <circle cx="106" cy="88" r="10" fill="#F6D8DE"/>
+                    <circle cx="97" cy="94" r="7.5" fill="#E8A5B4" fill-opacity="0.72"/>
+                    <circle cx="106" cy="92" r="3.5" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; bottom:-24px; left:30px; width:330px; height:285px; pointer-events:none; opacity:0.84;" viewBox="0 0 170 150" fill="none">
+                    <path d="M22 132C55 110 88 94 128 84" stroke="#7E9680" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="64" cy="112" rx="17" ry="8" transform="rotate(-18 64 112)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="128" cy="84" r="9.5" fill="#F6D8DE"/>
+                    <circle cx="136" cy="90" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="128" cy="88" r="3.5" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; bottom:150px; right:64px; width:220px; height:220px; pointer-events:none; opacity:0.78;" viewBox="0 0 130 130" fill="none">
+                    <path d="M106 24C84 54 58 80 26 102" stroke="#7E9680" stroke-width="1.9" stroke-linecap="round"/>
+                    <ellipse cx="74" cy="56" rx="15" ry="7.5" transform="rotate(34 74 56)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="26" cy="102" r="9.5" fill="#F6D8DE"/>
+                    <circle cx="18" cy="95" r="7" fill="#E8A5B4" fill-opacity="0.76"/>
+                    <circle cx="26" cy="99" r="3.4" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; bottom:-24px; right:-24px; width:380px; height:380px; pointer-events:none; opacity:0.9;" viewBox="0 0 180 180" fill="none">
+                    <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
+                    <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
+                    <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
+                    <circle cx="96" cy="96" r="7.5" fill="#F6D8DE" fill-opacity="0.85"/>
+                    <circle cx="96" cy="96" r="2.8" fill="#E4A853"/>
+                </svg>
+                <svg style="position:absolute; top:210px; right:190px; width:110px; height:110px; pointer-events:none; opacity:0.86;" viewBox="0 0 80 80" fill="none">
+                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
+                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.5"/>
+                    <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.3"/>
+                    <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.3"/>
+                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <svg style="position:absolute; bottom:270px; left:170px; width:98px; height:98px; pointer-events:none; opacity:0.82;" viewBox="0 0 80 80" fill="none">
+                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.5"/>
+                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.5"/>
+                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            `;
+        }
+
+        function buildInvoiceTaxPdfElement(username) {
+            const { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax } = buildInvoiceTaxData();
+            const sheet = document.createElement("div");
+            sheet.className = "pdf-report-sheet";
+
+            const rowsHtml = records.length > 0
+                ? records.map((item, idx) => {
+                    const fee = formatRupiah(Number(item.amount) || 0);
+                    const tax = formatRupiah(Number(item.taxAmount) || 0);
+                    const taxHint = item.taxInputRaw && String(item.taxInputRaw).includes('%')
+                        ? `<span style="display:block; font-size:12px; color:#7A6C67;">Input: ${escapeHtml(item.taxInputRaw)}</span>`
+                        : '';
+                    const mgmtText = item.managementName ? escapeHtml(item.managementName) : '-';
+                    const dlText = item.deadlineDate || item.payoutDate || '-';
+                    let stBg = '#E6EFE7';
+                    let stColor = '#4F6952';
+                    if (item.status === 'DP 50%') { stBg = '#FEF3C7'; stColor = '#92400E'; }
+                    if (item.status === 'Pending / Invoice Sent') { stBg = '#F6D8DE'; stColor = '#9D174D'; }
+
+                    return `
+                        <tr style="border-bottom:1px solid #EFE5D8; background:${idx % 2 === 0 ? 'rgba(255,253,250,0.9)' : 'rgba(243,236,226,0.45)'};">
+                            <td style="padding:14px 16px; font-size:14px; color:#7A6C67; white-space:nowrap;">${escapeHtml(item.date || '-')}</td>
+                            <td style="padding:14px 16px; font-size:15px; font-weight:600; color:#352B28;">
+                                ${escapeHtml(item.clientName || '-')}
+                                <span style="display:block; font-size:12px; font-weight:400; color:#7A6C67;">${escapeHtml(item.category || '-')}</span>
+                            </td>
+                            <td style="padding:14px 16px; font-size:14px; color:#4F6952; font-weight:500;">${mgmtText}</td>
+                            <td style="padding:14px 16px; font-size:15px; font-weight:700; color:#352B28; white-space:nowrap;">${fee}</td>
+                            <td style="padding:14px 16px; font-size:15px; font-weight:700; color:#D97D90; white-space:nowrap;">${tax}${taxHint}</td>
+                            <td style="padding:14px 16px; white-space:nowrap;">
+                                <span style="display:inline-block; padding:5px 12px; border-radius:9999px; font-size:12px; font-weight:700; background:${stBg}; color:${stColor};">${escapeHtml(item.status || '-')}</span>
+                            </td>
+                            <td style="padding:14px 16px; font-size:13px; color:#7A6C67; white-space:nowrap;">${escapeHtml(dlText)}</td>
+                        </tr>
+                    `;
+                }).join('')
+                : `<tr><td colspan="7" style="padding:28px; text-align:center; font-size:15px; color:#7A6C67;">Belum ada data project yang tercatat.</td></tr>`;
+
+            const unpaidSummaryHtml = unpaidItems.length > 0
+                ? unpaidItems.map(u => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:16px; background:#FAF7F2; border:1px solid #EADFD3; font-size:14px;">
+                        <div>
+                            <strong style="color:#352B28;">${escapeHtml(u.clientName)}</strong>
+                            <span style="color:#7A6C67; margin-left:8px;">(${escapeHtml(u.status)})</span>
+                            ${u.managementName ? `<span style="color:#4F6952; margin-left:8px;">• ${escapeHtml(u.managementName)}</span>` : ''}
+                        </div>
+                        <div style="font-weight:700; color:#D97D90; white-space:nowrap;">
+                            ${formatRupiah(Number(u.amount) || 0)}${u.payoutDate ? ` <span style="font-size:12px; font-weight:500; color:#7A6C67;">(Cair: ${escapeHtml(u.payoutDate)})</span>` : ''}
+                        </div>
+                    </div>
+                `).join('')
+                : `<p style="margin:0; font-size:14px; color:#4F6952;">Semua invoice/project sudah lunas.</p>`;
+
+            sheet.innerHTML = `
+                ${buildFloralOverlayMarkup()}
+                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; padding:28px 32px; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.1);">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+                                <div>
+                                    <span style="display:inline-block; padding:4px 12px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:12px; font-weight:700; margin-bottom:8px;">
+                                        INVOICE &amp; TAX RECAP
+                                    </span>
+                                    <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:38px; font-weight:700; color:#352B28; line-height:1.2;">
+                                        Narravia Studio
+                                    </h1>
+                                    <p style="margin:6px 0 0 0; font-size:15px; color:#4F6952; font-weight:600;">
+                                        Creator: ${escapeHtml(username)}
+                                    </p>
+                                </div>
+                                <div style="text-align:right; font-size:13px; color:#7A6C67;">
+                                    <p style="margin:0; font-weight:600; color:#352B28;">Dicetak pada</p>
+                                    <p style="margin:2px 0 0 0;">${new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</p>
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px; margin-top:24px;">
+                                <div style="background:#FAF7F2; border:1px solid #EADFD3; border-radius:20px; padding:18px;">
+                                    <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Fee Lunas (Excl. Pajak)</p>
+                                    <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#4F6952;">${formatRupiah(paidFeeTotal)}</p>
+                                </div>
+                                <div style="background:#FAF7F2; border:1px solid #EADFD3; border-radius:20px; padding:18px;">
+                                    <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Fee Belum Lunas (Excl. Pajak)</p>
+                                    <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#D97D90;">${formatRupiah(unpaidFeeTotal)}</p>
+                                </div>
+                                <div style="background:#FAF7F2; border:1px solid #EADFD3; border-radius:20px; padding:18px;">
+                                    <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Total Nominal Pajak</p>
+                                    <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#352B28;">${formatRupiah(totalTax)}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; overflow:hidden; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
+                            <div style="padding:18px 24px; border-bottom:1px solid #EADFD3; background:#F3ECE2;">
+                                <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28;">
+                                    Rincian Project, Fee (Exclude Pajak) &amp; Pajak
+                                </h2>
+                            </div>
+                            <table style="width:100%; border-collapse:collapse; text-align:left;">
+                                <thead>
+                                    <tr style="background:rgba(243,236,226,0.65); border-bottom:1px solid #EADFD3; font-size:12px; text-transform:uppercase; color:#7A6C67;">
+                                        <th style="padding:12px 16px;">Tanggal</th>
+                                        <th style="padding:12px 16px;">Project Name</th>
+                                        <th style="padding:12px 16px;">Management</th>
+                                        <th style="padding:12px 16px;">Fee (Excl.)</th>
+                                        <th style="padding:12px 16px;">Pajak</th>
+                                        <th style="padding:12px 16px;">Status</th>
+                                        <th style="padding:12px 16px;">Deadline / Cair</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid #EADFD3; border-radius:28px; padding:22px 26px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
+                            <h3 style="margin:0 0 12px 0; font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; color:#352B28;">
+                                Ringkasan Tagihan Belum Lunas (DP / Pending)
+                            </h3>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                ${unpaidSummaryHtml}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:28px; padding-top:14px; border-top:1.5px solid rgba(230,218,203,0.85); display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#7A6C67;">
+                        <span>Created by Narravia.Studio</span>
+                        <span>Dokumen Rekap Invoice &amp; Tax</span>
+                    </div>
+                </div>
+            `;
+
+            return sheet;
+        }
+
+        window.exportInvoiceTaxPDF = async () => {
+            if (typeof html2canvas === "undefined" || !window.jspdf?.jsPDF) {
+                return alert("Library PDF belum termuat. Coba refresh halaman.");
+            }
+
+            const btn = document.getElementById("btnExportTaxPdf");
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan PDF...`;
+
+            const staging = document.getElementById("jpgRenderStaging");
+            staging.innerHTML = "";
+
+            try {
+                const username = (document.getElementById("userDisplayName").innerText || "Creator").trim();
+                const sheetEl = buildInvoiceTaxPdfElement(username);
+                staging.appendChild(sheetEl);
+
+                const canvas = await html2canvas(sheetEl, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: "#FAF7F2"
+                });
+
+                const imgData = canvas.toDataURL("image/jpeg", 0.99);
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+                const pdfW = pdf.internal.pageSize.getWidth();
+                const pdfH = pdf.internal.pageSize.getHeight();
+                const imgProps = pdf.getImageProperties(imgData);
+                const ratio = imgProps.width / imgProps.height;
+                const renderH = pdfW / ratio;
+
+                if (renderH <= pdfH) {
+                    pdf.addImage(imgData, "JPEG", 0, 0, pdfW, renderH);
+                } else {
+                    let heightLeft = renderH;
+                    let position = 0;
+                    pdf.addImage(imgData, "JPEG", 0, position, pdfW, renderH);
+                    heightLeft -= pdfH;
+                    while (heightLeft > 0) {
+                        position = heightLeft - renderH;
+                        pdf.addPage();
+                        pdf.addImage(imgData, "JPEG", 0, position, pdfW, renderH);
+                        heightLeft -= pdfH;
+                    }
+                }
+
+                pdf.save("narravia_rekap_invoice_tax.pdf");
+            } catch (err) {
+                alert("Gagal membuat PDF: " + err.message);
+            } finally {
+                staging.innerHTML = "";
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        };
+
+        function sortByRateAndPopularity(list) {
+            const catFreq = {};
+            list.forEach(item => {
+                const c = item.category || 'Lainnya';
+                catFreq[c] = (catFreq[c] || 0) + 1;
+            });
+            return [...list].sort((a, b) => {
+                const amtDiff = (Number(b.amount) || 0) - (Number(a.amount) || 0);
+                if (amtDiff !== 0) return amtDiff;
+                return (catFreq[b.category] || 0) - (catFreq[a.category] || 0);
+            });
+        }
+
+        function renderMonthlyCollages(items) {
+            const collageContainer = document.getElementById('monthlyCollageContainer');
+            if (!collageContainer) return;
+
+            const photoItems = items.filter(r => r.photoData && r.photoData !== "");
+            if (photoItems.length === 0) {
+                collageContainer.innerHTML = `
+                    <div class="col-span-full botanical-card text-center py-8 px-4 rounded-3xl text-muted text-xs">
+                        <i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto atau link gambar saat mencatat project untuk membentuk kolase per bulan.
+                    </div>`;
+                return;
+            }
+
+            const monthGroups = {};
+            photoItems.forEach(item => {
+                const ym = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
+                if (!monthGroups[ym]) monthGroups[ym] = [];
+                monthGroups[ym].push(item);
+            });
+
+            const sortedMonths = Object.keys(monthGroups).sort().reverse();
+            collageContainer.innerHTML = '';
+
+            sortedMonths.forEach(ym => {
+                const ranked = sortByRateAndPopularity(monthGroups[ym]);
+                const topSix = ranked.slice(0, 6);
+                let slotsHtml = '';
+
+                for (let i = 0; i < 6; i++) {
+                    const cellItem = topSix[i];
+                    if (cellItem) {
+                        const rankBadge = i === 0
+                            ? `<span class="absolute top-1.5 left-1.5 bg-sageDark text-white text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-crown text-amber-300 mr-0.5"></i> Top</span>`
+                            : `<span class="absolute top-1.5 left-1.5 bg-ivory/95 text-espresso text-[10px] font-bold px-2 py-0.5 rounded-full">#${i + 1}</span>`;
+
+                        slotsHtml += `
+                            <div onclick="openPhotoModal('${cellItem.id}')" title="${escapeHtml(cellItem.clientName)}"
+                                class="aspect-[4/3] rounded-2xl overflow-hidden bg-cream relative cursor-pointer group border border-[#EADFD3] flex items-center justify-center">
+                                <img src="${cellItem.photoData}" alt="${escapeHtml(cellItem.clientName)}" class="w-full h-full object-contain group-hover:scale-105 transition duration-300">
+                                ${rankBadge}
+                            </div>`;
+                    } else {
+                        slotsHtml += `
+                            <div class="aspect-[4/3] rounded-2xl border border-[#E6DACB] bg-ivory/70 flex flex-col items-center justify-center text-muted/60 text-[10px]">
+                                <i class="fa-regular fa-image mb-1 text-roseSoft/60"></i>
+                                <span>Slot ${i + 1}</span>
+                            </div>`;
+                    }
+                }
+
+                collageContainer.innerHTML += `
+                    <div class="botanical-card micro-card-lift p-5 rounded-3xl">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <h3 class="font-serif text-lg font-semibold text-espresso flex items-center gap-2">
+                                <i class="fa-solid fa-spa text-roseSoft text-sm"></i>
+                                <span>Portofolio ${formatMonthName(ym)}</span>
+                            </h3>
+                            <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold inline-flex items-center">
+                                <i class="fa-solid fa-photo-film mr-1 text-roseSoft"></i> ${topSix.length}/6 Foto
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2.5">
+                            ${slotsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderYearlyPortfolio(items) {
+            const yearlyContainer = document.getElementById('yearlyPortfolioContainer');
+            if (!yearlyContainer) return;
+
+            if (items.length === 0) {
+                yearlyContainer.innerHTML = `
+                    <div class="botanical-card text-center py-12 px-4 rounded-3xl text-muted text-sm">
+                        <i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada item portofolio. Tambahkan link konten atau foto saat mencatat project baru.
+                    </div>`;
+                return;
+            }
+
+            const yearGroups = {};
+            items.forEach(item => {
+                const yr = formatYearLabel(item.date);
+                if (!yearGroups[yr]) yearGroups[yr] = [];
+                yearGroups[yr].push(item);
+            });
+
+            const sortedYears = Object.keys(yearGroups).sort().reverse();
+            yearlyContainer.innerHTML = '';
+
+            sortedYears.forEach(yr => {
+                const yearItems = sortByRateAndPopularity(yearGroups[yr]);
+                const cardsHtml = yearItems.map(item => {
+                    const mediaHtml = item.photoData
+                        ? `<img src="${item.photoData}" alt="${escapeHtml(item.clientName)}" onclick="openPhotoModal('${item.id}')" class="w-full h-full object-contain cursor-pointer group-hover:scale-105 transition duration-300">`
+                        : `<div class="w-full h-full flex flex-col items-center justify-center bg-cream/80 text-sageDark p-6 text-center">
+                             <i class="fa-solid fa-clapperboard text-2xl mb-2 text-roseSoft"></i>
+                             <span class="text-xs font-medium">Konten Tersimpan</span>
+                           </div>`;
+
+                    const linkBtn = item.portfolioLink
+                        ? `<a href="${item.portfolioLink}" target="_blank" rel="noopener noreferrer" class="clay-pill inline-flex items-center gap-1.5 text-xs font-semibold text-sageDark px-3.5 py-1.5 mt-3 w-fit">
+                             <i class="fa-solid fa-link text-[10px]"></i> Lihat Karya <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                           </a>`
+                        : '';
+
+                    return `
+                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden group flex flex-col">
+                            <div class="aspect-[4/3] bg-cream overflow-hidden relative flex items-center justify-center">
+                                ${mediaHtml}
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <p class="text-[11px] text-muted"><i class="fa-regular fa-calendar mr-1"></i>${item.date || ''}</p>
+                                    <h4 class="font-serif text-lg font-semibold text-espresso mt-0.5">${escapeHtml(item.clientName)}</h4>
+                                </div>
+                                ${linkBtn}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                yearlyContainer.innerHTML += `
+                    <section class="pt-2 border-t border-[#E6DACB]/70 first:border-t-0 first:pt-0">
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <h3 class="font-serif text-xl font-semibold text-espresso flex items-center gap-2">
+                                <i class="fa-solid fa-award text-sageDark text-base"></i>
+                                <span>Portofolio ${yr}</span>
+                            </h3>
+                            <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold">
+                                <i class="fa-solid fa-sparkles text-roseSoft mr-1"></i> ${yearItems.length} Karya
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${cardsHtml}
+                        </div>
+                    </section>
+                `;
+            });
+        }
+
+        window.renderPortfolio = () => {
+            const items = getPortfolioEligibleItems();
+            updateShowcaseSocialIcons();
+            renderMonthlyCollages(items);
+            renderYearlyPortfolio(items);
+            syncJpgButtonState();
+        };
+
+        function makeHd43Thumbnail(src, targetW = 2400, targetH = 1800) {
+            return new Promise((resolve) => {
+                if (!src) return resolve("");
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = targetW;
+                    canvas.height = targetH;
+                    const ctx = canvas.getContext("2d");
+                    ctx.fillStyle = "#F3ECE2";
+                    ctx.fillRect(0, 0, targetW, targetH);
+
+                    const imgRatio = img.width / img.height;
+                    const boxRatio = targetW / targetH;
+                    let drawW, drawH, offsetX, offsetY;
+
+                    if (imgRatio > boxRatio) {
+                        drawW = targetW;
+                        drawH = targetW / imgRatio;
+                        offsetX = 0;
+                        offsetY = (targetH - drawH) / 2;
+                    } else {
+                        drawH = targetH;
+                        drawW = targetH * imgRatio;
+                        offsetX = (targetW - drawW) / 2;
+                        offsetY = 0;
+                    }
+
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = "high";
+                    ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+                    resolve(canvas.toDataURL("image/jpeg", 0.99));
+                };
+                img.onerror = () => resolve(src);
+                img.src = src;
+            });
+        }
+
+        function getSocialBadgesMarkup() {
+            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
+            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
+            const th = normalizeSocialEntry(userSocials.threads, "threads");
+            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
+            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+
+            const entries = [
+                ig ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-instagram" style="color:#D97D90; margin-right:8px;"></i>${escapeHtml(ig.label)}</span>` : "",
+                tt ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-tiktok" style="color:#4F6952; margin-right:8px;"></i>${escapeHtml(tt.label)}</span>` : "",
+                th ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-solid fa-at" style="color:#D97D90; margin-right:8px;"></i>${escapeHtml(th.label)}</span>` : "",
+                fb ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-facebook" style="color:#4F6952; margin-right:8px;"></i>${escapeHtml(fb.label)}</span>` : "",
+                tw ? `<span style="padding:12px 24px; border-radius:9999px; background:#FFFDF9; border:2px solid #E5D9CA; color:#352B28; font-size:22px; font-weight:600;"><i class="fa-brands fa-twitter" style="color:#D97D90; margin-right:8px;"></i>${escapeHtml(tw.label)}</span>` : ""
+            ].filter(Boolean);
+
+            return entries.join("");
+        }
+
+        function buildBridgingPageElement(username, totalProjects) {
+            const page = document.createElement("div");
+            page.className = "jpg-page-sheet";
+
+            page.innerHTML = `
+                ${buildFloralOverlayMarkup()}
+                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div style="text-align:center; padding-top:24px;">
+                        <span style="display:inline-block; padding:10px 28px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:22px; font-weight:700; letter-spacing:0.04em;">
+                            CREATIVE BRIDGING &amp; STORYTELLING
+                        </span>
+                        <h1 style="margin:24px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:84px; font-weight:700; color:#352B28; line-height:1.15;">
+                            My Portofolio
+                        </h1>
+                        <p style="margin:14px 0 0 0; font-size:32px; font-weight:600; color:#4F6952;">
+                            Created by ${escapeHtml(username)}
+                        </p>
+                    </div>
+
+                    <div style="background:rgba(255,253,250,0.95); border:2px solid #E5D9CA; border-radius:48px; padding:64px 72px; box-shadow:0 18px 40px -16px rgba(79,105,82,0.14); text-align:center;">
+                        <i class="fa-solid fa-spa" style="font-size:42px; color:#D97D90; margin-bottom:20px;"></i>
+                        <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:48px; font-weight:700; color:#352B28; line-height:1.3;">
+                            Visual Story, Atmosphere &amp; Moments That Stay
+                        </h2>
+                        <p style="margin:24px auto 0 auto; max-width:1420px; font-size:28px; color:#7A6C67; line-height:1.65;">
+                            Setiap karya di portofolio ini dikurasi dari pengalaman dokumentasi event, brand activation, dan visual storytelling yang dirancang agar terasa hangat, estetik, dan relevan dengan audiens masa kini.
+                        </p>
+                        <div style="display:flex; justify-content:center; gap:36px; margin-top:44px; flex-wrap:wrap;">
+                            <div style="background:#FAF7F2; border:1.5px solid #EADFD3; border-radius:28px; padding:24px 40px;">
+                                <p style="margin:0; font-size:18px; text-transform:uppercase; font-weight:700; color:#7A6C67;">Kurasi Karya</p>
+                                <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#4F6952;">${totalProjects} Project</p>
+                            </div>
+                            <div style="background:#FAF7F2; border:1.5px solid #EADFD3; border-radius:28px; padding:24px 40px;">
+                                <p style="margin:0; font-size:18px; text-transform:uppercase; font-weight:700; color:#7A6C67;">Format Visual</p>
+                                <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#D97D90;">4:3 Super HD</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding-top:24px; border-top:2px solid rgba(230,218,203,0.9); display:flex; justify-content:space-between; align-items:center; font-size:24px; color:#7A6C67;">
+                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:10px;"></i> Narravia.Studio</span>
+                        <span>Bridging Page</span>
+                    </div>
+                </div>
+            `;
+
+            return page;
+        }
+
+        function buildGalleryPageElement(pageItems, galleryPageNum, totalGalleryPages, username, includeIntroBubble) {
+            const page = document.createElement("div");
+            page.className = "jpg-page-sheet";
+
+            const bubbleBlockHtml = includeIntroBubble
+                ? `
+                    <div style="background:rgba(255,253,250,0.96); border:2px solid #E5D9CA; border-radius:36px; padding:26px 40px; margin:0 auto 44px auto; max-width:1760px; text-align:center; box-shadow:0 12px 28px -12px rgba(79,105,82,0.12);">
+                        <p style="margin:0; font-size:26px; font-weight:600; color:#352B28; line-height:1.5;">
+                            ${escapeHtml(buildIntroBubbleSentence())}
+                        </p>
+                    </div>
+                `
+                : "";
+
+            const collageCardsHtml = pageItems.map((item) => {
+                const eventDesc = escapeHtml(item.clientName || "Event Showcase");
+                const visualHtml = item.safePhotoSrc
+                    ? `<img src="${item.safePhotoSrc}" alt="${eventDesc}" style="width:100%; height:100%; object-fit:contain; display:block;">`
+                    : `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#F3ECE2; color:#4F6952; padding:24px; text-align:center;">
+                         <i class="fa-solid fa-clapperboard" style="font-size:44px; color:#D97D90; margin-bottom:10px;"></i>
+                         <span style="font-size:22px; font-weight:600;">Event Link</span>
+                       </div>`;
+
+                return `
+                    <div style="background:rgba(255,253,250,0.96); border:2px solid #E5D9CA; border-radius:38px; padding:22px 22px 28px 22px; display:flex; flex-direction:column; justify-content:flex-start; box-shadow:0 12px 28px -12px rgba(79,105,82,0.14);">
+                        <div style="width:100%; aspect-ratio:4/3; border-radius:28px; overflow:hidden; background:#F3ECE2; border:1px solid #EFE5D8; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                            ${visualHtml}
+                        </div>
+                        <div style="margin-top:22px; padding:4px 12px 6px 12px; display:flex; align-items:center; justify-content:center; text-align:center; gap:12px; min-height:60px;">
+                            <i class="fa-solid fa-spa" style="color:#D97D90; font-size:24px; line-height:1.4; flex-shrink:0;"></i>
+                            <p style="margin:0; font-size:26px; font-weight:600; color:#352B28; line-height:1.4; text-align:center; word-break:break-word;">
+                                ${eventDesc}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            page.innerHTML = `
+                ${buildFloralOverlayMarkup()}
+                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <div style="text-align:center; margin-bottom:36px;">
+                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:74px; font-weight:700; color:#352B28; letter-spacing:-0.01em; line-height:1.2;">
+                                My Portofolio
+                            </h1>
+                            <p style="margin:12px 0 0 0; font-size:28px; font-weight:600; color:#4F6952; line-height:1.4;">
+                                Created by ${escapeHtml(username)}
+                            </p>
+                        </div>
+
+                        ${bubbleBlockHtml}
+
+                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:38px;">
+                            ${collageCardsHtml}
+                        </div>
+                    </div>
+
+                    <div style="margin-top:50px; padding-top:22px; border-top:2px solid rgba(230,218,203,0.9); display:flex; justify-content:space-between; align-items:center; font-size:22px; color:#7A6C67;">
+                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:8px;"></i> Narravia.Studio</span>
+                        <span>Showcase ${galleryPageNum} dari ${totalGalleryPages}</span>
+                    </div>
+                </div>
+            `;
+
+            return page;
+        }
+
+        function buildThankYouPageElement(username) {
+            const page = document.createElement("div");
+            page.className = "jpg-page-sheet";
+            const socialChips = getSocialBadgesMarkup();
+
+            page.innerHTML = `
+                ${buildFloralOverlayMarkup()}
+                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div></div>
+
+                    <div style="background:rgba(255,253,250,0.96); border:2px solid #E5D9CA; border-radius:52px; padding:84px 80px; box-shadow:0 20px 44px -16px rgba(79,105,82,0.16); text-align:center;">
+                        <span style="display:inline-block; padding:10px 28px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:22px; font-weight:700;">
+                            LET'S COLLABORATE
+                        </span>
+                        <h1 style="margin:26px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:90px; font-weight:700; color:#352B28; line-height:1.15;">
+                            Thank You!
+                        </h1>
+                        <p style="margin:22px auto 0 auto; max-width:1360px; font-size:30px; color:#7A6C67; line-height:1.6;">
+                            Terima kasih sudah meluangkan waktu melihat portofolio <strong style="color:#352B28;">${escapeHtml(username)}</strong>. Untuk diskusi project, kolaborasi brand, atau event berikutnya, hubungi kami melalui kanal di bawah ini.
+                        </p>
+                        ${socialChips ? `<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:42px;">${socialChips}</div>` : ""}
+                    </div>
+
+                    <div style="padding-top:24px; border-top:2px solid rgba(230,218,203,0.9); display:flex; justify-content:space-between; align-items:center; font-size:24px; color:#7A6C67;">
+                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:10px;"></i> Created by Narravia.Studio</span>
+                        <span>Thank You Page</span>
+                    </div>
+                </div>
+            `;
+
+            return page;
+        }
+
+        function triggerJpgDownload(dataUrl, filename) {
+            const a = document.createElement("a");
+            a.href = dataUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        window.exportPortfolioJPG = async () => {
+            const rawItems = sortByRateAndPopularity(getPortfolioEligibleItems());
+            if (rawItems.length < MIN_JPG_EVENTS) {
+                return alert(`Portofolio bisa di-export ke JPG minimal setelah ada ${MIN_JPG_EVENTS} event (saat ini baru ${rawItems.length} event).`);
+            }
+            if (typeof html2canvas === "undefined") {
+                return alert("Library export belum termuat. Coba refresh halaman.");
+            }
+
+            const btn = document.getElementById("btnExportJpg");
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG Super HD...`;
+
+            const staging = document.getElementById("jpgRenderStaging");
+            staging.innerHTML = "";
+
+            try {
+                const username = (document.getElementById("userDisplayName").innerText || "Creator").trim();
+                const preparedItems = await Promise.all(
+                    rawItems.map(async (item) => ({
+                        ...item,
+                        safePhotoSrc: item.photoData ? await makeHd43Thumbnail(item.photoData, 2400, 1800) : ""
+                    }))
+                );
+
+                const perPage = 9;
+                const chunks = [];
+                for (let i = 0; i < preparedItems.length; i += perPage) {
+                    chunks.push(preparedItems.slice(i, i + perPage));
+                }
+
+                const pageElements = [
+                    { el: buildBridgingPageElement(username, preparedItems.length), name: "01_portofolio_bridging_super_hd.jpg" },
+                    ...chunks.map((chunk, idx) => ({
+                        el: buildGalleryPageElement(chunk, idx + 1, chunks.length, username, idx === 0),
+                        name: chunks.length > 1
+                            ? `02_portofolio_showcase_hal_${idx + 1}_super_hd.jpg`
+                            : "02_portofolio_showcase_super_hd.jpg"
+                    })),
+                    { el: buildThankYouPageElement(username), name: "03_portofolio_thankyou_super_hd.jpg" }
+                ];
+
+                for (let p = 0; p < pageElements.length; p++) {
+                    staging.innerHTML = "";
+                    staging.appendChild(pageElements[p].el);
+
+                    const renderedCanvas = await html2canvas(pageElements[p].el, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: "#FAF7F2"
+                    });
+
+                    const hdJpgUrl = renderedCanvas.toDataURL("image/jpeg", 0.99);
+                    triggerJpgDownload(hdJpgUrl, pageElements[p].name);
+                }
+            } catch (err) {
+                alert("Gagal membuat JPG HD: " + err.message);
+            } finally {
+                staging.innerHTML = "";
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                syncJpgButtonState();
+            }
+        };
+
+        window.openPhotoModal = async (id) => {
+            const item = records.find(r => r.id === id);
+            if (!item || !item.photoData) return;
+            const superHdView = await renderImageSourceToSuperHd(item.photoData, 2400, 0.99);
+            document.getElementById('modalTitle').innerText = item.clientName;
+            document.getElementById('modalSubtitle').innerText = `${formatMonthName((item.date || "").slice(0, 7))} • ${item.date || ''}`;
+            document.getElementById('modalImg').src = superHdView || item.photoData;
+            const modal = document.getElementById('photoModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closePhotoModal = () => {
+            const modal = document.getElementById('photoModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.switchTab = (tab) => {
+            const isFinance = tab === 'finance';
+            const isPortfolio = tab === 'portfolio';
+            const isSocial = tab === 'social';
+
+            document.getElementById('viewFinance').classList.toggle('hidden', !isFinance);
+            document.getElementById('viewPortfolio').classList.toggle('hidden', !isPortfolio);
+            document.getElementById('viewSocial').classList.toggle('hidden', !isSocial);
+
+            const activeCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer";
+            const idleCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer";
+
+            document.getElementById('tabFinance').className = isFinance ? activeCls : idleCls;
+            document.getElementById('tabPortfolio').className = isPortfolio ? activeCls : idleCls;
+            document.getElementById('tabSocial').className = isSocial ? activeCls : idleCls;
+
+            if (isPortfolio) {
+                window.renderPortfolio();
+            } else if (isSocial) {
+                updateSocialProfileCard();
+            } else if (isFinance) {
+                renderMonthlyChart();
+            }
+        };
+
+        window.exportToCSV = () => {
+            if (records.length === 0) return alert('Belum ada data untuk di-export.');
+            let csv = 'Tanggal,Project Name,Kategori,Nominal Fee (Exclude Pajak),Nominal Pajak,Input Pajak Asli,Status,Management,Deadline,Estimasi Cair,Sosmed Platform,Sosmed Handle,Link\n';
+            records.forEach(r => {
+                const safeClient = String(r.clientName || '').replace(/"/g, '""');
+                const safeCat = String(r.category || '').replace(/"/g, '""');
+                const safeTaxRaw = String(r.taxInputRaw || '').replace(/"/g, '""');
+                const safeMgmt = String(r.managementName || '').replace(/"/g, '""');
+                const safeDeadline = String(r.deadlineDate || '').replace(/"/g, '""');
+                const safePayout = String(r.payoutDate || '').replace(/"/g, '""');
+                const safeSocPlat = String(r.projectSocialPlatform || '').replace(/"/g, '""');
+                const safeSocHandle = String(r.projectSocialHandle || '').replace(/"/g, '""');
+                const safeLink = String(r.portfolioLink || '').replace(/"/g, '""');
+                csv += `"${r.date || ''}","${safeClient}","${safeCat}",${Number(r.amount) || 0},${Number(r.taxAmount) || 0},"${safeTaxRaw}","${r.status}","${safeMgmt}","${safeDeadline}","${safePayout}","${safeSocPlat}","${safeSocHandle}","${safeLink}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'narravia_studio_pendapatan.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    </script>
+</body>
+</html>
