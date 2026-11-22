@@ -384,10 +384,11 @@
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-regular fa-user text-sageDark mr-1"></i> Username
                     </label>
-                    <input type="text" id="authUsername" required autocomplete="off" placeholder="@username"
+                    <input type="text" id="authUsername" required autocomplete="off" placeholder="username"
+                        oninput="this.value = this.value.replace(/^@+/, '')"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
-                <div id="registerEmailGroup">
+                <div id="registerEmailGroup" class="hidden">
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email <span class="text-roseSoft font-semibold">(wajib untuk verifikasi Sign Up)</span>
                     </label>
@@ -398,8 +399,14 @@
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-solid fa-key text-sageDark mr-1"></i> Password
                     </label>
-                    <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
-                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                    <div class="relative">
+                        <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl pl-4 pr-11 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                        <button type="button" id="btnTogglePassword" aria-label="Lihat atau sembunyikan password"
+                            class="absolute inset-y-0 right-0 px-3.5 flex items-center text-muted hover:text-espresso transition cursor-pointer">
+                            <i id="togglePasswordIcon" class="fa-regular fa-eye text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-0.5">
@@ -428,6 +435,9 @@
                     </button>
                     <button type="button" id="btnRegister" class="clay-pill w-full text-espresso font-semibold py-2.5 text-sm cursor-pointer">
                         <i class="fa-solid fa-user-plus mr-1.5 text-roseSoft"></i> Daftar Akun Baru (Kirim Verifikasi Email)
+                    </button>
+                    <button type="button" id="btnBackToLogin" class="hidden text-xs font-semibold text-muted hover:text-espresso underline pt-1 cursor-pointer">
+                        Kembali ke tampilan Masuk (Sign In)
                     </button>
                 </div>
             </form>
@@ -1831,6 +1841,34 @@
         const authUsernameInput = document.getElementById('authUsername');
         const authEmailInput = document.getElementById('authEmail');
         const authPasswordInput = document.getElementById('authPassword');
+        const registerEmailGroup = document.getElementById('registerEmailGroup');
+        const btnTogglePassword = document.getElementById('btnTogglePassword');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        const btnBackToLogin = document.getElementById('btnBackToLogin');
+        let isSignUpMode = false;
+
+        function setAuthMode(signUp) {
+            isSignUpMode = signUp;
+            registerEmailGroup.classList.toggle('hidden', !signUp);
+            btnBackToLogin.classList.toggle('hidden', !signUp);
+            authError.classList.add('hidden');
+            authNotice.classList.add('hidden');
+            if (signUp) {
+                authEmailInput.focus();
+            } else {
+                authEmailInput.value = "";
+            }
+        }
+
+        btnTogglePassword.addEventListener('click', () => {
+            const isHidden = authPasswordInput.type === 'password';
+            authPasswordInput.type = isHidden ? 'text' : 'password';
+            togglePasswordIcon.className = isHidden
+                ? 'fa-regular fa-eye-slash text-sm text-sageDark'
+                : 'fa-regular fa-eye text-sm';
+        });
+
+        btnBackToLogin.addEventListener('click', () => setAuthMode(false));
 
         function clearAuthFormInputs(keepRememberCheckbox = false) {
             authUsernameInput.value = "";
@@ -1851,7 +1889,7 @@
             const savedPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
             if (savedPref && savedPref.remember) {
                 rememberMeCheckbox.checked = true;
-                if (savedPref.username) authUsernameInput.value = savedPref.username;
+                if (savedPref.username) authUsernameInput.value = String(savedPref.username).replace(/^@+/, '');
                 if (savedPref.email) authEmailInput.value = savedPref.email;
             } else {
                 clearRememberedPref();
@@ -2783,7 +2821,7 @@
                 if (rawPref && rawPref.remember) {
                     localStorage.setItem(REMEMBER_KEY, JSON.stringify({
                         ...rawPref,
-                        username: finalName,
+                        username: finalName.replace(/^@+/, ''),
                         email: user.email || rawPref.email || ""
                     }));
                 }
@@ -3000,7 +3038,7 @@
                 );
                 const formattedUser = formatUsernameDisplay(resolved.username || usernameInput);
                 if (remember) {
-                    saveRememberPreference(true, formattedUser, resolved.email);
+                    saveRememberPreference(true, formattedUser.replace(/^@+/, ''), resolved.email);
                 } else {
                     clearRememberedPref();
                 }
@@ -3027,7 +3065,13 @@
         });
 
         document.getElementById('btnRegister').addEventListener('click', async () => {
-            const usernameInput = authUsernameInput.value.trim();
+            if (!isSignUpMode) {
+                setAuthMode(true);
+                showAuthNotice("Masukkan email aktif kamu untuk pengiriman link verifikasi akun baru.");
+                return;
+            }
+
+            const usernameInput = authUsernameInput.value.trim().replace(/^@+/, "");
             const email = authEmailInput.value.trim();
             const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
@@ -3064,7 +3108,7 @@
                 );
                 const chosenName = formatUsernameDisplay(usernameInput);
                 if (remember) {
-                    saveRememberPreference(true, chosenName, email);
+                    saveRememberPreference(true, usernameInput, email);
                 } else {
                     clearRememberedPref();
                 }
@@ -3077,8 +3121,9 @@
                 pendingVerifyUser = cred.user;
                 await sendEmailVerification(cred.user);
                 await signOut(auth);
+                setAuthMode(false);
                 showAuthNotice(
-                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu masuk pakai username & password.`,
+                    `Akun ${usernameInput} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu masuk pakai username & password.`,
                     true
                 );
             } catch (err) {
