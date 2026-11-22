@@ -2441,15 +2441,22 @@
             }
         };
 
-        document.getElementById('clientCategoryForm').addEventListener('submit', async (e) => {
+       document.getElementById('clientCategoryForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const targetUid = document.getElementById('publicShareSection').dataset.targetUid || currentUser?.uid;
             const fb = document.getElementById('clientPickFeedback');
             const btn = document.getElementById('btnSubmitClientPick');
             const brandName = document.getElementById('clientPickName').value.trim();
             const chosenCat = document.getElementById('clientPickCategory').value;
+            const picWhatsapp = document.getElementById('clientPickWhatsapp').value.trim();
+            const picEmail = document.getElementById('clientPickEmail').value.trim();
             const eventDate = document.getElementById('clientPickDate').value;
             const note = document.getElementById('clientPickNote').value.trim();
+
+            if (!picWhatsapp && !picEmail) {
+                fb.innerText = "Mohon isi minimal WhatsApp PIC atau Email PIC agar kreator dapat menghubungi kembali.";
+                return;
+            }
 
             if (!targetUid) {
                 fb.innerText = "Tautan belum terhubung ke akun kreator. Kirimkan detail ini langsung ke kreator.";
@@ -2461,11 +2468,21 @@
                 await addDoc(collection(db, `users/${targetUid}/pitchingRequests`), {
                     brandName,
                     category: chosenCat,
+                    picWhatsapp,
+                    picEmail,
                     eventDate,
                     brief: note,
                     decision: "pending",
                     createdAt: Date.now()
                 });
+                fb.innerText = "Pitching berhasil dikirim! Kreator akan menerima notifikasi dan menghubungi PIC via WA/Email.";
+                e.target.reset();
+            } catch (err) {
+                fb.innerText = "Gagal mengirim otomatis: " + err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        });
                 fb.innerText = "Pitching berhasil dikirim! Kreator akan menerima notifikasi dan meninjau penawaranmu.";
                 e.target.reset();
             } catch (err) {
