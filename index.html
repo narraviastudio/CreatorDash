@@ -376,10 +376,10 @@
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-regular fa-user text-sageDark mr-1"></i> Username
                     </label>
-                    <input type="text" id="authUsername" required autocomplete="off" placeholder="@username"
+                    <input type="text" id="authUsername" required autocomplete="off" placeholder="username"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
-                <div id="registerEmailGroup">
+                <div id="registerEmailGroup" class="hidden">
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email <span class="text-roseSoft font-semibold">(wajib untuk verifikasi Sign Up)</span>
                     </label>
@@ -390,8 +390,14 @@
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-solid fa-key text-sageDark mr-1"></i> Password
                     </label>
-                    <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
-                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                    <div class="relative flex items-center">
+                        <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl pl-4 pr-11 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
+                        <button type="button" id="btnTogglePassword" aria-label="Toggle password visibility"
+                            class="absolute right-3 text-muted hover:text-espresso text-sm px-1.5 py-1 cursor-pointer">
+                            <i id="togglePasswordIcon" class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-0.5">
@@ -1791,14 +1797,39 @@
         const btnResendVerify = document.getElementById('btnResendVerify');
         const btnForgotPassword = document.getElementById('btnForgotPassword');
         const rememberMeCheckbox = document.getElementById('rememberMe');
+        const registerEmailGroup = document.getElementById('registerEmailGroup');
         const authUsernameInput = document.getElementById('authUsername');
         const authEmailInput = document.getElementById('authEmail');
         const authPasswordInput = document.getElementById('authPassword');
+        const btnTogglePassword = document.getElementById('btnTogglePassword');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+        function setRegisterEmailVisible(visible) {
+            if (!registerEmailGroup) return;
+            registerEmailGroup.classList.toggle('hidden', !visible);
+        }
+
+        function isRegisterEmailVisible() {
+            return Boolean(registerEmailGroup && !registerEmailGroup.classList.contains('hidden'));
+        }
+
+        if (btnTogglePassword && authPasswordInput && togglePasswordIcon) {
+            btnTogglePassword.addEventListener('click', () => {
+                const showPass = authPasswordInput.type === 'password';
+                authPasswordInput.type = showPass ? 'text' : 'password';
+                togglePasswordIcon.className = showPass ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+            });
+        }
 
         function clearAuthFormInputs(keepRememberCheckbox = false) {
             authUsernameInput.value = "";
             authEmailInput.value = "";
             authPasswordInput.value = "";
+            authPasswordInput.type = "password";
+            if (togglePasswordIcon) {
+                togglePasswordIcon.className = "fa-regular fa-eye";
+            }
+            setRegisterEmailVisible(false);
             if (!keepRememberCheckbox) {
                 rememberMeCheckbox.checked = false;
             }
@@ -1814,7 +1845,7 @@
             const savedPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
             if (savedPref && savedPref.remember) {
                 rememberMeCheckbox.checked = true;
-                if (savedPref.username) authUsernameInput.value = savedPref.username;
+                if (savedPref.username) authUsernameInput.value = String(savedPref.username).replace(/^@+/, "");
                 if (savedPref.email) authEmailInput.value = savedPref.email;
             } else {
                 clearRememberedPref();
@@ -1837,7 +1868,7 @@
                 if (remember) {
                     localStorage.setItem(REMEMBER_KEY, JSON.stringify({
                         remember: true,
-                        username,
+                        username: String(username || "").replace(/^@+/, ""),
                         email
                     }));
                 } else {
@@ -2719,7 +2750,7 @@
                 if (rawPref && rawPref.remember) {
                     localStorage.setItem(REMEMBER_KEY, JSON.stringify({
                         ...rawPref,
-                        username: finalName,
+                        username: finalName.replace(/^@+/, ""),
                         email: user.email || rawPref.email || ""
                     }));
                 }
@@ -2910,6 +2941,7 @@
 
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            setRegisterEmailVisible(false);
             const usernameInput = authUsernameInput.value.trim();
             const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
@@ -2963,13 +2995,19 @@
         });
 
         document.getElementById('btnRegister').addEventListener('click', async () => {
+            authError.classList.add('hidden');
+            authNotice.classList.add('hidden');
+
+            if (!isRegisterEmailVisible()) {
+                setRegisterEmailVisible(true);
+                authEmailInput.focus();
+                return;
+            }
+
             const usernameInput = authUsernameInput.value.trim();
             const email = authEmailInput.value.trim();
             const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
-
-            authError.classList.add('hidden');
-            authNotice.classList.add('hidden');
 
             if (!normalizeUsernameKey(usernameInput)) {
                 showAuthError("Isi username terlebih dahulu untuk mendaftar.");
@@ -3013,6 +3051,7 @@
                 pendingVerifyUser = cred.user;
                 await sendEmailVerification(cred.user);
                 await signOut(auth);
+                setRegisterEmailVisible(false);
                 showAuthNotice(
                     `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu masuk pakai username & password.`,
                     true
@@ -3853,7 +3892,6 @@
                 });
             }
 
-            // Map events per YYYY-MM-DD
             const eventsByDate = {};
             const addCalEvent = (dateStr, ev) => {
                 if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return;
@@ -3943,7 +3981,6 @@
                 gridEl.innerHTML = cellsHtml;
             }
 
-            // Priority Highlights List (hanya kegiatan yang ditandai priority)
             const priorityItems = records.filter(r => isClientMarkedPriority(r));
             if (prioBadge) prioBadge.textContent = `${priorityItems.length} priority`;
 
@@ -4368,7 +4405,7 @@
                     metaLines.push(`<span class="text-[11px] px-2.5 py-0.5 rounded-full bg-blush/50 text-roseSoft font-semibold"><i class="fa-solid fa-tag mr-1"></i>${escapeHtml(r.category)}</span>`);
                 }
                 if (r.pipelineStage) {
-                    metaLines.push(`<span class="text-[11px] px-2 py-0.5 rounded-full bg-cream text-espresso font-semibold"><i class="fa-solid fa-diagram-project mr-1 text-sageDark"></i>${escapeHtml(r.pipelineStage)}</span>`);
+                    metaLines.push(`<span class="text-[11px] px-2.5 py-0.5 rounded-full bg-cream text-espresso font-semibold"><i class="fa-solid fa-diagram-project mr-1 text-sageDark"></i>${escapeHtml(r.pipelineStage)}</span>`);
                 }
                 if (r.projectSocialHandle) {
                     metaLines.push(`<span class="text-[11px] text-roseSoft font-medium"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(r.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(r.projectSocialHandle)}</span>`);
@@ -4504,7 +4541,6 @@
             document.getElementById('invEmail').value = safe.email;
             document.getElementById('invNotes').value = safe.notes;
             document.getElementById('invTerms').value = safe.terms;
-
             invoiceLineItems = Array.isArray(safe.items) && safe.items.length > 0
                 ? safe.items.map(it => ({
                     title: it.title || "",
@@ -4513,20 +4549,16 @@
                     price: Math.max(0, parseFloat(it.price) || 0)
                 }))
                 : [{ title: "", desc: "", qty: 1, price: 0 }];
-
-            renderInvoiceEditorItems();
+            renderInvoiceItemsEditor();
         }
 
-        function autoSaveInvoiceDraft() {
-            refreshInvoicePreview();
+        function persistInvoiceDraftNow(syncCloud = true) {
             if (!activeUserUid) return;
             const uidSnapshot = activeUserUid;
             const snapshot = buildDraftSnapshotFromForm();
             saveInvoiceDraftToLocal(uidSnapshot, snapshot);
 
-            const statusEl = document.getElementById('invoiceAutoSaveStatus');
-            
-
+            if (!syncCloud) return;
             clearTimeout(invoiceCloudSaveTimer);
             invoiceCloudSaveTimer = setTimeout(async () => {
                 if (activeUserUid !== uidSnapshot) return;
@@ -4540,176 +4572,165 @@
             }, 400);
         }
 
-        window.handleInvoiceFieldChange = () => {
-            autoSaveInvoiceDraft();
-        };
+        function handleInvoiceFieldChange() {
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
+        }
 
-        function syncInvoiceProjectDropdown() {
+        function populateInvoiceProjectSourceSelect(selectedId = "") {
             const sel = document.getElementById('invoiceProjectSourceSelect');
             if (!sel) return;
+            const currentVal = selectedId || sel.value;
             sel.innerHTML = `<option value="">-- Pilih Project --</option>` + records.map(r =>
-                `<option value="${r.id}">${escapeHtml(r.clientName)} (${escapeHtml(r.status)} — ${formatRupiah(r.amount)})</option>`
-            ).join('');
-        }
-
-        function mapProjectStatusToInvoiceStatus(projStatus) {
-            if (projStatus === "Lunas") return "Lunas";
-            if (projStatus === "DP 50%") return "DP";
-            if (projStatus === "Pending / Invoice Sent") return "Belum Lunas";
-            return "";
-        }
-
-        function formatIndoLongDate(dateStr) {
-            if (!dateStr) return "";
-            const parsed = new Date(String(dateStr).slice(0, 10) + "T00:00:00");
-            if (Number.isNaN(parsed.getTime())) return String(dateStr);
-            return parsed.toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-            });
+                `<option value="${r.id}">${escapeHtml(r.clientName)} (${escapeHtml(r.category || 'Event')} • ${formatRupiah(r.amount)})</option>`
+            ).join("");
+            if (currentVal && records.some(r => r.id === currentVal)) {
+                sel.value = currentVal;
+            } else if (records.length > 0 && !currentVal) {
+                sel.value = records[0].id;
+            }
         }
 
         window.pullProjectIntoInvoice = () => {
-            const selId = document.getElementById('invoiceProjectSourceSelect')?.value || "";
-            if (!selId) {
-                const emptyDraft = createEmptyInvoiceDraft();
-                applyInvoiceDraftToForm(emptyDraft);
-                autoSaveInvoiceDraft();
-                return;
-            }
-            const proj = records.find(r => r.id === selId);
+            const sel = document.getElementById('invoiceProjectSourceSelect');
+            const projId = sel?.value || "";
+            if (!projId) return;
+            const proj = records.find(r => r.id === projId);
             if (!proj) return;
 
-            const recipientName = (proj.managementName || proj.clientName || "").trim();
-            document.getElementById('invClientName').value = recipientName;
+            const matchedPkg = findMatchingRatecardPackage(proj.category) || findMatchingRatecardPackage(proj.clientName);
+            const feeNum = Number(proj.amount) > 0 ? Number(proj.amount) : (Number(matchedPkg?.price) || 0);
+            const descText = proj.briefSummary || matchedPkg?.desc || (proj.managementName ? `Brand / Management: ${proj.managementName}` : "");
 
-            const catTitle = proj.category || "Layanan Konten";
-            const matchedPkg = findMatchingRatecardPackage(catTitle);
-            const resolvedDesc = matchedPkg?.desc || proj.briefSummary || proj.clientName || "";
-            const resolvedPrice = (Number(proj.amount) > 0)
-                ? Number(proj.amount)
-                : (Number(matchedPkg?.price) || 0);
-
-            document.getElementById('invClientSubtitle').value = proj.clientName
-                ? `${catTitle} — ${proj.clientName}`
-                : catTitle;
-
-            const mappedStatus = mapProjectStatusToInvoiceStatus(proj.status);
-            if (mappedStatus) {
-                document.getElementById('invStatus').value = mappedStatus;
+            document.getElementById('invClientName').value = proj.managementName || proj.clientName || "";
+            document.getElementById('invClientSubtitle').value = proj.clientName || "";
+            document.getElementById('invEventDateText').value = proj.date || "";
+            if (!document.getElementById('invDateText').value) {
+                document.getElementById('invDateText').value = new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+            }
+            if (proj.status === "Lunas") {
+                document.getElementById('invStatus').value = "Lunas";
+            } else if (proj.status === "DP 50%") {
+                document.getElementById('invStatus').value = "DP";
+                if (!document.getElementById('invDpPercent').value) document.getElementById('invDpPercent').value = "50";
+            } else {
+                document.getElementById('invStatus').value = "Belum Lunas";
             }
 
-            if (proj.date) {
-                document.getElementById('invEventDateText').value = formatIndoLongDate(proj.date);
-            }
-            if (!document.getElementById('invDateText').value.trim()) {
-                document.getElementById('invDateText').value = formatIndoLongDate(new Date().toISOString().slice(0, 10));
-            }
-            if (proj.briefSummary) {
-                const notesEl = document.getElementById('invNotes');
-                if (notesEl && !notesEl.value.trim()) {
-                    notesEl.value = proj.briefSummary;
-                }
-            }
-
-            invoiceLineItems = [
-                {
-                    title: matchedPkg?.name || catTitle,
-                    desc: resolvedDesc,
-                    qty: 1,
-                    price: resolvedPrice
-                }
-            ];
-            renderInvoiceEditorItems();
-            autoSaveInvoiceDraft();
+            invoiceLineItems = [{
+                title: proj.category || matchedPkg?.name || proj.clientName || "Paket Konten",
+                desc: descText,
+                qty: 1,
+                price: feeNum
+            }];
+            renderInvoiceItemsEditor();
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
+            showToast(`Data "${proj.clientName}" ditarik ke Invoice.`);
         };
 
-        window.openInvoiceWithProject = (projectId) => {
+        window.applyCategoryPresetToInvoice = (catVal) => {
+            if (!catVal) return;
+            const matchedPkg = findMatchingRatecardPackage(catVal);
+            const firstItem = invoiceLineItems[0] || { title: "", desc: "", qty: 1, price: 0 };
+            firstItem.title = matchedPkg?.name || catVal;
+            if (matchedPkg?.desc && !firstItem.desc) {
+                firstItem.desc = matchedPkg.desc;
+            }
+            if (Number(matchedPkg?.price) > 0 && (!firstItem.price || Number(firstItem.price) === 0)) {
+                firstItem.price = Number(matchedPkg.price);
+            }
+            invoiceLineItems[0] = firstItem;
+            renderInvoiceItemsEditor();
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
+        };
+
+        window.openInvoiceWithProject = (projId) => {
             openInvoiceModal();
-            const sel = document.getElementById('invoiceProjectSourceSelect');
-            if (sel && projectId) {
-                sel.value = projectId;
-                pullProjectIntoInvoice();
+            populateInvoiceProjectSourceSelect(projId);
+            pullProjectIntoInvoice();
+        };
+
+        window.openInvoiceModal = () => {
+            const modal = document.getElementById('invoiceModal');
+            if (!modal) return;
+            populateInvoiceProjectSourceSelect();
+            renderInvoiceItemsEditor();
+            refreshInvoicePreview();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeInvoiceModal = () => {
+            persistInvoiceDraftNow(true);
+            const modal = document.getElementById('invoiceModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         };
 
         window.clearInvoiceForm = () => {
-            const catDrop = document.getElementById('invoiceCategoryDropdown');
-            if (catDrop) catDrop.value = "";
-            const projDrop = document.getElementById('invoiceProjectSourceSelect');
-            if (projDrop) projDrop.value = "";
-
             const emptyDraft = createEmptyInvoiceDraft();
             applyInvoiceDraftToForm(emptyDraft);
-            autoSaveInvoiceDraft();
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
+            showToast("Form invoice dikosongkan.");
         };
 
-        window.applyCategoryPresetToInvoice = (categoryVal) => {
-            if (!categoryVal) {
-                invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
-                renderInvoiceEditorItems();
-                autoSaveInvoiceDraft();
-                return;
-            }
-            document.getElementById('invClientSubtitle').value = categoryVal;
-            const matchedPkg = findMatchingRatecardPackage(categoryVal);
-            const matchedProject = records.find(r => (r.category || "") === categoryVal);
-            if (matchedProject) {
-                document.getElementById('invClientName').value = (matchedProject.managementName || matchedProject.clientName || "").trim();
-                if (matchedProject.date) {
-                    document.getElementById('invEventDateText').value = formatIndoLongDate(matchedProject.date);
-                }
-                const resolvedPrice = (Number(matchedProject.amount) > 0)
-                    ? Number(matchedProject.amount)
-                    : (Number(matchedPkg?.price) || 0);
-                invoiceLineItems = [
-                    {
-                        title: matchedPkg?.name || categoryVal,
-                        desc: matchedPkg?.desc || matchedProject.briefSummary || matchedProject.clientName || "",
-                        qty: 1,
-                        price: resolvedPrice
-                    }
-                ];
-            } else {
-                invoiceLineItems = [
-                    {
-                        title: matchedPkg?.name || categoryVal,
-                        desc: matchedPkg?.desc || "",
-                        qty: 1,
-                        price: Number(matchedPkg?.price) || 0
-                    }
-                ];
-            }
-            renderInvoiceEditorItems();
-            autoSaveInvoiceDraft();
-        };
-
-        function renderInvoiceEditorItems() {
+        function renderInvoiceItemsEditor() {
             const container = document.getElementById('invItemsEditor');
             if (!container) return;
-            container.innerHTML = invoiceLineItems.map((item, i) => `
-                <div class="bg-white border border-[#E6DACB] rounded-2xl p-2.5 space-y-1.5">
-                    <div class="flex items-center gap-1.5">
-                        <input type="text" value="${escapeHtml(item.title)}" placeholder="Nama item / paket"
-                            oninput="updateInvoiceItem(${i}, 'title', this.value)"
-                            class="flex-1 bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-xs font-semibold">
-                        <input type="number" min="1" value="${item.qty}" placeholder="Qty"
-                            oninput="updateInvoiceItem(${i}, 'qty', this.value)"
-                            class="w-14 bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-xs text-center">
-                        <input type="number" min="0" step="1000" value="${item.price}" placeholder="0"
-                            oninput="updateInvoiceItem(${i}, 'price', this.value)"
-                            class="w-28 bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-xs">
-                        ${invoiceLineItems.length > 1 ? `<button type="button" onclick="removeInvoiceItem(${i})" class="text-rose-600 px-1.5 text-xs cursor-pointer" title="Hapus item"><i class="fa-solid fa-xmark"></i></button>` : ''}
+
+            container.innerHTML = invoiceLineItems.map((item, idx) => `
+                <div class="bg-white border border-[#E6DACB] rounded-2xl p-3 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-[11px] font-bold text-sageDark">Item #${idx + 1}</span>
+                        ${invoiceLineItems.length > 1
+                            ? `<button type="button" onclick="removeInvoiceLineItem(${idx})" class="text-[11px] text-rose-600 hover:underline cursor-pointer">Hapus</button>`
+                            : ''}
                     </div>
-                    <textarea rows="2" placeholder="Deskripsi item / rincian layanan"
-                        oninput="updateInvoiceItem(${i}, 'desc', this.value)"
-                        class="w-full bg-ivory border border-[#E4D8CA] rounded-lg px-2 py-1 text-[11px] text-muted">${escapeHtml(item.desc)}</textarea>
+                    <input type="text" value="${escapeHtml(item.title)}" placeholder="Nama item / paket"
+                        oninput="updateInvoiceLineItem(${idx}, 'title', this.value)"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-xl px-2.5 py-1 text-xs font-semibold">
+                    <input type="text" value="${escapeHtml(item.desc)}" placeholder="Keterangan deliverable"
+                        oninput="updateInvoiceLineItem(${idx}, 'desc', this.value)"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-xl px-2.5 py-1 text-[11px]">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] text-muted">Qty</label>
+                            <input type="number" min="1" value="${item.qty}"
+                                oninput="updateInvoiceLineItem(${idx}, 'qty', this.value)"
+                                class="w-full bg-ivory border border-[#E4D8CA] rounded-xl px-2.5 py-1 text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-muted">Harga Satuan (Rp)</label>
+                            <input type="number" min="0" step="1000" value="${item.price}"
+                                oninput="updateInvoiceLineItem(${idx}, 'price', this.value)"
+                                class="w-full bg-ivory border border-[#E4D8CA] rounded-xl px-2.5 py-1 text-xs">
+                        </div>
+                    </div>
                 </div>
-            `).join('');
+            `).join("");
         }
 
-        window.updateInvoiceItem = (idx, field, val) => {
+        window.addInvoiceLineItem = () => {
+            invoiceLineItems.push({ title: "", desc: "", qty: 1, price: 0 });
+            renderInvoiceItemsEditor();
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
+        };
+
+        window.removeInvoiceLineItem = (idx) => {
+            if (invoiceLineItems.length <= 1) return;
+            invoiceLineItems.splice(idx, 1);
+            renderInvoiceItemsEditor();
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
+        };
+
+        window.updateInvoiceLineItem = (idx, field, val) => {
             if (!invoiceLineItems[idx]) return;
             if (field === 'qty') {
                 invoiceLineItems[idx].qty = Math.max(1, parseInt(val, 10) || 1);
@@ -4718,1016 +4739,622 @@
             } else {
                 invoiceLineItems[idx][field] = val;
             }
-            autoSaveInvoiceDraft();
+            refreshInvoicePreview();
+            persistInvoiceDraftNow(true);
         };
 
-        window.addInvoiceLineItem = () => {
-            invoiceLineItems.push({
-                title: "",
-                desc: "",
-                qty: 1,
-                price: 0
-            });
-            renderInvoiceEditorItems();
-            autoSaveInvoiceDraft();
-        };
-
-        window.removeInvoiceItem = (idx) => {
-            if (invoiceLineItems.length <= 1) return;
-            invoiceLineItems.splice(idx, 1);
-            renderInvoiceEditorItems();
-            autoSaveInvoiceDraft();
-        };
-
-        function collectCurrentInvoiceData() {
-            const invNumber = (document.getElementById('invNumber')?.value || "").trim();
-            const invStatus = (document.getElementById('invStatus')?.value || "").trim();
-            const clientName = (document.getElementById('invClientName')?.value || "").trim();
-            const clientSubtitle = (document.getElementById('invClientSubtitle')?.value || "").trim();
-            const invDateText = (document.getElementById('invDateText')?.value || "").trim();
-            const invEventDateText = (document.getElementById('invEventDateText')?.value || "").trim();
+        function getInvoiceFormData() {
+            const invNumber = document.getElementById('invNumber')?.value.trim() || "";
+            const invStatus = document.getElementById('invStatus')?.value || "";
+            const clientName = document.getElementById('invClientName')?.value.trim() || "";
+            const clientSubtitle = document.getElementById('invClientSubtitle')?.value.trim() || "";
+            const invDateText = document.getElementById('invDateText')?.value.trim() || "";
+            const invEventDateText = document.getElementById('invEventDateText')?.value.trim() || "";
             const transport = Math.max(0, parseFloat(document.getElementById('invTransport')?.value || "0") || 0);
-            const dpPct = Math.min(100, Math.max(0, parseFloat(document.getElementById('invDpPercent')?.value || "0") || 0));
-            const bank = (document.getElementById('invBank')?.value || "").trim();
-            const accountHolder = (document.getElementById('invAccountHolder')?.value || "").trim();
-            const accountNumber = (document.getElementById('invAccountNumber')?.value || "").trim();
-            const phone = (document.getElementById('invPhone')?.value || "").trim();
-            const email = (document.getElementById('invEmail')?.value || "").trim();
+            const dpPercent = Math.min(100, Math.max(0, parseFloat(document.getElementById('invDpPercent')?.value || "0") || 0));
+            const bank = document.getElementById('invBank')?.value.trim() || "";
+            const accountHolder = document.getElementById('invAccountHolder')?.value.trim() || "";
+            const accountNumber = document.getElementById('invAccountNumber')?.value.trim() || "";
+            const phone = document.getElementById('invPhone')?.value.trim() || "";
+            const email = document.getElementById('invEmail')?.value.trim() || "";
+
             const notesLines = (document.getElementById('invNotes')?.value || "")
-                .split("\n")
-                .map(s => s.trim())
-                .filter(Boolean);
+                .split("\n").map(s => s.trim()).filter(Boolean);
             const termsLines = (document.getElementById('invTerms')?.value || "")
-                .split("\n")
-                .map(s => s.trim())
-                .filter(Boolean);
+                .split("\n").map(s => s.trim()).filter(Boolean);
 
-            const subTotal = invoiceLineItems.reduce((sum, it) => sum + ((Number(it.qty) || 1) * (Number(it.price) || 0)), 0);
-            const grandTotal = subTotal + transport;
-            const dpAmount = Math.round(subTotal * (dpPct / 100)) + transport;
-            const remainingBalance = Math.max(0, grandTotal - dpAmount);
+            const subtotal = invoiceLineItems.reduce((sum, it) => sum + ((Number(it.qty) || 1) * (Number(it.price) || 0)), 0);
+            const totalAll = subtotal + transport;
+            const dpAmount = Math.round(totalAll * (dpPercent / 100));
+            const remainingAmount = Math.max(0, totalAll - dpAmount);
 
-            const igHandle = normalizeSocialEntry(userSocials.instagram, "instagram")?.label || "";
-            const signOffName = getUsernameWithoutAt();
+            const studioDisplayName = getUsernameWithoutAt();
 
             return {
+                studioDisplayName,
                 invNumber,
                 invStatus,
                 clientName,
                 clientSubtitle,
                 invDateText,
                 invEventDateText,
-                items: invoiceLineItems,
-                subTotal,
                 transport,
-                grandTotal,
-                dpPct,
+                dpPercent,
                 dpAmount,
-                remainingBalance,
+                remainingAmount,
+                subtotal,
+                totalAll,
                 bank,
                 accountHolder,
                 accountNumber,
                 phone,
                 email,
-                igHandle,
-                signOffName,
                 notesLines,
-                termsLines
+                termsLines,
+                items: invoiceLineItems
             };
         }
 
-        function buildInvoicePagesHtml(data) {
-            const itemRowsHtml = data.items.map((it, idx) => {
-                const lineTotal = (Number(it.qty) || 1) * (Number(it.price) || 0);
+        function buildInvoicePagesHtml(data, isPreviewMode = false) {
+            const scaleAttr = isPreviewMode ? 'style="transform: scale(0.74); transform-origin: top left; margin-bottom: -365px;"' : '';
+
+            const itemsRowsHtml = data.items.map((it, idx) => {
+                const qty = Number(it.qty) || 1;
+                const price = Number(it.price) || 0;
+                const lineTotal = qty * price;
                 return `
-                    <tr style="border-bottom:1.5px solid rgba(226,212,195,0.75); background:rgba(255,253,250,0.92);">
-                        <td style="padding:14px 12px; font-weight:700; color:#352B28; vertical-align:top; width:44px; font-style:normal;">${idx + 1}.</td>
-                        <td style="padding:14px 14px; vertical-align:top;">
-                            <div style="font-family:'Playfair Display',Georgia,serif; font-size:17px; font-weight:700; color:#352B28; min-height:22px; font-style:normal;">${escapeHtml(it.title)}</div>
-                            <div style="font-size:12.5px; color:#5F534E; line-height:1.55; margin-top:4px; min-height:18px; font-style:normal;">${escapeHtml(it.desc)}</div>
+                    <tr class="border-b border-[#EFE5D8]">
+                        <td class="py-3.5 px-3 text-xs font-semibold text-muted align-top">${String(idx + 1).padStart(2, '0')}</td>
+                        <td class="py-3.5 px-3 align-top">
+                            <p class="text-xs font-bold text-espresso">${escapeHtml(it.title || '-')}</p>
+                            ${it.desc ? `<p class="text-[11px] text-muted mt-0.5 leading-relaxed">${escapeHtml(it.desc)}</p>` : ''}
                         </td>
-                        <td style="padding:14px 10px; font-weight:700; color:#4F6952; text-align:center; vertical-align:top; white-space:nowrap; width:74px; font-style:normal;">${Number(it.qty) || 1}x</td>
-                        <td style="padding:14px 14px; font-weight:700; color:#352B28; text-align:right; vertical-align:top; white-space:nowrap; width:145px; font-style:normal;">${formatRupiah(lineTotal)}</td>
+                        <td class="py-3.5 px-3 text-xs font-semibold text-espresso text-center align-top">${qty}</td>
+                        <td class="py-3.5 px-3 text-xs font-semibold text-espresso text-right align-top whitespace-nowrap">${formatRupiah(price)}</td>
+                        <td class="py-3.5 px-3 text-xs font-bold text-sageDark text-right align-top whitespace-nowrap">${formatRupiah(lineTotal)}</td>
                     </tr>
                 `;
-            }).join('');
+            }).join("");
 
             const notesHtml = data.notesLines.length > 0
-                ? data.notesLines.map(line => `<li style="margin-bottom:4px; line-height:1.45; font-style:normal;">${escapeHtml(line)}</li>`).join('')
-                : `<li style="margin-bottom:4px; line-height:1.45; color:#9C8E89; font-style:normal;">-</li>`;
+                ? data.notesLines.map(n => `<li class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-roseSoft mt-1.5 shrink-0"></span><span>${escapeHtml(n)}</span></li>`).join("")
+                : `<li class="text-muted">-</li>`;
 
-            const statusChip = (label, active) => {
-                const bg = active ? '#4F6952' : 'rgba(255,253,250,0.88)';
-                const color = active ? '#FFFFFF' : '#7A6C67';
-                const border = active ? '#4F6952' : '#D8C9B8';
-                return `<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:9999px; font-size:12px; font-weight:700; background:${bg}; color:${color}; border:1px solid ${border}; font-style:normal;">${active ? '✓ ' : ''}${escapeHtml(label)}</span>`;
-            };
+            const termsHtml = data.termsLines.length > 0
+                ? data.termsLines.map((t, i) => `
+                    <div class="bg-white/90 border border-[#E6DACB] rounded-2xl p-3.5 flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-blush/70 text-roseSoft text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</span>
+                        <p class="text-xs text-espresso leading-relaxed">${escapeHtml(t)}</p>
+                    </div>
+                `).join("")
+                : `<div class="bg-white/90 border border-[#E6DACB] rounded-2xl p-4 text-xs text-muted">-</div>`;
 
-            const page1Html = `
-                <div class="invoice-page-sheet" data-invoice-page="1">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding-bottom:22px; border-bottom:2px solid rgba(126,150,128,0.28);">
+            const page1 = `
+                <div ${scaleAttr}>
+                    <div class="invoice-page-sheet flex flex-col justify-between">
                         <div>
-                            <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-style:normal;">
-                                Narravia Studio • Official Invoice
-                            </span>
-                            <h1 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:42px; font-weight:700; color:#352B28; letter-spacing:0.02em; line-height:1.1; font-style:normal;">
-                                INVOICE
-                            </h1>
-                            <p style="margin:0; font-size:14px; font-weight:700; color:#4F6952; min-height:20px; font-style:normal;">
-                                ${escapeHtml(data.invNumber)}
-                            </p>
-                        </div>
-
-                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:14px 18px; min-width:255px; font-size:13px; font-style:normal;">
-                            <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:6px;">
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Tanggal Invoice</span>
-                                <span style="color:#352B28; font-weight:700; font-style:normal;">: ${escapeHtml(data.invDateText)}</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; gap:12px;">
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Tanggal Event</span>
-                                <span style="color:#D97D90; font-weight:700; font-style:normal;">: ${escapeHtml(data.invEventDateText)}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:20px; background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 22px; font-style:normal;">
-                        <p style="margin:0; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67; font-style:normal;">Kepada :</p>
-                        <p style="margin:4px 0 2px 0; font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:#352B28; min-height:28px; font-style:normal;">${escapeHtml(data.clientName)}</p>
-                        <p style="margin:0; font-size:13px; font-weight:600; color:#4F6952; min-height:18px; font-style:normal;">${escapeHtml(data.clientSubtitle)}</p>
-                    </div>
-
-                    <div style="margin-top:22px; border-radius:20px; overflow:hidden; border:1px solid #E2D4C3; background:rgba(255,253,250,0.92);">
-                        <table style="width:100%; border-collapse:collapse; text-align:left; font-style:normal;">
-                            <thead>
-                                <tr style="background:#4F6952; color:#FAF7F2; font-size:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                                    <th style="padding:12px; font-style:normal;">No</th>
-                                    <th style="padding:12px 14px; font-style:normal;">Deskripsi</th>
-                                    <th style="padding:12px 10px; text-align:center; font-style:normal;">Jumlah</th>
-                                    <th style="padding:12px 14px; text-align:right; font-style:normal;">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${itemRowsHtml}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div style="margin-top:22px; display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px; align-items:start;">
-                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px; font-style:normal;">
-                            <p style="margin:0 0 8px 0; font-family:'Playfair Display',Georgia,serif; font-size:16px; font-weight:700; color:#352B28; font-style:normal;">
-                                Catatan:
-                            </p>
-                            <ul style="margin:0; padding-left:18px; list-style-type:disc; font-size:12px; color:#5F534E; font-style:normal;">
-                                ${notesHtml}
-                            </ul>
-                        </div>
-
-                        <div style="background:rgba(255,253,250,0.95); border:1px solid #E2D4C3; border-radius:20px; padding:18px 20px; font-size:13px; font-style:normal;">
-                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Sub Total</span>
-                                <span style="color:#352B28; font-weight:700; font-style:normal;">${formatRupiah(data.subTotal)}</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Biaya Transport</span>
-                                <span style="color:#352B28; font-weight:700; font-style:normal;">${formatRupiah(data.transport)}</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; margin:8px -4px; border-radius:14px; background:#F6D8DE;">
-                                <span style="color:#352B28; font-weight:800; font-size:14px; font-style:normal;">TOTAL:</span>
-                                <span style="color:#352B28; font-weight:800; font-size:16px; font-style:normal;">${formatRupiah(data.grandTotal)}</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #E2D4C3;">
-                                <span style="color:#4F6952; font-weight:700; font-style:normal;">DP (${data.dpPct}%) + Transport</span>
-                                <span style="color:#4F6952; font-weight:700; font-style:normal;">${formatRupiah(data.dpAmount)}</span>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; padding:8px 0 2px 0;">
-                                <span style="color:#D97D90; font-weight:700; font-style:normal;">Sisa Pembayaran</span>
-                                <span style="color:#D97D90; font-weight:800; font-style:normal;">${formatRupiah(data.remainingBalance)}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch;">
-                        <div style="background:rgba(243,236,226,0.78); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; font-size:12.5px; font-style:normal;">
-                            <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952; font-style:normal;">
-                                Informasi Pembayaran
-                            </p>
-                            <div style="display:grid; grid-template-columns:110px 1fr; row-gap:5px; color:#352B28; font-style:normal;">
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Bank</span>
-                                <span style="font-weight:700; font-style:normal;">: ${escapeHtml(data.bank)}</span>
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">Atas Nama</span>
-                                <span style="font-weight:700; font-style:normal;">: ${escapeHtml(data.accountHolder)}</span>
-                                <span style="color:#7A6C67; font-weight:600; font-style:normal;">No. Rekening</span>
-                                <span style="font-weight:700; font-style:normal;">: ${escapeHtml(data.accountNumber)}</span>
-                            </div>
-                        </div>
-
-                        <div style="background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:20px; padding:16px 20px; display:flex; flex-direction:column; justify-content:space-between; font-style:normal;">
-                            <div>
-                                <p style="margin:0 0 8px 0; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#7A6C67; font-style:normal;">
-                                    Status Pembayaran:
-                                </p>
-                                <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                                    ${statusChip("Belum Lunas", data.invStatus === "Belum Lunas")}
-                                    ${statusChip("DP", data.invStatus === "DP")}
-                                    ${statusChip("Lunas", data.invStatus === "Lunas")}
+                            <div class="flex items-start justify-between gap-6 border-b border-[#E5D8C7] pb-6">
+                                <div>
+                                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blush/60 text-roseSoft text-[11px] font-bold tracking-wide uppercase">
+                                        <span>INVOICE</span>
+                                    </div>
+                                    <h1 class="font-serif text-4xl font-bold text-espresso mt-2.5">${escapeHtml(data.studioDisplayName)}</h1>
+                                    <p class="text-xs text-muted mt-1">Event Content Creator • Reels • TikTok • Same Day Edit • Documentation</p>
+                                </div>
+                                <div class="text-right space-y-1">
+                                    <p class="text-[11px] uppercase tracking-wider font-bold text-muted">No. Invoice</p>
+                                    <p class="text-sm font-bold text-espresso">${escapeHtml(data.invNumber || '-')}</p>
+                                    ${data.invStatus ? `<span class="inline-block mt-1 px-3 py-0.5 rounded-full bg-sage/20 text-sageDark text-[11px] font-bold">${escapeHtml(data.invStatus)}</span>` : ''}
                                 </div>
                             </div>
-                            <p style="margin:14px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-style:normal; font-size:14px; font-weight:600; color:#4F6952; text-align:center; width:100%;">
-                                Terima kasih sudah mempercayakan momen pentingmu
-                            </p>
+
+                            <div class="grid grid-cols-12 gap-5 mt-6">
+                                <div class="col-span-7 bg-white/90 border border-[#E6DACB] rounded-2xl p-4">
+                                    <p class="text-[10px] uppercase tracking-wider font-bold text-sageDark">Kepada / Client</p>
+                                    <h2 class="font-serif text-lg font-bold text-espresso mt-1">${escapeHtml(data.clientName || '-')}</h2>
+                                    ${data.clientSubtitle ? `<p class="text-xs text-muted mt-0.5">${escapeHtml(data.clientSubtitle)}</p>` : ''}
+                                </div>
+                                <div class="col-span-5 bg-white/90 border border-[#E6DACB] rounded-2xl p-4 space-y-1.5 text-xs">
+                                    <div class="flex justify-between gap-2">
+                                        <span class="text-muted">Tanggal Invoice:</span>
+                                        <span class="font-semibold text-espresso">${escapeHtml(data.invDateText || '-')}</span>
+                                    </div>
+                                    <div class="flex justify-between gap-2">
+                                        <span class="text-muted">Tanggal Event:</span>
+                                        <span class="font-semibold text-espresso">${escapeHtml(data.invEventDateText || '-')}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 bg-white/90 border border-[#E6DACB] rounded-2xl overflow-hidden">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-cream text-[11px] uppercase tracking-wider text-muted border-b border-[#E6DACB]">
+                                            <th class="py-3 px-3 w-12">No</th>
+                                            <th class="py-3 px-3">Paket / Jasa</th>
+                                            <th class="py-3 px-3 text-center w-16">Qty</th>
+                                            <th class="py-3 px-3 text-right w-32">Harga</th>
+                                            <th class="py-3 px-3 text-right w-36">Jumlah</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${itemsRowsHtml}</tbody>
+                                </table>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-5 mt-6 items-start">
+                                <div class="col-span-6 bg-white/90 border border-[#E6DACB] rounded-2xl p-4">
+                                    <p class="text-xs font-bold text-espresso mb-2">Catatan</p>
+                                    <ul class="space-y-1.5 text-xs text-espresso/90">${notesHtml}</ul>
+                                </div>
+                                <div class="col-span-6 bg-white/90 border border-[#E6DACB] rounded-2xl p-4 space-y-2 text-xs">
+                                    <div class="flex justify-between">
+                                        <span class="text-muted">Subtotal</span>
+                                        <span class="font-semibold text-espresso">${formatRupiah(data.subtotal)}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-muted">Biaya Transport</span>
+                                        <span class="font-semibold text-espresso">${formatRupiah(data.transport)}</span>
+                                    </div>
+                                    <div class="flex justify-between pt-2 border-t border-[#EFE5D8] text-sm font-bold text-espresso">
+                                        <span>Total Tagihan</span>
+                                        <span class="text-sageDark">${formatRupiah(data.totalAll)}</span>
+                                    </div>
+                                    ${data.dpPercent > 0 ? `
+                                        <div class="flex justify-between text-xs text-roseSoft font-semibold pt-1">
+                                            <span>DP (${data.dpPercent}%)</span>
+                                            <span>${formatRupiah(data.dpAmount)}</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs text-espresso font-semibold">
+                                            <span>Sisa Pelunasan</span>
+                                            <span>${formatRupiah(data.remainingAmount)}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <div class="mt-5 bg-cream/90 border border-[#E2D4C3] rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 text-xs">
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-wider font-bold text-sageDark">Informasi Pembayaran</p>
+                                    <p class="font-bold text-espresso mt-0.5">${escapeHtml(data.bank || '-')} — ${escapeHtml(data.accountNumber || '-')}</p>
+                                    <p class="text-muted">a.n. ${escapeHtml(data.accountHolder || '-')}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] uppercase tracking-wider font-bold text-roseSoft">Kontak Studio</p>
+                                    <p class="font-semibold text-espresso mt-0.5">${escapeHtml(data.phone || '-')}</p>
+                                    <p class="text-muted">${escapeHtml(data.email || '-')}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-[#E5D8C7] flex items-center justify-between text-[11px] text-muted">
+                            <span>${escapeHtml(data.studioDisplayName)} • Official Invoice</span>
+                            <span>Halaman 1 dari 2</span>
                         </div>
                     </div>
+                </div>
+            `;
 
-                    <div style="margin-top:22px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:flex-end; gap:16px; font-size:12.5px; color:#4A3F3B; font-style:normal;">
+            const page2 = `
+                <div ${scaleAttr}>
+                    <div class="invoice-page-sheet flex flex-col justify-between">
                         <div>
-                            <p style="margin:0 0 6px 0; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#4F6952; font-style:normal;">
-                                KONTAK
-                            </p>
-                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-bottom:5px; font-style:normal;">
-                                <span style="display:inline-flex; align-items:center; gap:6px; font-style:normal;">
-                                    <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:14px;"></i>
-                                    <span>${escapeHtml(data.phone)}</span>
-                                </span>
-                                <span style="display:inline-flex; align-items:center; gap:6px; font-style:normal;">
-                                    <i class="fa-regular fa-envelope" style="color:#D97D90; font-size:13px;"></i>
-                                    <span>${escapeHtml(data.email)}</span>
-                                </span>
+                            <div class="flex items-center justify-between border-b border-[#E5D8C7] pb-5">
+                                <div>
+                                    <span class="inline-block px-3 py-1 rounded-full bg-sage/20 text-sageDark text-[11px] font-bold">SYARAT &amp; KETENTUAN</span>
+                                    <h2 class="font-serif text-3xl font-bold text-espresso mt-2">Terms &amp; Conditions</h2>
+                                    <p class="text-xs text-muted mt-1">${escapeHtml(data.studioDisplayName)} — Ketentuan Kerja Sama &amp; Produksi Konten</p>
+                                </div>
+                                <div class="text-right text-xs text-muted">
+                                    <p class="font-bold text-espresso">${escapeHtml(data.invNumber || '-')}</p>
+                                    <p>${escapeHtml(data.clientName || '-')}</p>
+                                </div>
                             </div>
-                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px; font-style:normal;">
-                                <span style="display:inline-flex; align-items:center; gap:6px; font-style:normal;">
-                                    <i class="fa-brands fa-instagram" style="color:#E1306C; font-size:14px;"></i>
-                                    <span>${escapeHtml(data.igHandle)}</span>
-                                </span>
-                            </div>
+
+                            <div class="mt-6 space-y-3">${termsHtml}</div>
                         </div>
-                        <div style="text-align:right; font-style:normal;">
-                            <p style="margin:0; font-size:12px; color:#7A6C67; font-style:normal;">Hormat Kami,</p>
-                            <p style="margin:3px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28; font-style:normal;">${escapeHtml(data.signOffName)}</p>
+
+                        <div class="pt-4 border-t border-[#E5D8C7] flex items-center justify-between text-[11px] text-muted">
+                            <span>Terima kasih telah mempercayakan project Anda kepada ${escapeHtml(data.studioDisplayName)}</span>
+                            <span>Halaman 2 dari 2</span>
                         </div>
                     </div>
                 </div>
             `;
 
-            const termsListHtml = data.termsLines.length > 0
-                ? data.termsLines.map(term => `<li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#352B28; font-style:normal;">${escapeHtml(term)}</li>`).join('')
-                : `<li style="margin-bottom:10px; line-height:1.6; font-size:13.5px; color:#9C8E89; font-style:normal;">-</li>`;
-
-            const page2Html = `
-                <div class="invoice-page-sheet" data-invoice-page="2" style="display:flex; flex-direction:column; justify-content:space-between;">
-                    <div>
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding-bottom:20px; border-bottom:2px solid rgba(126,150,128,0.28); font-style:normal;">
-                            <div>
-                                <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#E6EFE7; color:#4F6952; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-style:normal;">
-                                    Halaman 2 • Ketentuan Layanan
-                                </span>
-                                <h2 style="margin:10px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:34px; font-weight:700; color:#352B28; font-style:normal;">
-                                    Syarat &amp; Ketentuan
-                                </h2>
-                                <p style="margin:0; font-size:13px; font-weight:700; color:#D97D90; min-height:18px; font-style:normal;">
-                                    ${escapeHtml([data.invNumber, data.clientName].filter(Boolean).join(" • "))}
-                                </p>
-                            </div>
-                            <div style="text-align:right; font-style:normal;">
-                                <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28; font-style:normal;">${escapeHtml(data.signOffName)}</p>
-                                <p style="margin:2px 0 0 0; font-size:12px; color:#7A6C67; font-style:normal;">${escapeHtml(data.igHandle)}</p>
-                            </div>
-                        </div>
-
-                        <div style="margin-top:24px; background:rgba(255,253,250,0.92); border:1px solid #E2D4C3; border-radius:24px; padding:26px 30px; font-style:normal;">
-                            <ul style="margin:0; padding-left:20px; list-style-type:disc; font-style:normal;">
-                                ${termsListHtml}
-                            </ul>
-                        </div>
-
-                        <div style="margin-top:22px; background:rgba(246,216,222,0.45); border:1px solid rgba(217,125,144,0.4); border-radius:20px; padding:16px 22px; text-align:center; font-style:normal;">
-                            <p style="margin:0; font-style:normal; font-size:13.5px; font-weight:600; color:#352B28; text-align:center; width:100%;">
-                                Dengan melakukan pembayaran, client dianggap telah membaca dan menyetujui seluruh syarat &amp; ketentuan di atas.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:24px; padding-top:16px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#7A6C67; font-style:normal;">
-                        <span style="font-style:normal;"><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:6px;"></i> Created by Narravia.Studio</span>
-                        <span style="font-style:normal;">${escapeHtml(data.invNumber)} • Halaman 2 dari 2</span>
-                    </div>
-                </div>
-            `;
-
-            return page1Html + page2Html;
+            return { page1, page2 };
         }
 
-        window.refreshInvoicePreview = () => {
+        function refreshInvoicePreview() {
             const previewEl = document.getElementById('invoiceLivePreview');
             if (!previewEl) return;
-            const data = collectCurrentInvoiceData();
-            previewEl.innerHTML = buildInvoicePagesHtml(data);
-        };
-
-        window.openInvoiceModal = () => {
-            if (activeUserUid) {
-                const localDraft = loadInvoiceDraftFromLocal(activeUserUid);
-                if (localDraft) {
-                    applyInvoiceDraftToForm(localDraft);
-                }
-            }
-            syncInvoiceProjectDropdown();
-            renderInvoiceEditorItems();
-            refreshInvoicePreview();
-            const modal = document.getElementById('invoiceModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
-
-        window.closeInvoiceModal = () => {
-            autoSaveInvoiceDraft();
-            const modal = document.getElementById('invoiceModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
+            const data = getInvoiceFormData();
+            const { page1, page2 } = buildInvoicePagesHtml(data, true);
+            previewEl.innerHTML = page1 + page2;
+        }
 
         window.exportClientInvoicePDF = async () => {
-            if (typeof html2canvas === "undefined" || !window.jspdf?.jsPDF) {
-                return showToast("Library PDF belum termuat. Coba refresh halaman.", true);
+            if (!window.jspdf || typeof html2canvas === 'undefined') {
+                showToast("Library PDF belum siap.", true);
+                return;
             }
-
-            if (document.fonts && document.fonts.ready) {
-                await document.fonts.ready;
-            }
-
-            autoSaveInvoiceDraft();
             const btn = document.getElementById('btnExportInvoicePdf');
-            const label = document.getElementById('btnExportInvoicePdfLabel');
-            btn.disabled = true;
-            if (label) label.innerText = "Menyiapkan PDF HD...";
-
+            const lbl = document.getElementById('btnExportInvoicePdfLabel');
             const staging = document.getElementById('jpgRenderStaging');
-            staging.innerHTML = "";
+            if (btn) btn.disabled = true;
+            if (lbl) lbl.innerText = "Memproses PDF HD...";
 
             try {
-                const data = collectCurrentInvoiceData();
-                const wrapper = document.createElement("div");
-                wrapper.innerHTML = buildInvoicePagesHtml(data);
-                const pageElements = Array.from(wrapper.querySelectorAll("[data-invoice-page]"));
+                const data = getInvoiceFormData();
+                const { page1, page2 } = buildInvoicePagesHtml(data, false);
+                staging.innerHTML = `<div id="invPdfPage1">${page1}</div><div id="invPdfPage2">${page2}</div>`;
+
+                const el1 = document.getElementById('invPdfPage1');
+                const el2 = document.getElementById('invPdfPage2');
+
+                const canvas1 = await html2canvas(el1, { scale: 2, useCORS: true, backgroundColor: "#FAF7F2" });
+                const canvas2 = await html2canvas(el2, { scale: 2, useCORS: true, backgroundColor: "#FAF7F2" });
 
                 const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: "portrait",
-                    unit: "mm",
-                    format: "a4",
-                    compress: false
-                });
-
+                const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
                 const pdfW = pdf.internal.pageSize.getWidth();
                 const pdfH = pdf.internal.pageSize.getHeight();
 
-                for (let i = 0; i < pageElements.length; i++) {
-                    staging.innerHTML = "";
-                    const pageNode = pageElements[i];
-                    staging.appendChild(pageNode);
+                pdf.addImage(canvas1.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, pdfW, pdfH);
+                pdf.addPage();
+                pdf.addImage(canvas2.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, pdfW, pdfH);
 
-                    const canvas = await html2canvas(pageNode, {
-                        scale: 3,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: "#FAF7F2",
-                        logging: false,
-                        onclone: (clonedDoc) => {
-                            clonedDoc.querySelectorAll(".invoice-page-sheet, .invoice-page-sheet *").forEach((el) => {
-                                el.style.fontStyle = "normal";
-                            });
-                        }
-                    });
-
-                    const imgData = canvas.toDataURL("image/png");
-                    if (i > 0) pdf.addPage();
-                    pdf.addImage(imgData, "PNG", 0, 0, pdfW, pdfH, undefined, "FAST");
-                }
-
-                const safeNum = (data.invNumber || "invoice").replace(/[^a-zA-Z0-9_-]+/g, "_");
-                pdf.save(`${safeNum}_narravia_studio_HD.pdf`);
-                showToast("PDF Invoice HD berhasil diunduh.");
+                const safeInv = (data.invNumber || "Invoice").replace(/[^a-zA-Z0-9_-]/g, "_");
+                pdf.save(`${safeInv}_${data.studioDisplayName.replace(/[^a-zA-Z0-9_-]/g, "_")}.pdf`);
+                showToast("Invoice PDF HD berhasil diunduh.");
             } catch (err) {
-                showToast("Gagal membuat PDF Invoice: " + err.message, true);
+                showToast("Gagal mengekspor PDF invoice: " + err.message, true);
             } finally {
-                staging.innerHTML = "";
-                btn.disabled = false;
-                if (label) label.innerText = "Export PDF HD";
+                if (staging) staging.innerHTML = "";
+                if (btn) btn.disabled = false;
+                if (lbl) lbl.innerText = "Export PDF HD";
             }
         };
 
-        /* ================= REKAP INVOICE & TAX PDF ================= */
-        function buildInvoiceTaxData() {
-            const paidFeeTotal = records
-                .filter(r => r.status === 'Lunas')
-                .reduce((s, r) => s + (Number(r.amount) || 0), 0);
-            const unpaidItems = records.filter(r => r.status !== 'Lunas');
-            const unpaidFeeTotal = unpaidItems.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+        /* ================= REKAP INVOICE & PAJAK ================= */
+        function buildTaxRecapSummary() {
+            const totalFee = records.reduce((s, r) => s + (Number(r.amount) || 0), 0);
             const totalTax = records.reduce((s, r) => s + (Number(r.taxAmount) || 0), 0);
-            return { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax };
+            const netTotal = totalFee + totalTax;
+            const paidFee = records.filter(r => r.status === 'Lunas').reduce((s, r) => s + (Number(r.amount) || 0), 0);
+            const unpaidFee = records.filter(r => r.status !== 'Lunas').reduce((s, r) => s + (Number(r.amount) || 0), 0);
+            const creatorName = getUsernameWithoutAt();
+
+            const lines = [
+                `REKAP INVOICE & PAJAK — ${creatorName}`,
+                `Total Project: ${records.length}`,
+                `Total Fee (Exclude Pajak): ${formatRupiah(totalFee)}`,
+                `Total Pajak: ${formatRupiah(totalTax)}`,
+                `Total Keseluruhan (Include Pajak): ${formatRupiah(netTotal)}`,
+                `Sudah Lunas (Fee): ${formatRupiah(paidFee)}`,
+                `Menunggu Pelunasan (Fee): ${formatRupiah(unpaidFee)}`,
+                `----------------------------------------`
+            ];
+
+            records.forEach((r, i) => {
+                const fee = Number(r.amount) || 0;
+                const tax = Number(r.taxAmount) || 0;
+                lines.push(`${i + 1}. [${r.date || '-'}] ${r.clientName} (${r.category || 'Event'}) | Fee: ${formatRupiah(fee)} | Pajak: ${formatRupiah(tax)} | Total: ${formatRupiah(fee + tax)} | Status: ${r.status}`);
+            });
+
+            return {
+                text: lines.join("\n"),
+                totalFee,
+                totalTax,
+                netTotal,
+                paidFee,
+                unpaidFee,
+                creatorName
+            };
         }
 
         window.copyInvoiceTaxSummary = async () => {
-            const { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax } = buildInvoiceTaxData();
-
-            const perProjectTaxLines = records.length > 0
-                ? records.map(item => {
-                    const fee = formatRupiah(Number(item.amount) || 0);
-                    const tax = formatRupiah(Number(item.taxAmount) || 0);
-                    const taxPctNote = item.taxInputRaw && String(item.taxInputRaw).includes('%') ? ` [${item.taxInputRaw}]` : '';
-                    const stagePart = item.pipelineStage ? ` | Tahap: ${item.pipelineStage}` : '';
-                    const mgmtPart = item.managementName ? ` | Mgmt: ${item.managementName}` : '';
-                    return `- ${item.clientName}${stagePart}${mgmtPart} | Fee (Excl. Pajak): ${fee} | Pajak: ${tax}${taxPctNote} (${item.status})`;
-                }).join('\n')
-                : '- Belum ada data project';
-
-            const unpaidLines = unpaidItems.length > 0
-                ? unpaidItems.map(u => {
-                    const mgmtPart = u.managementName ? ` | Mgmt: ${u.managementName}` : '';
-                    const dlPart = u.deadlineDate ? ` | Deadline: ${u.deadlineDate}` : '';
-                    const poPart = u.payoutDate ? ` | Estimasi cair: ${u.payoutDate}` : '';
-                    return `- ${u.clientName}${mgmtPart} (${u.status}) — Fee: ${formatRupiah(u.amount)}${dlPart}${poPart}`;
-                }).join('\n')
-                : '- Tidak ada tagihan tertunda';
-
-            const summaryText = [
-                `NARRAVIA STUDIO — REKAP INVOICE & TAX`,
-                `Total Fee Lunas (Exclude Pajak): ${formatRupiah(paidFeeTotal)}`,
-                `Total Fee Belum Lunas (Exclude Pajak): ${formatRupiah(unpaidFeeTotal)}`,
-                `Total Nominal Pajak: ${formatRupiah(totalTax)}`,
-                ``,
-                `Rincian Fee (Exclude Pajak) & Pajak per Project:`,
-                perProjectTaxLines,
-                ``,
-                `Rincian Tagihan Belum Lunas:`,
-                unpaidLines
-            ].join('\n');
-
+            const summary = buildTaxRecapSummary();
             try {
-                await navigator.clipboard.writeText(summaryText);
+                await navigator.clipboard.writeText(summary.text);
                 const lbl = document.getElementById('btnCopySummaryLabel');
                 if (lbl) {
-                    lbl.innerText = 'Rekap Tersalin!';
-                    setTimeout(() => { lbl.innerText = 'Salin Rekap Invoice & Pajak'; }, 2000);
+                    lbl.innerText = "Rekap Tersalin!";
+                    setTimeout(() => { lbl.innerText = "Salin Rekap Invoice & Pajak"; }, 1800);
                 }
-                showToast("Rekap invoice & pajak disalin.");
+                showToast("Rekap Invoice & Pajak disalin ke clipboard.");
             } catch (_) {
-                showToast("Gagal menyalin rekap ke clipboard.", true);
+                showToast("Gagal menyalin rekap.", true);
             }
         };
 
-        function buildInvoiceTaxPdfElement(username) {
-            const { paidFeeTotal, unpaidItems, unpaidFeeTotal, totalTax } = buildInvoiceTaxData();
-            const sheet = document.createElement("div");
-            sheet.className = "pdf-report-sheet";
-
-            const rowsHtml = records.length > 0
-                ? records.map((item, idx) => {
-                    const fee = formatRupiah(Number(item.amount) || 0);
-                    const tax = formatRupiah(Number(item.taxAmount) || 0);
-                    const taxHint = item.taxInputRaw && String(item.taxInputRaw).includes('%')
-                        ? `<span style="display:block; font-size:12px; color:#7A6C67;">Input: ${escapeHtml(item.taxInputRaw)}</span>`
-                        : '';
-                    const mgmtText = item.managementName ? escapeHtml(item.managementName) : '-';
-                    const dlText = item.deadlineDate || item.payoutDate || '-';
-                    let stBg = '#E6EFE7';
-                    let stColor = '#4F6952';
-                    if (item.status === 'DP 50%') { stBg = '#FEF3C7'; stColor = '#92400E'; }
-                    if (item.status === 'Pending / Invoice Sent') { stBg = '#F6D8DE'; stColor = '#9D174D'; }
-
-                    return `
-                        <tr style="border-bottom:1px solid #EFE5D8; background:${idx % 2 === 0 ? 'rgba(255,253,250,0.9)' : 'rgba(243,236,226,0.45)'};">
-                            <td style="padding:14px 16px; font-size:14px; color:#7A6C67; white-space:nowrap;">${escapeHtml(item.date || '-')}</td>
-                            <td style="padding:14px 16px; font-size:15px; font-weight:600; color:#352B28;">
-                                ${escapeHtml(item.clientName || '-')}
-                                <span style="display:block; font-size:12px; font-weight:400; color:#7A6C67;">${escapeHtml(item.pipelineStage || item.category || '-')}</span>
-                            </td>
-                            <td style="padding:14px 16px; font-size:14px; color:#4F6952; font-weight:500;">${mgmtText}</td>
-                            <td style="padding:14px 16px; font-size:15px; font-weight:700; color:#352B28; white-space:nowrap;">${fee}</td>
-                            <td style="padding:14px 16px; font-size:15px; font-weight:700; color:#D97D90; white-space:nowrap;">${tax}${taxHint}</td>
-                            <td style="padding:14px 16px; white-space:nowrap;">
-                                <span style="display:inline-block; padding:5px 12px; border-radius:9999px; font-size:12px; font-weight:700; background:${stBg}; color:${stColor};">${escapeHtml(item.status || '-')}</span>
-                            </td>
-                            <td style="padding:14px 16px; font-size:13px; color:#7A6C67; white-space:nowrap;">${escapeHtml(dlText)}</td>
-                        </tr>
-                    `;
-                }).join('')
-                : `<tr><td colspan="7" style="padding:28px; text-align:center; font-size:15px; color:#7A6C67;">Belum ada data project yang tercatat.</td></tr>`;
-
-            const unpaidSummaryHtml = unpaidItems.length > 0
-                ? unpaidItems.map(u => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:16px; background:#FAF7F2; border:1px solid #EADFD3; font-size:14px;">
-                        <div>
-                            <strong style="color:#352B28;">${escapeHtml(u.clientName)}</strong>
-                            <span style="color:#7A6C67; margin-left:8px;">(${escapeHtml(u.status)})</span>
-                            ${u.managementName ? `<span style="color:#4F6952; margin-left:8px;">• ${escapeHtml(u.managementName)}</span>` : ''}
-                        </div>
-                        <div style="font-weight:700; color:#D97D90; white-space:nowrap;">
-                            ${formatRupiah(Number(u.amount) || 0)}${u.payoutDate ? ` <span style="font-size:12px; font-weight:500; color:#7A6C67;">(Cair: ${escapeHtml(u.payoutDate)})</span>` : ''}
-                        </div>
-                    </div>
-                `).join('')
-                : `<p style="margin:0; font-size:14px; color:#4F6952;">Semua invoice/project sudah lunas.</p>`;
-
-            sheet.innerHTML = `
-                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
-                    <div>
-                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid rgba(234,223,211,0.65); border-radius:28px; padding:28px 32px; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.1);">
-                            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
-                                <div>
-                                    <span style="display:inline-block; padding:4px 12px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:12px; font-weight:700; margin-bottom:8px;">
-                                        INVOICE &amp; TAX RECAP
-                                    </span>
-                                    <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:38px; font-weight:700; color:#352B28; line-height:1.2;">
-                                        Narravia Studio
-                                    </h1>
-                                    <p style="margin:6px 0 0 0; font-size:15px; color:#4F6952; font-weight:600;">
-                                        Creator: ${escapeHtml(username)}
-                                    </p>
-                                </div>
-                                <div style="text-align:right; font-size:13px; color:#7A6C67;">
-                                    <p style="margin:0; font-weight:600; color:#352B28;">Dicetak pada</p>
-                                    <p style="margin:2px 0 0 0;">${new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</p>
-                                </div>
-                            </div>
-
-                            <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px; margin-top:24px;">
-                                <div style="background:#FAF7F2; border:1px solid rgba(234,223,211,0.65); border-radius:20px; padding:18px;">
-                                    <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Fee Lunas (Excl. Pajak)</p>
-                                    <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#4F6952;">${formatRupiah(paidFeeTotal)}</p>
-                                </div>
-                                <div style="background:#FAF7F2; border:1px solid rgba(234,223,211,0.65); border-radius:20px; padding:18px;">
-                                    <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Fee Belum Lunas (Excl. Pajak)</p>
-                                    <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#D97D90;">${formatRupiah(unpaidFeeTotal)}</p>
-                                </div>
-                                <div style="background:#FAF7F2; border:1px solid rgba(234,223,211,0.65); border-radius:20px; padding:18px;">
-                                    <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:#7A6C67;">Total Nominal Pajak</p>
-                                    <p style="margin:6px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700; color:#352B28;">${formatRupiah(totalTax)}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid rgba(234,223,211,0.65); border-radius:28px; overflow:hidden; margin-bottom:24px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
-                            <div style="padding:18px 24px; border-bottom:1px solid rgba(234,223,211,0.65); background:#F3ECE2;">
-                                <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28;">
-                                    Rincian Project, Fee (Exclude Pajak) &amp; Pajak
-                                </h2>
-                            </div>
-                            <table style="width:100%; border-collapse:collapse; text-align:left;">
-                                <thead>
-                                    <tr style="background:rgba(243,236,226,0.65); border-bottom:1px solid rgba(234,223,211,0.65); font-size:12px; text-transform:uppercase; color:#7A6C67;">
-                                        <th style="padding:12px 16px;">Tanggal</th>
-                                        <th style="padding:12px 16px;">Project Name</th>
-                                        <th style="padding:12px 16px;">Management</th>
-                                        <th style="padding:12px 16px;">Fee (Excl.)</th>
-                                        <th style="padding:12px 16px;">Pajak</th>
-                                        <th style="padding:12px 16px;">Status</th>
-                                        <th style="padding:12px 16px;">Deadline / Cair</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${rowsHtml}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div style="background:rgba(255,253,250,0.95); border:1.5px solid rgba(234,223,211,0.65); border-radius:28px; padding:22px 26px; box-shadow:0 10px 26px -12px rgba(79,105,82,0.08);">
-                            <h3 style="margin:0 0 12px 0; font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; color:#352B28;">
-                                Ringkasan Tagihan Belum Lunas (DP / Pending)
-                            </h3>
-                            <div style="display:flex; flex-direction:column; gap:8px;">
-                                ${unpaidSummaryHtml}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:28px; padding-top:14px; border-top:1.5px solid rgba(230,218,203,0.85); display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#7A6C67;">
-                        <span>Created by Narravia.Studio</span>
-                        <span>Dokumen Rekap Invoice &amp; Tax</span>
-                    </div>
-                </div>
-            `;
-
-            return sheet;
-        }
-
         window.exportInvoiceTaxPDF = async () => {
-            if (typeof html2canvas === "undefined" || !window.jspdf?.jsPDF) {
-                return showToast("Library PDF belum termuat. Coba refresh halaman.", true);
+            if (!window.jspdf || typeof html2canvas === 'undefined') {
+                showToast("Library PDF belum siap.", true);
+                return;
             }
-
-            if (document.fonts && document.fonts.ready) {
-                await document.fonts.ready;
-            }
-
-            const btn = document.getElementById("btnExportTaxPdf");
-            const originalHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan PDF HD...`;
-
-            const staging = document.getElementById("jpgRenderStaging");
-            staging.innerHTML = "";
+            const btn = document.getElementById('btnExportTaxPdf');
+            const lbl = document.getElementById('btnExportPdfLabel');
+            const staging = document.getElementById('jpgRenderStaging');
+            if (btn) btn.disabled = true;
+            if (lbl) lbl.innerText = "Membuat PDF...";
 
             try {
-                const username = getActiveUsername();
-                const sheetEl = buildInvoiceTaxPdfElement(username);
-                staging.appendChild(sheetEl);
+                const s = buildTaxRecapSummary();
+                const rowsHtml = records.map((r, idx) => {
+                    const fee = Number(r.amount) || 0;
+                    const tax = Number(r.taxAmount) || 0;
+                    return `
+                        <tr class="border-b border-[#EFE5D8] text-xs">
+                            <td class="py-2.5 px-3">${idx + 1}</td>
+                            <td class="py-2.5 px-3 text-muted whitespace-nowrap">${escapeHtml(r.date || '-')}</td>
+                            <td class="py-2.5 px-3 font-semibold text-espresso">${escapeHtml(r.clientName)}</td>
+                            <td class="py-2.5 px-3 text-muted">${escapeHtml(r.category || '-')}</td>
+                            <td class="py-2.5 px-3 text-right font-semibold">${formatRupiah(fee)}</td>
+                            <td class="py-2.5 px-3 text-right text-roseSoft font-semibold">${formatRupiah(tax)}</td>
+                            <td class="py-2.5 px-3 text-right font-bold text-sageDark">${formatRupiah(fee + tax)}</td>
+                            <td class="py-2.5 px-3 text-center font-semibold">${escapeHtml(r.status)}</td>
+                        </tr>
+                    `;
+                }).join("");
 
-                const canvas = await html2canvas(sheetEl, {
-                    scale: 3,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: "#FAF7F2",
-                    logging: false
-                });
+                staging.innerHTML = `
+                    <div id="taxPdfSheet" class="pdf-report-sheet flex flex-col justify-between">
+                        <div>
+                            <div class="border-b border-[#E5D8C7] pb-5 flex items-end justify-between">
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest font-bold text-sageDark">Financial &amp; Tax Recap</p>
+                                    <h1 class="font-serif text-3xl font-bold text-espresso mt-1">Rekap Invoice &amp; Pajak — ${escapeHtml(s.creatorName)}</h1>
+                                </div>
+                                <p class="text-xs text-muted">Total ${records.length} Project</p>
+                            </div>
 
-                const imgData = canvas.toDataURL("image/png");
+                            <div class="grid grid-cols-4 gap-4 my-6">
+                                <div class="bg-white/90 border border-[#E6DACB] rounded-2xl p-4">
+                                    <p class="text-[11px] text-muted font-semibold">Total Fee</p>
+                                    <p class="font-serif text-xl font-bold text-espresso mt-1">${formatRupiah(s.totalFee)}</p>
+                                </div>
+                                <div class="bg-white/90 border border-[#E6DACB] rounded-2xl p-4">
+                                    <p class="text-[11px] text-muted font-semibold">Total Pajak</p>
+                                    <p class="font-serif text-xl font-bold text-roseSoft mt-1">${formatRupiah(s.totalTax)}</p>
+                                </div>
+                                <div class="bg-white/90 border border-[#E6DACB] rounded-2xl p-4">
+                                    <p class="text-[11px] text-muted font-semibold">Sudah Lunas (Fee)</p>
+                                    <p class="font-serif text-xl font-bold text-sageDark mt-1">${formatRupiah(s.paidFee)}</p>
+                                </div>
+                                <div class="bg-white/90 border border-[#E6DACB] rounded-2xl p-4">
+                                    <p class="text-[11px] text-muted font-semibold">Total Include Pajak</p>
+                                    <p class="font-serif text-xl font-bold text-espresso mt-1">${formatRupiah(s.netTotal)}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-white/90 border border-[#E6DACB] rounded-2xl overflow-hidden">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-cream text-[11px] uppercase tracking-wider text-muted border-b border-[#E6DACB]">
+                                            <th class="py-3 px-3">#</th>
+                                            <th class="py-3 px-3">Tanggal</th>
+                                            <th class="py-3 px-3">Project</th>
+                                            <th class="py-3 px-3">Kategori</th>
+                                            <th class="py-3 px-3 text-right">Fee</th>
+                                            <th class="py-3 px-3 text-right">Pajak</th>
+                                            <th class="py-3 px-3 text-right">Total</th>
+                                            <th class="py-3 px-3 text-center">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${rowsHtml}</tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-[#E5D8C7] text-xs text-muted flex justify-between">
+                            <span>${escapeHtml(s.creatorName)}</span>
+                            <span>Narravia Studio</span>
+                        </div>
+                    </div>
+                `;
+
+                const sheetEl = document.getElementById('taxPdfSheet');
+                const canvas = await html2canvas(sheetEl, { scale: 2, useCORS: true, backgroundColor: "#FAF7F2" });
                 const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: "portrait",
-                    unit: "mm",
-                    format: "a4",
-                    compress: false
-                });
-
+                const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
                 const pdfW = pdf.internal.pageSize.getWidth();
                 const pdfH = pdf.internal.pageSize.getHeight();
-                const imgProps = pdf.getImageProperties(imgData);
-                const ratio = imgProps.width / imgProps.height;
-                const renderH = pdfW / ratio;
-
-                if (renderH <= pdfH) {
-                    pdf.addImage(imgData, "PNG", 0, 0, pdfW, renderH, undefined, "FAST");
-                } else {
-                    let heightLeft = renderH;
-                    let position = 0;
-                    pdf.addImage(imgData, "PNG", 0, position, pdfW, renderH, undefined, "FAST");
-                    heightLeft -= pdfH;
-                    while (heightLeft > 0) {
-                        position = heightLeft - renderH;
-                        pdf.addPage();
-                        pdf.addImage(imgData, "PNG", 0, position, pdfW, renderH, undefined, "FAST");
-                        heightLeft -= pdfH;
-                    }
-                }
-
-                const cleanUser = username.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
-                pdf.save(`rekap_invoice_tax_${cleanUser}_HD.pdf`);
+                pdf.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, pdfW, pdfH);
+                pdf.save(`Rekap_Invoice_Pajak_${s.creatorName.replace(/[^a-zA-Z0-9_-]/g, "_")}.pdf`);
                 showToast("PDF Rekap Invoice & Pajak berhasil diunduh.");
             } catch (err) {
-                showToast("Gagal membuat PDF HD: " + err.message, true);
+                showToast("Gagal membuat PDF rekap: " + err.message, true);
             } finally {
-                staging.innerHTML = "";
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
+                if (staging) staging.innerHTML = "";
+                if (btn) btn.disabled = false;
+                if (lbl) lbl.innerText = "Export PDF";
             }
         };
 
         window.exportToCSV = () => {
-            if (!records.length) return showToast("Belum ada data untuk di-export.", true);
-            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Nominal Fee (Exclude Pajak)", "Pajak", "Status Pembayaran", "Management", "Deadline Konten", "Jatuh Tempo Cair", "Sosmed Project", "Link Portofolio"];
-            const rows = records.map(r => [
-                r.date || "",
-                `"${String(r.clientName || "").replace(/"/g, '""')}"`,
-                `"${String(r.category || "").replace(/"/g, '""')}"`,
-                `"${String(r.pipelineStage || "Brief Diterima").replace(/"/g, '""')}"`,
-                Number(r.amount) || 0,
-                Number(r.taxAmount) || 0,
-                `"${String(r.status || "").replace(/"/g, '""')}"`,
-                `"${String(r.managementName || "").replace(/"/g, '""')}"`,
-                r.deadlineDate || "",
-                r.payoutDate || "",
-                `"${String(r.projectSocialHandle ? `${r.projectSocialPlatform || ""}: ${r.projectSocialHandle}` : "").replace(/"/g, '""')}"`,
-                `"${String(r.portfolioLink || "").replace(/"/g, '""')}"`
-            ]);
-            const csvContent = "data:text/csv;charset=utf-8,"
-                + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-            const encodedUri = encodeURI(csvContent);
+            if (records.length === 0) {
+                showToast("Belum ada data untuk di-export.", true);
+                return;
+            }
+            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Fee (Rp)", "Pajak (Rp)", "Total (Rp)", "Status", "Brand/Management", "Deadline Konten", "Jatuh Tempo", "Sosial Media", "Link Portofolio"];
+            const rows = records.map(r => {
+                const fee = Number(r.amount) || 0;
+                const tax = Number(r.taxAmount) || 0;
+                const socText = r.projectSocialHandle ? `${r.projectSocialPlatform || 'Sosmed'}: ${r.projectSocialHandle}` : "";
+                return [
+                    r.date || "",
+                    r.clientName || "",
+                    r.category || "",
+                    r.pipelineStage || "Brief Diterima",
+                    fee,
+                    tax,
+                    fee + tax,
+                    r.status || "",
+                    r.managementName || "",
+                    r.deadlineDate || "",
+                    r.payoutDate || "",
+                    socText,
+                    r.portfolioLink || ""
+                ].map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",");
+            });
+
+            const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `narravia_studio_income_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.href = url;
+            link.download = `Narravia_Studio_Projects_${new Date().toISOString().slice(0, 10)}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("Data CSV berhasil diunduh.");
+            URL.revokeObjectURL(url);
+            showToast("File CSV berhasil diunduh.");
         };
 
-        function createCollageCardElement(ym, items, username) {
-            const monthTitle = formatMonthName(ym);
-            const card = document.createElement("div");
-            card.className = "botanical-card rounded-3xl p-5 flex flex-col justify-between";
-            card.dataset.collageCard = "true";
-
-            const slots = [];
-            for (let i = 0; i < 4; i++) {
-                const item = items[i];
-                if (item) {
-                    const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
-                    const safeImg = imgSrc && (imgSrc.startsWith("data:image/") || sanitizeUrl(imgSrc)) ? imgSrc : "";
-                    slots.push(`
-                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-[#E6DACB] group">
-                            ${safeImg
-                                ? `<img src="${safeImg}" alt="${escapeHtml(item.clientName)}" class="w-full h-full object-contain">`
-                                : `<div class="w-full h-full flex items-center justify-center p-2 text-center text-[11px] text-muted">${escapeHtml(item.clientName)}</div>`
-                            }
-                            <div class="absolute bottom-1.5 left-1.5 right-1.5 bg-ivory/90 backdrop-blur-xs px-2.5 py-1 rounded-xl border border-[#E6DACB]">
-                                <p class="text-[11px] font-semibold text-espresso truncate">${escapeHtml(item.clientName)}</p>
-                            </div>
-                        </div>
-                    `);
-                } else {
-                    slots.push(`
-                        <div class="aspect-[4/3] rounded-2xl bg-cream/60 border border-dashed border-[#DFD2C2] flex items-center justify-center text-muted text-[11px]">
-                            <i class="fa-regular fa-image mr-1 opacity-60"></i> Slot ${i + 1}
-                        </div>
-                    `);
-                }
-            }
-
-            const extraCount = items.length > 4 ? items.length - 4 : 0;
-            const extraBadge = extraCount > 0
-                ? `<span class="text-xs font-semibold text-roseSoft bg-blush/50 px-2.5 py-0.5 rounded-full">+${extraCount} karya lainnya</span>`
-                : `<span class="text-xs text-muted">${items.length} / 4 karya</span>`;
-
-            card.innerHTML = `
-                <div>
-                    <div class="flex items-center justify-between gap-2 mb-3">
-                        <div>
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sageDark">Kolase Bulanan</span>
-                            <h4 class="font-serif text-lg font-semibold text-espresso">${escapeHtml(monthTitle)}</h4>
-                        </div>
-                        ${extraBadge}
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 mb-4">
-                        ${slots.join("")}
-                    </div>
-                </div>
-                <div class="flex items-center justify-between pt-2 border-t border-[#EFE5D8]" data-export-hide="true">
-                    <span class="text-[11px] text-muted">${escapeHtml(username)} • 4:3 HD</span>
-                    <button type="button" onclick="downloadCollageAsJpg(this, '${escapeHtml(ym)}')"
-                        class="clay-pill text-espresso px-3.5 py-1.5 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-download text-sageDark"></i> <span>Download Kolase JPG (4:3)</span>
-                    </button>
-                </div>
-            `;
-            return card;
-        }
-
-        function createPortfolioItemCard(item) {
-            const card = document.createElement("div");
-            card.className = "botanical-card rounded-3xl overflow-hidden flex flex-col justify-between group micro-card-lift";
-
-            const safeLink = sanitizeUrl(item.portfolioLink);
-            const imgSrc = item.photoData || safeLink;
-            const hasImage = Boolean(imgSrc && (imgSrc.startsWith("data:image/") || sanitizeUrl(imgSrc)));
-
-            let mediaHtml = '';
-            if (hasImage) {
-                mediaHtml = `
-                    <div onclick="openPhotoModal('${item.id}')" class="relative aspect-[4/3] bg-cream overflow-hidden cursor-pointer flex items-center justify-center p-1.5">
-                        <img src="${imgSrc}" alt="${escapeHtml(item.clientName)}" class="w-full h-full object-contain group-hover:scale-[1.02] transition duration-300">
-                        <div class="absolute top-3 right-3 bg-ivory/90 text-espresso text-[11px] font-semibold px-3 py-1 rounded-full border border-[#E6DACB]">
-                            <i class="fa-solid fa-expand mr-1 text-sageDark"></i> Lihat HD
-                        </div>
-                    </div>`;
-            } else if (safeLink) {
-                mediaHtml = `
-                    <div class="aspect-[4/3] bg-cream flex flex-col items-center justify-center p-6 text-center">
-                        <i class="fa-solid fa-arrow-up-right-from-square text-2xl text-sageDark mb-2"></i>
-                        <a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-xs text-sageDark underline break-all font-medium">${escapeHtml(safeLink)}</a>
-                    </div>`;
-            }
-
-            const mgmtBadge = item.managementName
-                ? `<span class="inline-block mt-1.5 text-[11px] font-semibold text-sageDark bg-sage/15 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(item.managementName)}</span>`
-                : '';
-
-            const socBadge = item.projectSocialHandle
-                ? `<span class="inline-block mt-1.5 ml-1 text-[11px] font-semibold text-roseSoft bg-blush/50 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(item.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(item.projectSocialHandle)}</span>`
-                : '';
-
-            const actionFooter = safeLink
-                ? `<div class="mt-3 pt-2.5 border-t border-[#EFE5D8] flex items-center justify-between gap-2">
-                        <a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-xs text-sageDark hover:underline font-semibold inline-flex items-center gap-1">
-                            Buka Link <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                        </a>
-                        <button type="button" onclick="openEditPortfolioModal('${item.id}')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">
-                            <i class="fa-regular fa-pen-to-square text-sageDark mr-1"></i> Edit Revisi
-                        </button>
-                   </div>`
-                : `<div class="mt-3 pt-2.5 border-t border-[#EFE5D8] flex items-center justify-end">
-                        <button type="button" onclick="openEditPortfolioModal('${item.id}')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">
-                            <i class="fa-regular fa-pen-to-square text-sageDark mr-1"></i> Edit Revisi
-                        </button>
-                   </div>`;
-
-            card.innerHTML = `
-                ${mediaHtml}
-                <div class="p-4 text-center">
-                    <h4 class="font-serif font-semibold text-base text-espresso">${escapeHtml(item.clientName)}</h4>
-                    <p class="text-xs text-muted mt-0.5">${escapeHtml(item.category)} • ${escapeHtml(item.date || '-')}</p>
-                    <div>${mgmtBadge}${socBadge}</div>
-                    ${actionFooter}
-                </div>`;
-            return card;
-        }
-
         window.renderPortfolio = () => {
-            updateShowcaseSocialIcons();
-            const monthlyContainer = document.getElementById('monthlyCollageContainer');
+            const collageContainer = document.getElementById('monthlyCollageContainer');
             const yearlyContainer = document.getElementById('yearlyPortfolioContainer');
-            monthlyContainer.innerHTML = '';
-            yearlyContainer.innerHTML = '';
 
             const portfolioItems = getPortfolioEligibleItems();
-            const username = getActiveUsername();
 
             if (portfolioItems.length === 0) {
-                monthlyContainer.innerHTML = `
-                    <div class="col-span-full botanical-card p-10 rounded-3xl text-center text-muted">
-                        <p class="mb-3"><i class="fa-regular fa-images text-2xl mb-1 text-roseSoft block"></i> Belum ada karya dengan foto atau link portofolio.</p>
-                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
+                collageContainer.innerHTML = `
+                    <div class="col-span-full botanical-card p-10 rounded-3xl text-center space-y-3">
+                        <p class="text-muted text-sm">
+                            <i class="fa-solid fa-sparkles text-roseSoft mr-1.5"></i> Belum ada karya di portofolio. Tambahkan link atau foto pada form Input Project Baru.
+                        </p>
+                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill px-4 py-2 text-xs font-semibold text-sageDark cursor-pointer">
                             <i class="fa-solid fa-plus mr-1"></i> Tambah Karya Pertama
                         </button>
                     </div>`;
+                yearlyContainer.innerHTML = "";
                 return;
             }
 
-            const byMonth = {};
+            const monthGroups = {};
             portfolioItems.forEach(item => {
                 const ym = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
-                if (!byMonth[ym]) byMonth[ym] = [];
-                byMonth[ym].push(item);
+                if (!monthGroups[ym]) monthGroups[ym] = [];
+                monthGroups[ym].push(item);
             });
 
-            Object.keys(byMonth).sort().reverse().forEach(ym => {
-                monthlyContainer.appendChild(createCollageCardElement(ym, byMonth[ym], username));
+            const sortedMonths = Object.keys(monthGroups).sort().reverse();
+            collageContainer.innerHTML = "";
+
+            sortedMonths.forEach(ym => {
+                const groupItems = monthGroups[ym];
+                const monthTitle = formatMonthName(ym);
+                const collageCardsHtml = groupItems.map(item => {
+                    const rawImgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                    const safeImgSrc = rawImgSrc && (rawImgSrc.startsWith("data:image/") || sanitizeUrl(rawImgSrc)) ? rawImgSrc : "";
+                    return `
+                        <div class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-[#E6DACB]">
+                            ${safeImgSrc
+                                ? `<img src="${safeImgSrc}" alt="${escapeHtml(item.clientName)}" loading="lazy" onclick="openPhotoModal('${encodeURIComponent(item.id)}')" class="w-full h-full object-contain cursor-pointer transition duration-300 group-hover:scale-105">`
+                                : `<div class="w-full h-full flex items-center justify-center p-3 text-center text-xs text-muted">${escapeHtml(item.clientName)}</div>`
+                            }
+                            <button type="button" onclick="event.stopPropagation(); openEditPortfolioModal('${item.id}')" title="Edit revisi karya"
+                                class="clay-pill text-espresso px-2.5 py-1 text-[10px] font-semibold opacity-90 hover:opacity-100 cursor-pointer flex items-center gap-1"
+                                style="position:absolute;top:8px;right:8px;z-index:20;">
+                                <i class="fa-solid fa-pen-to-square text-roseSoft"></i><span>Edit</span>
+                            </button>
+                            <div onclick="openPhotoModal('${encodeURIComponent(item.id)}')" class="cursor-pointer" style="position:absolute;inset:0;background:linear-gradient(to top,rgba(53,43,40,0.85),rgba(53,43,40,0.12) 55%,transparent);opacity:0;transition:opacity 200ms ease;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;pointer-events:auto;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+                                <p class="text-white text-xs font-semibold truncate">${escapeHtml(item.clientName)}</p>
+                                <p class="text-blush text-[11px] truncate">${escapeHtml(item.category || 'Event')}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                collageContainer.innerHTML += `
+                    <div class="botanical-card p-5 sm:p-6 rounded-3xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider font-bold text-sageDark">Kolase Bulanan</span>
+                                <h4 class="font-serif text-xl font-semibold text-espresso">${escapeHtml(monthTitle)}</h4>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-blush/50 text-roseSoft text-xs font-semibold">
+                                ${groupItems.length} karya
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            ${collageCardsHtml}
+                        </div>
+                    </div>
+                `;
             });
 
-            const byYear = {};
+            const yearGroups = {};
             portfolioItems.forEach(item => {
                 const yr = formatYearLabel(item.date);
-                if (!byYear[yr]) byYear[yr] = [];
-                byYear[yr].push(item);
+                if (!yearGroups[yr]) yearGroups[yr] = [];
+                yearGroups[yr].push(item);
             });
 
-            Object.keys(byYear).sort().reverse().forEach(yr => {
-                const section = document.createElement("div");
-                section.className = "space-y-4";
+            const sortedYears = Object.keys(yearGroups).sort().reverse();
+            yearlyContainer.innerHTML = "";
 
-                const heading = document.createElement("div");
-                heading.className = "flex items-center gap-3";
-                heading.innerHTML = `
-                    <h3 class="font-serif text-xl font-semibold text-espresso">
-                        <i class="fa-solid fa-seedling text-sageDark mr-1.5 text-base"></i> Karya Tahun ${escapeHtml(yr)}
-                    </h3>
-                    <span class="text-xs font-semibold text-roseSoft bg-blush/50 px-3 py-0.5 rounded-full">
-                        ${byYear[yr].length} karya
-                    </span>
+            sortedYears.forEach(yr => {
+                const itemsInYear = yearGroups[yr];
+                const cardsHtml = itemsInYear.map(item => {
+                    const rawImgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                    const safeImgSrc = rawImgSrc && (rawImgSrc.startsWith("data:image/") || sanitizeUrl(rawImgSrc)) ? rawImgSrc : "";
+                    const mgmtText = item.managementName ? ` • ${escapeHtml(item.managementName)}` : '';
+                    const socText = item.projectSocialHandle ? `<p class="text-[11px] text-roseSoft font-medium mt-1 truncate"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(item.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(item.projectSocialHandle)}</p>` : '';
+
+                    const mediaHtml = safeImgSrc
+                        ? `<img src="${safeImgSrc}" alt="${escapeHtml(item.clientName)}" loading="lazy" onclick="openPhotoModal('${encodeURIComponent(item.id)}')" class="w-full h-full object-contain cursor-pointer transition duration-500 group-hover:scale-105">`
+                        : `<div class="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-cream">
+                               <p class="text-xs text-muted mb-2">Pratinjau gambar tidak tersedia</p>
+                               ${item.portfolioLink ? `<a href="${escapeHtml(item.portfolioLink)}" target="_blank" rel="noopener noreferrer" class="text-xs text-sageDark underline">Buka Tautan Asli</a>` : ''}
+                           </div>`;
+
+                    return `
+                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden group">
+                            <div class="aspect-[4/3] bg-cream relative overflow-hidden flex items-center justify-center">
+                                ${mediaHtml}
+                                <button type="button" onclick="event.stopPropagation(); openEditPortfolioModal('${item.id}')" title="Edit revisi karya"
+                                    class="clay-pill text-espresso px-3 py-1 text-[11px] font-semibold cursor-pointer flex items-center gap-1"
+                                    style="position:absolute;top:10px;right:10px;z-index:20;">
+                                    <i class="fa-solid fa-pen-to-square text-roseSoft"></i><span>Edit</span>
+                                </button>
+                            </div>
+                            <div class="p-4 text-center">
+                                <h4 class="font-serif font-semibold text-espresso text-base truncate">${escapeHtml(item.clientName)}</h4>
+                                <p class="text-xs text-muted mt-0.5">${escapeHtml(item.category || 'Event')}${mgmtText}</p>
+                                <p class="text-[11px] text-sageDark mt-1">${escapeHtml(item.date || '')}</p>
+                                ${socText}
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                yearlyContainer.innerHTML += `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <h4 class="font-serif text-xl font-semibold text-espresso">Tahun ${escapeHtml(yr)}</h4>
+                            <span class="h-px flex-1 bg-[#E5D8C7]"></span>
+                            <span class="text-xs font-semibold text-muted">${itemsInYear.length} karya</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${cardsHtml}
+                        </div>
+                    </div>
                 `;
-
-                const grid = document.createElement("div");
-                grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6";
-                byYear[yr].forEach(item => {
-                    grid.appendChild(createPortfolioItemCard(item));
-                });
-
-                section.appendChild(heading);
-                section.appendChild(grid);
-                yearlyContainer.appendChild(section);
             });
         };
 
-        window.downloadCollageAsJpg = async (btnEl, ym) => {
-            if (typeof html2canvas === "undefined") {
-                return showToast("Library export gambar belum termuat. Coba refresh halaman.", true);
-            }
-            const cardEl = btnEl ? btnEl.closest('[data-collageCard="true"]') : null;
-            if (!cardEl) return;
-
-            const originalHtml = btnEl.innerHTML;
-            btnEl.disabled = true;
-            btnEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG 4:3...`;
-
-            const staging = document.getElementById("jpgRenderStaging");
-            staging.innerHTML = "";
-
-            try {
-                const username = getActiveUsername();
-                const monthTitle = formatMonthName(ym);
-                const monthItems = getPortfolioEligibleItems().filter(item => {
-                    const itemYm = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
-                    return itemYm === ym;
-                });
-
-                const frame43 = document.createElement("div");
-                frame43.style.width = "1600px";
-                frame43.style.height = "1200px";
-                frame43.style.boxSizing = "border-box";
-                frame43.style.padding = "48px 56px";
-                frame43.style.backgroundColor = "#FAF7F2";
-                frame43.style.backgroundImage = `
-                    radial-gradient(rgba(53, 43, 40, 0.07) 5px, transparent 5.5px),
-                    radial-gradient(rgba(53, 43, 40, 0.07) 5px, transparent 5.5px),
-                    radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.56) 0%, transparent 36%),
-                    radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.22) 0%, transparent 38%),
-                    radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.48) 0%, transparent 40%)
-                `;
-                frame43.style.backgroundSize = "56px 56px, 56px 56px, 100% 100%, 100% 100%, 100% 100%";
-                frame43.style.backgroundPosition = "0 0, 28px 28px, 0 0, 0 0, 0 0";
-                frame43.style.display = "flex";
-                frame43.style.flexDirection = "column";
-                frame43.style.justifyContent = "space-between";
-                frame43.style.fontFamily = "'Plus Jakarta Sans', system-ui, sans-serif";
-
-                const slotsHtml = [];
-                for (let i = 0; i < 4; i++) {
-                    const item = monthItems[i];
-                    if (item) {
-                        const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
-                        const safeImg = imgSrc && (imgSrc.startsWith("data:image/") || sanitizeUrl(imgSrc)) ? imgSrc : "";
-                        slotsHtml.push(`
-                            <div style="position:relative; border-radius:24px; overflow:hidden; background:#F3ECE2; border:1.5px solid #E2D4C3; display:flex; align-items:center; justify-content:center;">
-                                ${safeImg
-                                    ? `<img src="${safeImg}" alt="${escapeHtml(item.clientName)}" style="width:100%; height:100%; object-fit:contain;">`
-                                    : `<div style="padding:16px; text-align:center; font-size:16px; color:#7A6C67;">${escapeHtml(item.clientName)}</div>`
-                                }
-                                <div style="position:absolute; bottom:14px; left:14px; right:14px; background:rgba(250,247,242,0.94); border:1px solid #E2D4C3; border-radius:16px; padding:10px 16px;">
-                                    <div style="font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.clientName)}</div>
-                                    <div style="font-size:13px; color:#7A6C67; margin-top:2px;">${escapeHtml(item.category || 'Event')} • ${escapeHtml(item.date || '')}</div>
-                                </div>
-                            </div>
-                        `);
-                    } else {
-                        slotsHtml.push(`
-                            <div style="border-radius:24px; background:rgba(243,236,226,0.55); border:2px dashed #DFD2C2; display:flex; align-items:center; justify-content:center; font-size:16px; color:#9C8E89;">
-                                Slot Karya ${i + 1}
-                            </div>
-                        `);
-                    }
-                }
-
-                frame43.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
-                        <div>
-                            <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:13px; font-weight:700; margin-bottom:8px;">
-                                PORTFOLIO COLLAGE • 4:3 HD
-                            </span>
-                            <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:36px; font-weight:700; color:#352B28; line-height:1.15;">
-                                ${escapeHtml(monthTitle)}
-                            </h2>
-                        </div>
-                        <div style="text-align:right;">
-                            <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:#4F6952;">${escapeHtml(username)}</p>
-                            <p style="margin:4px 0 0 0; font-size:14px; color:#7A6C67;">Narravia Studio Showcase</p>
-                        </div>
-                    </div>
-
-                    <div style="flex:1; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); grid-template-rows:repeat(2, minmax(0, 1fr)); gap:22px;">
-                        ${slotsHtml.join("")}
-                    </div>
-
-                    <div style="margin-top:20px; padding-top:12px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#7A6C67;">
-                        <span>Created by Narravia.Studio</span>
-                        <span>${monthItems.length} karya tercatat</span>
-                    </div>
-                `;
-
-                staging.appendChild(frame43);
-
-                const canvas = await html2canvas(frame43, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: "#FAF7F2",
-                    logging: false
-                });
-
-                const safeMonth = String(ym || "collage").replace(/[^a-zA-Z0-9_-]+/g, "_");
-                const link = document.createElement("a");
-                link.download = `kolase_portofolio_${safeMonth}_4x3_HD.jpg`;
-                link.href = canvas.toDataURL("image/jpeg", 0.96);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast(`Kolase JPG 4:3 (${monthTitle}) berhasil diunduh.`);
-            } catch (err) {
-                showToast("Gagal export JPG 4:3: " + err.message, true);
-            } finally {
-                staging.innerHTML = "";
-                btnEl.disabled = false;
-                btnEl.innerHTML = originalHtml;
-            }
-        };
-
-        window.openPhotoModal = (id) => {
+        window.openPhotoModal = (encodedId) => {
+            const id = decodeURIComponent(encodedId);
             const item = records.find(r => r.id === id);
             if (!item) return;
-            const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
-            if (!imgSrc) return;
+            const src = item.photoData || sanitizeUrl(item.portfolioLink);
+            const safeSrc = src && (src.startsWith("data:image/") || sanitizeUrl(src)) ? src : "";
+            if (!safeSrc) return;
 
-            document.getElementById('modalImg').src = imgSrc;
-            document.getElementById('modalTitle').innerText = item.clientName;
-            document.getElementById('modalSubtitle').innerText = `${item.category} • ${item.date || ''}`;
+            document.getElementById('modalImg').src = safeSrc;
+            document.getElementById('modalTitle').innerText = item.clientName || 'Dokumentasi';
+            document.getElementById('modalSubtitle').innerText = `${item.category || 'Event'} • ${item.date || ''}`;
             const modal = document.getElementById('photoModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -5735,38 +5362,53 @@
 
         window.closePhotoModal = () => {
             const modal = document.getElementById('photoModal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('modalImg').src = '';
         };
 
         window.switchTab = (tab) => {
-            const tabs = ['Finance', 'Portfolio', 'Social', 'Operations'];
-            tabs.forEach(t => {
-                const btn = document.getElementById('tab' + t);
-                const view = document.getElementById('view' + t);
-                const isActive = t.toLowerCase() === tab;
+            const vFin = document.getElementById('viewFinance');
+            const vPort = document.getElementById('viewPortfolio');
+            const vSoc = document.getElementById('viewSocial');
+            const vOps = document.getElementById('viewOperations');
 
-                if (isActive) {
-                    btn.className = "clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer";
-                    view.classList.remove('hidden');
-                } else {
-                    btn.className = "clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer";
-                    view.classList.add('hidden');
-                }
-            });
+            const tFin = document.getElementById('tabFinance');
+            const tPort = document.getElementById('tabPortfolio');
+            const tSoc = document.getElementById('tabSocial');
+            const tOps = document.getElementById('tabOperations');
 
-            if (tab === 'portfolio') {
+            const activeClass = 'clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer';
+            const inactiveClass = 'clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer';
+
+            vFin.classList.add('hidden');
+            vPort.classList.add('hidden');
+            vSoc.classList.add('hidden');
+            vOps.classList.add('hidden');
+
+            tFin.className = inactiveClass;
+            tPort.className = inactiveClass;
+            tSoc.className = inactiveClass;
+            tOps.className = inactiveClass;
+
+            if (tab === 'finance') {
+                vFin.classList.remove('hidden');
+                tFin.className = activeClass;
+                renderMonthlyChart();
+            } else if (tab === 'portfolio') {
+                vPort.classList.remove('hidden');
+                tPort.className = activeClass;
+                updateSocialProfileCard();
                 renderRatecardUI();
                 window.renderPortfolio();
             } else if (tab === 'social') {
+                vSoc.classList.remove('hidden');
+                tSoc.className = activeClass;
                 updateSocialProfileCard();
             } else if (tab === 'operations') {
+                vOps.classList.remove('hidden');
+                tOps.className = activeClass;
                 renderOperationsTab();
-            } else if (tab === 'finance') {
-                updateSummary();
-                renderMonthlyChart();
             }
         };
     </script>
