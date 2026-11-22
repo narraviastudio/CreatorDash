@@ -315,10 +315,8 @@
             </div>
         </div>
 
-        <!-- Galeri Highlight Publik (4:3 Tanpa Terpotong) -->
         <div id="pubGalleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 
-        <!-- Form Pilihan Kategori untuk Brand / Klien -->
         <div class="botanical-card p-6 sm:p-8 rounded-3xl">
             <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
                 <i class="fa-solid fa-list-check"></i> Form Pilihan Kategori Klien
@@ -877,8 +875,8 @@
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
                         <i class="fa-solid fa-id-badge"></i> Creator's Profile &amp; Pitching Card
                     </span>
-                    <button type="button" onclick="copyPitchingCard()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
-                        <i class="fa-regular fa-copy text-roseSoft mr-1"></i> <span id="btnCopyPitchLabel">Salin Kartu Pitching</span>
+                    <button type="button" id="btnExportPitchingJpg" onclick="exportPitchingCardJPG()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso cursor-pointer inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-image text-roseSoft"></i> <span id="btnExportPitchLabel">Export JPG</span>
                     </button>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -1081,7 +1079,6 @@
                 </div>
             </div>
 
-            <!-- Form Pengaturan Invoice -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div class="lg:col-span-5 space-y-4 bg-ivory/90 border border-[#E6DACB] rounded-3xl p-4 sm:p-5">
                     <div class="flex flex-wrap items-center justify-between gap-2">
@@ -1101,7 +1098,6 @@
                         </select>
                     </div>
 
-                    <!-- Tarik Langsung Project dari Pipeline -->
                     <div>
                         <label class="block text-[11px] font-semibold text-sageDark mb-1">Tarik Data dari Project Tersimpan</label>
                         <div class="flex gap-2">
@@ -1219,7 +1215,6 @@
                     </div>
                 </div>
 
-                <!-- Preview 2 Halaman Invoice -->
                 <div class="lg:col-span-7 space-y-6 overflow-x-auto pb-2">
                     <div id="invoiceLivePreview" class="space-y-6 min-w-[760px]"></div>
                 </div>
@@ -1555,29 +1550,168 @@
             return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator yang berdomisili di ${domicile}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
         }
 
-        function buildPitchingCardText() {
-            const handles = [
-                normalizeSocialEntry(userSocials.instagram, "instagram")?.label ? `IG: ${normalizeSocialEntry(userSocials.instagram, "instagram").label}` : "",
-                normalizeSocialEntry(userSocials.tiktok, "tiktok")?.label ? `TikTok: ${normalizeSocialEntry(userSocials.tiktok, "tiktok").label}` : "",
-                normalizeSocialEntry(userSocials.threads, "threads")?.label ? `Threads: ${normalizeSocialEntry(userSocials.threads, "threads").label}` : "",
-                normalizeSocialEntry(userSocials.facebook, "facebook")?.label ? `FB: ${normalizeSocialEntry(userSocials.facebook, "facebook").label}` : "",
-                normalizeSocialEntry(userSocials.twitter, "twitter")?.label ? `X: ${normalizeSocialEntry(userSocials.twitter, "twitter").label}` : ""
-            ].filter(Boolean).join(" | ");
-            return `${buildIntroBubbleSentence()}\n${handles ? `Kanal: ${handles}\n` : ""}Status: ${publicShareSettings.collabStatus}`;
+        function buildPitchingCardExportElement(createdByLabel, introSentence, collabStatusText, avatarSrc, socialBadges) {
+            const sheet = document.createElement("div");
+            sheet.style.cssText = [
+                "width: 1800px",
+                "min-height: 1120px",
+                "background-color: #FAF7F2",
+                "background-image:",
+                "  radial-gradient(rgba(53, 43, 40, 0.085) 6px, transparent 6.5px),",
+                "  radial-gradient(rgba(53, 43, 40, 0.085) 6px, transparent 6.5px),",
+                "  radial-gradient(circle at 8% 12%, rgba(246, 216, 222, 0.58) 0%, transparent 38%),",
+                "  radial-gradient(circle at 92% 16%, rgba(126, 150, 128, 0.24) 0%, transparent 40%),",
+                "  radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.18) 0%, transparent 38%),",
+                "  radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 42%)",
+                "background-size: 64px 64px, 64px 64px, 100% 100%, 100% 100%, 100% 100%, 100% 100%",
+                "background-position: 0 0, 32px 32px, 0 0, 0 0, 0 0, 0 0",
+                "padding: 76px 92px",
+                "box-sizing: border-box",
+                "position: relative",
+                "overflow: hidden",
+                "font-family: 'Plus Jakarta Sans', system-ui, sans-serif",
+                "font-style: normal"
+            ].join(";");
+
+            const initialChar = (createdByLabel.replace(/^@+/, "").trim().charAt(0) || "U").toUpperCase();
+            const avatarHtml = avatarSrc
+                ? `<img src="${avatarSrc}" alt="Foto Profil Kreator" style="width:100%; height:100%; object-fit:cover; display:block;">`
+                : `<span style="font-family:'Playfair Display',Georgia,serif; font-size:96px; font-weight:700; color:#352B28; font-style:normal;">${escapeHtml(initialChar)}</span>`;
+
+            const badgesHtml = socialBadges.length > 0
+                ? socialBadges.map(b => `
+                    <span style="display:inline-flex; align-items:center; gap:12px; padding:14px 26px; border-radius:9999px; background:linear-gradient(145deg,#FFFDF9,#EFE5D8); border:1.5px solid #E2D4C3; box-shadow:4px 4px 10px rgba(53,43,40,0.09),-3px -3px 8px rgba(255,255,255,0.9); font-size:24px; font-weight:700; color:#352B28; font-style:normal;">
+                        <i class="${b.iconClass}" style="color:${b.iconColor}; font-size:26px;"></i>
+                        <span>${escapeHtml(b.label)}</span>
+                    </span>
+                `).join("")
+                : `<span style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; border-radius:9999px; background:#F3ECE2; border:1.5px solid #E2D4C3; font-size:22px; font-weight:600; color:#7A6C67; font-style:normal;">${escapeHtml(createdByLabel)}</span>`;
+
+            sheet.innerHTML = `
+                <svg style="position:absolute; top:-16px; left:-16px; width:260px; height:260px; pointer-events:none; opacity:0.9;" viewBox="0 0 170 170" fill="none">
+                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.4" stroke-linecap="round"/>
+                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
+                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
+                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
+                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
+                </svg>
+
+                <svg style="position:absolute; bottom:-24px; right:-24px; width:300px; height:300px; pointer-events:none; opacity:0.9;" viewBox="0 0 180 180" fill="none">
+                    <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
+                    <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
+                    <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
+                </svg>
+
+                <div style="position:relative; z-index:2; background:rgba(255,253,250,0.95); border:2px solid rgba(226,212,195,0.85); border-radius:44px; padding:56px 64px; box-shadow:0 18px 40px -16px rgba(79,105,82,0.14); display:flex; flex-direction:column; justify-content:space-between; min-height:968px; font-style:normal;">
+                    <div>
+                        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px; margin-bottom:46px;">
+                            <span style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; border-radius:9999px; background:rgba(126,150,128,0.18); color:#4F6952; font-size:21px; font-weight:700; font-style:normal;">
+                                <i class="fa-solid fa-id-badge"></i> Creator's Profile &amp; Pitching Card
+                            </span>
+                            <span style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; border-radius:9999px; background:rgba(246,216,222,0.65); color:#D97D90; font-size:20px; font-weight:700; font-style:normal;">
+                                <i class="fa-solid fa-sparkles"></i> ${escapeHtml(collabStatusText)}
+                            </span>
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:48px;">
+                            <div style="width:260px; height:260px; border-radius:9999px; overflow:hidden; border:5px solid rgba(79,105,82,0.45); background:#F6D8DE; box-shadow:0 14px 30px -10px rgba(53,43,40,0.18); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                ${avatarHtml}
+                            </div>
+
+                            <div style="flex:1; min-width:0;">
+                                <div style="background:rgba(243,236,226,0.88); border:1.5px solid #E2D4C3; border-radius:36px; padding:38px 44px; font-style:normal;">
+                                    <p style="margin:0; font-size:32px; font-weight:600; color:#352B28; line-height:1.55; font-style:normal;">
+                                        ${escapeHtml(introSentence)}
+                                    </p>
+                                </div>
+
+                                <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:28px;">
+                                    ${badgesHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:48px; padding-top:24px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:21px; color:#7A6C67; font-style:normal;">
+                        <span style="font-style:normal;"><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:8px;"></i> Created by Narravia.Studio</span>
+                        <span style="font-weight:600; color:#4F6952; font-style:normal;">${escapeHtml(createdByLabel)}</span>
+                    </div>
+                </div>
+            `;
+
+            return sheet;
         }
 
-        window.copyPitchingCard = async () => {
-            const text = buildPitchingCardText();
+        window.exportPitchingCardJPG = async () => {
+            if (typeof html2canvas === "undefined") {
+                return showToast("Library export belum termuat. Coba refresh halaman.", true);
+            }
+
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
+
+            const btn = document.getElementById("btnExportPitchingJpg");
+            const label = document.getElementById("btnExportPitchLabel");
+            if (btn) btn.disabled = true;
+            if (label) label.innerText = "Menyiapkan JPG...";
+
+            const staging = document.getElementById("jpgRenderStaging");
+            staging.innerHTML = "";
+
             try {
-                await navigator.clipboard.writeText(text);
-                const lbl = document.getElementById('btnCopyPitchLabel');
-                if (lbl) {
-                    lbl.innerText = 'Kartu Pitching Tersalin!';
-                    setTimeout(() => { lbl.innerText = 'Salin Kartu Pitching'; }, 2000);
-                }
-                showToast("Kartu pitching disalin ke clipboard.");
-            } catch (_) {
-                showToast("Gagal menyalin otomatis. Periksa izin clipboard browser.", true);
+                const createdByLabel = getActiveUsername();
+                const introSentence = buildIntroBubbleSentence();
+                const collabStatusText = publicShareSettings.collabStatus || "Open Collaboration";
+                const avatarSrc = currentAvatarDataUrl || document.getElementById("userAvatarImg")?.src || "";
+
+                const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
+                const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
+                const th = normalizeSocialEntry(userSocials.threads, "threads");
+                const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
+                const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+
+                const socialBadges = [
+                    ig ? { label: ig.label, iconClass: "fa-brands fa-instagram", iconColor: "#D97D90" } : null,
+                    tt ? { label: tt.label, iconClass: "fa-brands fa-tiktok", iconColor: "#352B28" } : null,
+                    th ? { label: th.label, iconClass: "fa-solid fa-at", iconColor: "#4F6952" } : null,
+                    fb ? { label: fb.label, iconClass: "fa-brands fa-facebook", iconColor: "#4F6952" } : null,
+                    tw ? { label: tw.label, iconClass: "fa-brands fa-twitter", iconColor: "#D97D90" } : null
+                ].filter(Boolean);
+
+                const cardEl = buildPitchingCardExportElement(
+                    createdByLabel,
+                    introSentence,
+                    collabStatusText,
+                    avatarSrc,
+                    socialBadges
+                );
+                staging.appendChild(cardEl);
+
+                const canvas = await html2canvas(cardEl, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: "#FAF7F2",
+                    logging: false
+                });
+
+                const jpgUrl = canvas.toDataURL("image/jpeg", 0.98);
+                const cleanSlug = createdByLabel.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
+                triggerJpgDownload(jpgUrl, `pitching_card_${cleanSlug}_HD.jpg`);
+                showToast("Kartu pitching JPG HD berhasil diunduh.");
+            } catch (err) {
+                showToast("Gagal membuat JPG kartu pitching: " + err.message, true);
+            } finally {
+                staging.innerHTML = "";
+                if (btn) btn.disabled = false;
+                if (label) label.innerText = "Export JPG";
             }
         };
 
@@ -2031,7 +2165,7 @@
                 const img = new Image();
                 img.onload = async function() {
                     const canvas = document.createElement('canvas');
-                    const size = 240;
+                    const size = 360;
                     canvas.width = size;
                     canvas.height = size;
                     const ctx = canvas.getContext('2d');
@@ -2055,7 +2189,7 @@
                     ctx.imageSmoothingQuality = 'high';
                     ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
 
-                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.88);
+                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.9);
                     try {
                         localStorage.setItem(getAvatarStorageKey(currentUser.uid), avatarUrl);
                     } catch (_) {}
@@ -4076,31 +4210,33 @@
                         : '';
 
                     return `
-                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden group flex flex-col">
-                            <div class="aspect-[4/3] bg-cream overflow-hidden relative flex items-center justify-center">
+                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden flex flex-col group">
+                            <div class="aspect-[4/3] w-full bg-cream overflow-hidden relative flex items-center justify-center">
                                 ${mediaHtml}
                             </div>
-                            <div class="p-5 flex-1 flex flex-col justify-between items-center text-center">
-                                <div class="w-full">
-                                    <p class="text-[11px] text-muted"><i class="fa-regular fa-calendar mr-1"></i>${escapeHtml(item.date || '')}</p>
-                                    <h4 class="font-serif text-lg font-semibold text-espresso mt-1 text-center" style="transform:none;">${escapeHtml(item.clientName)}</h4>
+                            <div class="p-5 flex-1 flex flex-col justify-between text-center">
+                                <div>
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-roseSoft">${escapeHtml(item.category)}</span>
+                                    <h3 class="font-serif text-base font-semibold text-espresso mt-1">${escapeHtml(item.clientName)}</h3>
+                                    <p class="text-xs text-muted mt-1"><i class="fa-regular fa-calendar mr-1 text-sageDark"></i> ${escapeHtml(item.date || '-')}</p>
                                 </div>
-                                ${linkBtn ? `<div class="mt-4">${linkBtn}</div>` : ''}
+                                <div class="mt-4 pt-3 border-t border-[#F0E6DA]/70 flex items-center justify-center gap-2 flex-wrap">
+                                    ${linkBtn}
+                                    ${item.photoData ? `<button onclick="openPhotoModal('${item.id}')" class="clay-pill text-xs text-espresso font-medium px-3.5 py-1.5 cursor-pointer"><i class="fa-solid fa-expand mr-1 text-roseSoft"></i> Zoom</button>` : ''}
+                                </div>
                             </div>
                         </div>
                     `;
                 }).join('');
 
                 yearlyContainer.innerHTML += `
-                    <section class="pt-2 border-t border-[#E6DACB]/70 first:border-t-0 first:pt-0">
-                        <div class="flex items-center justify-between gap-2 mb-4">
+                    <section class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-[#E6DACB] pb-2.5">
                             <h3 class="font-serif text-xl font-semibold text-espresso flex items-center gap-2">
-                                <i class="fa-solid fa-award text-sageDark text-base"></i>
-                                <span>Portofolio ${escapeHtml(yr)}</span>
+                                <i class="fa-solid fa-leaf text-sageDark text-base"></i>
+                                <span>Tahun ${escapeHtml(yr)}</span>
                             </h3>
-                            <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold">
-                                <i class="fa-solid fa-sparkles text-roseSoft mr-1"></i> ${yearItems.length} Karya
-                            </span>
+                            <span class="clay-pill px-3.5 py-1 text-xs font-semibold text-sageDark">${yearItems.length} Karya</span>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             ${cardsHtml}
@@ -4111,159 +4247,158 @@
         }
 
         window.renderPortfolio = () => {
-            const items = getPortfolioEligibleItems();
-            syncGreetingTexts();
-            updateShowcaseSocialIcons();
-            renderMonthlyCollages(items);
-            renderYearlyPortfolio(items);
+            const portfolioItems = getPortfolioEligibleItems();
             syncJpgButtonState();
+            renderMonthlyCollages(portfolioItems);
+            renderYearlyPortfolio(portfolioItems);
         };
 
-        function buildShowcaseJpgSheetElement(pageItems, pageNum, totalPages, createdByLabel, introSentence) {
-            const page = document.createElement("div");
-            page.className = "jpg-landscape-sheet";
+        async function buildLandscapePortfolioElement(items, createdBySocial) {
+            const sorted = sortByRateAndPopularity(items);
+            const featured = sorted.slice(0, 6);
+            const hdPhotos = await Promise.all(
+                featured.map(it => it.photoData ? makeHd43Photo(it.photoData, 2400, 1800) : Promise.resolve(""))
+            );
 
-            const cardsHtml = pageItems.map((item) => {
-                const eventDesc = escapeHtml(item.clientName || "Event Showcase");
-                const visualHtml = item.safePhotoSrc
-                    ? `<img src="${item.safePhotoSrc}" alt="${eventDesc}" style="width:100%; height:100%; object-fit:contain; display:block;">`
-                    : `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#F3ECE2; color:#4F6952; padding:32px; text-align:center;">
-                         <i class="fa-solid fa-clapperboard" style="font-size:64px; color:#D97D90; margin-bottom:14px;"></i>
-                         <span style="font-size:32px; font-weight:600;">Event Link</span>
-                       </div>`;
+            const sheet = document.createElement("div");
+            sheet.className = "jpg-landscape-sheet";
+
+            const photoCellsHtml = featured.map((it, idx) => {
+                const imgSrc = hdPhotos[idx];
+                const mediaEl = imgSrc
+                    ? `<img src="${imgSrc}" alt="${escapeHtml(it.clientName)}" style="width:100%; height:100%; object-fit:contain; display:block;">`
+                    : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#4F6952; font-size:28px; font-weight:600;">${escapeHtml(it.category || "Event")}</div>`;
 
                 return `
-                    <div style="background:rgba(255,253,250,0.94); border:2.5px solid rgba(229,217,202,0.52); border-radius:42px; padding:34px 34px 40px 34px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 16px 36px -14px rgba(79,105,82,0.12); box-sizing:border-box;">
-                        <div style="width:100%; aspect-ratio:4 / 3; border-radius:28px; overflow:hidden; background:#F3ECE2; border:1.5px solid rgba(234,223,211,0.5); display:flex; align-items:center; justify-content:center;">
-                            ${visualHtml}
+                    <div style="background:rgba(255,253,250,0.96); border:1.5px solid rgba(234,223,211,0.65); border-radius:36px; padding:24px; box-shadow:0 16px 36px -14px rgba(79,105,82,0.12); display:flex; flex-direction:column;">
+                        <div style="width:100%; aspect-ratio:4/3; border-radius:26px; overflow:hidden; background:#F3ECE2; display:flex; align-items:center; justify-content:center;">
+                            ${mediaEl}
                         </div>
-                        <div style="margin-top:34px; text-align:center; transform:none;">
-                            <p style="margin:0; font-size:36px; font-weight:700; color:#352B28; line-height:1.35; text-align:center; transform:none;">
-                                ${eventDesc}
+                        <div style="margin-top:20px; text-align:center;">
+                            <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:28px; font-weight:700; color:#352B28; line-height:1.25;">
+                                ${escapeHtml(it.clientName || "Project")}
+                            </p>
+                            <p style="margin:6px 0 0 0; font-size:18px; font-weight:600; color:#D97D90;">
+                                ${escapeHtml(it.category || "Event")} • ${escapeHtml(it.date || "")}
                             </p>
                         </div>
                     </div>
                 `;
             }).join("");
 
-            page.innerHTML = `
-                <svg style="position:absolute; top:-24px; left:-24px; width:420px; height:420px; pointer-events:none; opacity:0.9;" viewBox="0 0 170 170" fill="none">
-                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.4" stroke-linecap="round"/>
-                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
-                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
-                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
-                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
-                </svg>
-
-                <div style="position:relative; z-index:2; min-height:2361px; display:flex; flex-direction:column; justify-content:space-between;">
+            sheet.innerHTML = `
+                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
-                        <div style="text-align:center; margin-bottom:36px;">
-                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:92px; font-weight:700; color:#352B28; line-height:1.15; text-align:center; transform:none;">
-                                My Portofolio
+                        <div style="text-align:center; margin-bottom:46px;">
+                            <span style="display:inline-block; padding:10px 26px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:20px; font-weight:700; letter-spacing:0.06em; margin-bottom:14px;">
+                                CREATOR PORTFOLIO SHOWCASE
+                            </span>
+                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:64px; font-weight:700; color:#352B28; line-height:1.15;">
+                                Narravia Studio
                             </h1>
-                            <p style="margin:12px 0 0 0; font-size:36px; font-weight:600; color:#4F6952; line-height:1.35; text-align:center;">
-                                Created by ${escapeHtml(createdByLabel)}
-                            </p>
                         </div>
 
-                        <div style="background:rgba(255,253,250,0.92); border:2.5px solid rgba(229,217,202,0.52); border-radius:42px; padding:34px 56px; margin:0 auto 54px auto; text-align:center; box-shadow:0 14px 32px -12px rgba(79,105,82,0.1);">
-                            <p style="margin:0; font-size:36px; font-weight:600; color:#352B28; line-height:1.45; text-align:center;">
-                                ${escapeHtml(introSentence)}
-                            </p>
-                        </div>
-
-                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:54px;">
-                            ${cardsHtml}
+                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:38px;">
+                            ${photoCellsHtml}
                         </div>
                     </div>
 
-                    <div style="margin-top:56px; padding-top:24px; border-top:2px solid rgba(230,218,203,0.65); display:flex; justify-content:space-between; align-items:center; font-size:30px; color:#7A6C67;">
-                        <span><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:10px;"></i> Narravia.Studio</span>
-                        <span>Showcase ${pageNum} dari ${totalPages}</span>
+                    <div style="margin-top:46px; padding-top:24px; border-top:2px solid rgba(230,218,203,0.85); display:flex; justify-content:space-between; align-items:center; font-size:24px; color:#7A6C67;">
+                        <span>Created by ${escapeHtml(createdBySocial)}</span>
+                        <span style="font-weight:600; color:#4F6952;">Narravia.Studio</span>
                     </div>
                 </div>
             `;
 
-            return page;
+            return sheet;
         }
 
         window.exportPortfolioJPG = async () => {
-            const rawItems = sortByRateAndPopularity(getPortfolioEligibleItems());
-            if (rawItems.length < MIN_JPG_EVENTS) {
-                return showToast(`Minimal ${MIN_JPG_EVENTS} event untuk export JPG HD (saat ini ${rawItems.length}).`, true);
+            const items = getPortfolioEligibleItems();
+            if (items.length < MIN_JPG_EVENTS) {
+                return showToast(`Minimal ${MIN_JPG_EVENTS} event/portofolio diperlukan untuk export JPG HD.`, true);
             }
+
             if (typeof html2canvas === "undefined") {
                 return showToast("Library export belum termuat. Coba refresh halaman.", true);
             }
 
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
+
             const btn = document.getElementById("btnExportJpg");
-            const originalHtml = btn.innerHTML;
+            const label = document.getElementById("btnExportJpgLabel");
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG HD...`;
+            if (label) label.innerText = "Menyiapkan JPG HD...";
 
             const staging = document.getElementById("jpgRenderStaging");
             staging.innerHTML = "";
 
             try {
-                const createdByLabel = getCreatedBySocialName();
-                const introSentence = buildIntroBubbleSentence();
+                const createdBySocial = getCreatedBySocialName();
+                const sheetEl = await buildLandscapePortfolioElement(items, createdBySocial);
+                staging.appendChild(sheetEl);
 
-                const preparedItems = await Promise.all(
-                    rawItems.map(async (item) => ({
-                        ...item,
-                        safePhotoSrc: item.photoData ? await makeHd43Photo(item.photoData, 2400, 1800) : ""
-                    }))
-                );
+                const canvas = await html2canvas(sheetEl, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: "#FAF7F2",
+                    logging: false
+                });
 
-                const perPage = 3;
-                const chunks = [];
-                for (let i = 0; i < preparedItems.length; i += perPage) {
-                    chunks.push(preparedItems.slice(i, i + perPage));
-                }
-
-                for (let idx = 0; idx < chunks.length; idx++) {
-                    staging.innerHTML = "";
-                    const pageEl = buildShowcaseJpgSheetElement(
-                        chunks[idx],
-                        idx + 1,
-                        chunks.length,
-                        createdByLabel,
-                        introSentence
-                    );
-                    staging.appendChild(pageEl);
-
-                    const renderedCanvas = await html2canvas(pageEl, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: "#FAF7F2"
-                    });
-
-                    const hdJpgUrl = renderedCanvas.toDataURL("image/jpeg", 0.99);
-                    const fileName = chunks.length > 1
-                        ? `portofolio_showcase_hal_${idx + 1}_HD.jpg`
-                        : "portofolio_showcase_HD.jpg";
-                    triggerJpgDownload(hdJpgUrl, fileName);
-                }
+                const jpgUrl = canvas.toDataURL("image/jpeg", 0.99);
+                triggerJpgDownload(jpgUrl, "narravia_portfolio_showcase_HD.jpg");
                 showToast("Portofolio JPG HD berhasil diunduh.");
             } catch (err) {
-                showToast("Gagal membuat JPG HD: " + err.message, true);
+                showToast("Gagal membuat JPG: " + err.message, true);
             } finally {
                 staging.innerHTML = "";
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
                 syncJpgButtonState();
+                if (label) label.innerText = "Export JPG HD";
             }
         };
 
-        window.openPhotoModal = async (id) => {
+        window.exportToCSV = () => {
+            if (records.length === 0) return showToast("Belum ada data untuk di-export.", true);
+            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Nominal Fee (Exclude Pajak)", "Pajak", "Status", "Management", "Deadline Konten", "Jatuh Tempo / Cair", "Sosmed Project", "Link Portofolio"];
+            const rows = records.map(r => [
+                r.date || '',
+                `"${String(r.clientName || '').replace(/"/g, '""')}"`,
+                `"${String(r.category || '').replace(/"/g, '""')}"`,
+                `"${String(r.pipelineStage || '').replace(/"/g, '""')}"`,
+                Number(r.amount) || 0,
+                Number(r.taxAmount) || 0,
+                r.status || '',
+                `"${String(r.managementName || '').replace(/"/g, '""')}"`,
+                r.deadlineDate || '',
+                r.payoutDate || '',
+                `"${String(r.projectSocialHandle ? `${r.projectSocialPlatform || ''}: ${r.projectSocialHandle}` : '').replace(/"/g, '""')}"`,
+                `"${String(r.portfolioLink || '').replace(/"/g, '""')}"`
+            ]);
+            const csvContent = "data:text/csv;charset=utf-8,"
+                + headers.join(",") + "\n"
+                + rows.map(e => e.join(",")).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "narravia_studio_income.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Data CSV berhasil diunduh.");
+        };
+
+        window.openPhotoModal = (id) => {
             const item = records.find(r => r.id === id);
             if (!item || !item.photoData) return;
             document.getElementById('modalTitle').innerText = item.clientName;
-            document.getElementById('modalSubtitle').innerText = `${formatMonthName((item.date || "").slice(0, 7))} • ${item.date || ''}`;
-            document.getElementById('modalImg').src = item.photoData;
+            document.getElementById('modalSubtitle').innerText = `${item.category} • ${item.date || ''}`;
+            const img = document.getElementById('modalImg');
+            img.src = item.photoData;
+            img.alt = item.clientName;
             const modal = document.getElementById('photoModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -4276,66 +4411,44 @@
         };
 
         window.switchTab = (tab) => {
+            const activeClasses = ['text-white', 'bg-gradient-to-r', 'from-sageDark', 'to-[#3F5542]'];
+            const inactiveClasses = ['text-muted', 'hover:text-espresso'];
+
             const views = {
-                finance: 'viewFinance',
-                portfolio: 'viewPortfolio',
-                social: 'viewSocial',
-                operations: 'viewOperations'
+                finance: document.getElementById('viewFinance'),
+                portfolio: document.getElementById('viewPortfolio'),
+                social: document.getElementById('viewSocial'),
+                operations: document.getElementById('viewOperations')
             };
             const tabs = {
-                finance: 'tabFinance',
-                portfolio: 'tabPortfolio',
-                social: 'tabSocial',
-                operations: 'tabOperations'
+                finance: document.getElementById('tabFinance'),
+                portfolio: document.getElementById('tabPortfolio'),
+                social: document.getElementById('tabSocial'),
+                operations: document.getElementById('tabOperations')
             };
 
             Object.keys(views).forEach(key => {
-                const viewEl = document.getElementById(views[key]);
-                const tabEl = document.getElementById(tabs[key]);
-                const active = key === tab;
-
-                if (viewEl) viewEl.classList.toggle('hidden', !active);
-                if (tabEl) {
-                    tabEl.classList.toggle('text-white', active);
-                    tabEl.classList.toggle('bg-gradient-to-r', active);
-                    tabEl.classList.toggle('from-sageDark', active);
-                    tabEl.classList.toggle('to-[#3F5542]', active);
-                    tabEl.classList.toggle('text-muted', !active);
+                if (views[key]) views[key].classList.toggle('hidden', key !== tab);
+                if (tabs[key]) {
+                    activeClasses.forEach(c => tabs[key].classList.remove(c));
+                    inactiveClasses.forEach(c => tabs[key].classList.remove(c));
+                    if (key === tab) {
+                        activeClasses.forEach(c => tabs[key].classList.add(c));
+                    } else {
+                        inactiveClasses.forEach(c => tabs[key].classList.add(c));
+                    }
                 }
             });
 
-            if (tab === 'portfolio') window.renderPortfolio();
-            if (tab === 'social') updateSocialProfileCard();
-            if (tab === 'operations') renderOperationsTab();
-        };
-
-        window.exportToCSV = () => {
-            if (records.length === 0) return showToast('Belum ada data untuk di-export.', true);
-            const headers = ['Tanggal', 'Project Name', 'Kategori', 'Tahap Pipeline', 'Fee (Exclude Pajak)', 'Pajak', 'Status', 'Management', 'Deadline Konten', 'Jatuh Tempo / Cair', 'Sosial Media', 'Link Portofolio'];
-            const rows = records.map(r => [
-                r.date || '',
-                `"${String(r.clientName || '').replace(/"/g, '""')}"`,
-                `"${String(r.category || '').replace(/"/g, '""')}"`,
-                `"${String(r.pipelineStage || 'Brief Diterima').replace(/"/g, '""')}"`,
-                r.amount || 0,
-                r.taxAmount || 0,
-                `"${String(r.status || '').replace(/"/g, '""')}"`,
-                `"${String(r.managementName || '').replace(/"/g, '""')}"`,
-                r.deadlineDate || '',
-                r.payoutDate || '',
-                `"${String(((r.projectSocialPlatform || '') + ' ' + (r.projectSocialHandle || '')).trim()).replace(/"/g, '""')}"`,
-                `"${String(r.portfolioLink || '').replace(/"/g, '""')}"`
-            ]);
-            const csvContent = "data:text/csv;charset=utf-8,"
-                + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', `narravia_studio_income_${new Date().toISOString().slice(0, 10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Data CSV berhasil diunduh.");
+            if (tab === 'finance') {
+                renderMonthlyChart();
+            } else if (tab === 'portfolio') {
+                window.renderPortfolio();
+            } else if (tab === 'social') {
+                updateSocialProfileCard();
+            } else if (tab === 'operations') {
+                renderOperationsTab();
+            }
         };
     </script>
 </body>
