@@ -3351,6 +3351,134 @@
             updatePitchingBellUI();
         };
 
+        function formatWaNumberForLink(rawPhone) {
+            let digits = String(rawPhone || "").replace(/[^0-9]/g, "");
+            if (!digits) return "";
+            if (digits.startsWith("0")) {
+                digits = "62" + digits.slice(1);
+            }
+            return digits;
+        }
+
+        function buildPitchingReplyTemplate(item, mode) {
+            const creatorName = getUsernameWithoutAt();
+            const brand = item.brandName || "Kak";
+            const cat = item.category || "kolaborasi konten";
+            const eventDate = item.eventDate ? formatIndoLongDate(item.eventDate) : "jadwal yang direncanakan";
+
+            if (mode === "accepted") {
+                return {
+                    badge: "✓ Pitching Accepted",
+                    badgeClass: "bg-sage/20 text-sageDark",
+                    title: `Konfirmasi ACC Pitching — ${brand}`,
+                    subject: `Konfirmasi Kerja Sama Kolaborasi (${cat}) — ${brand} x ${creatorName}`,
+                    body: `Halo tim ${brand},\n\nTerima kasih banyak atas penawaran kerja sama untuk kategori *${cat}* pada tanggal *${eventDate}*.\n\nDengan senang hati saya mengonfirmasi bahwa pitching dari ${brand} saya *ACCEPT / SETUJUI*. Untuk langkah selanjutnya (detail brief, kontrak/MOU, serta pengiriman invoice/DP), silakan informasikan alur berikutnya ya.\n\nTerima kasih, senang bisa berkolaborasi bersama ${brand}!\n\nSalam hangat,\n${creatorName}`
+                };
+            }
+
+            if (mode === "declined") {
+                return {
+                    badge: "✕ Pitching Ditolak",
+                    badgeClass: "bg-rose-100 text-rose-700",
+                    title: `Pemberitahuan Pitching — ${brand}`,
+                    subject: `Update Penawaran Kolaborasi (${cat}) — ${brand} x ${creatorName}`,
+                    body: `Halo tim ${brand},\n\nTerima kasih banyak sudah menghubungi dan mengajak berkolaborasi untuk project *${cat}* pada tanggal *${eventDate}*.\n\nMohon maaf sekali, untuk saat ini saya belum dapat mengambil penawaran tersebut dikarenakan jadwal/ketersediaan slot yang belum sesuai. Semoga di kesempatan dan campaign ${brand} berikutnya kita bisa berkolaborasi bersama ya.\n\nSukses selalu untuk campaign-nya!\n\nSalam hangat,\n${creatorName}`
+                };
+            }
+
+            // Mode: discussing (Diskusi Lanjutan)
+            return {
+                badge: "💬 Diskusi Lanjutan",
+                badgeClass: "bg-sky-100 text-sky-800",
+                title: `Diskusi Lanjutan — ${brand}`,
+                subject: `Diskusi Lanjutan Kolaborasi (${cat}) — ${brand} x ${creatorName}`,
+                body: `Halo tim ${brand},\n\nTerima kasih atas ketertarikan dan pitching kerja sama untuk *${cat}* pada tanggal *${eventDate}*.\n\nSaya tertarik dengan campaign ini dan ingin berdiskusi lebih lanjut terkait detail deliverable, timeline produksi, serta penyesuaian rate card/budget-nya. Kira-kira kapan waktu yang nyaman untuk kita bahas lebih detail?\n\nTerima kasih!\n\nSalam hangat,\n${creatorName}`
+            };
+        }
+
+        window.openPitchingReplyModal = (pitchId, mode = "discussing") => {
+            const item = pitchingRequests.find(p => p.id === pitchId);
+            if (!item) return;
+
+            const tpl = buildPitchingReplyTemplate(item, mode);
+            const badgeEl = document.getElementById("pitchReplyBadge");
+            const titleEl = document.getElementById("pitchReplyTitle");
+            const contactEl = document.getElementById("pitchReplyContactInfo");
+            const subjEl = document.getElementById("pitchReplySubject");
+            const bodyEl = document.getElementById("pitchReplyBody");
+            const waInp = document.getElementById("pitchReplyWaInput");
+            const emailInp = document.getElementById("pitchReplyEmailInput");
+
+            if (badgeEl) {
+                badgeEl.textContent = tpl.badge;
+                badgeEl.className = `inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold ${tpl.badgeClass}`;
+            }
+            if (titleEl) titleEl.textContent = tpl.title;
+            if (subjEl) subjEl.value = tpl.subject;
+            if (bodyEl) bodyEl.value = tpl.body;
+            if (waInp) waInp.value = item.picWhatsapp || "";
+            if (emailInp) emailInp.value = item.picEmail || "";
+
+            const contactParts = [];
+            if (item.picWhatsapp) contactParts.push(`WA: ${item.picWhatsapp}`);
+            if (item.picEmail) contactParts.push(`Email: ${item.picEmail}`);
+            if (contactEl) {
+                contactEl.textContent = contactParts.length > 0
+                    ? `Kontak PIC terdaftar: ${contactParts.join(" • ")}`
+                    : "Kontak PIC belum diisi klien — kamu bisa isi manual di bawah.";
+            }
+
+            // Tutup dropdown notifikasi agar tidak bertumpuk
+            const dropdown = document.getElementById("pitchingNotifDropdown");
+            if (dropdown) dropdown.classList.add("hidden");
+
+            const modal = document.getElementById("pitchingReplyModal");
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            }
+        };
+
+        window.closePitchingReplyModal = () => {
+            const modal = document.getElementById("pitchingReplyModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }
+        };
+
+        window.copyPitchingReplyMessage = async () => {
+            const bodyText = document.getElementById("pitchReplyBody")?.value || "";
+            try {
+                await navigator.clipboard.writeText(bodyText);
+                showToast("Template pesan berhasil disalin!");
+            } catch (_) {
+                showToast("Gagal menyalin pesan.", true);
+            }
+        };
+
+        window.sendPitchingReplyViaWa = () => {
+            const rawWa = document.getElementById("pitchReplyWaInput")?.value || "";
+            const bodyText = document.getElementById("pitchReplyBody")?.value || "";
+            const formattedDigits = formatWaNumberForLink(rawWa);
+            const encodedMsg = encodeURIComponent(bodyText);
+
+            const waUrl = formattedDigits
+                ? `https://wa.me/${formattedDigits}?text=${encodedMsg}`
+                : `https://wa.me/?text=${encodedMsg}`;
+
+            window.open(waUrl, "_blank", "noopener,noreferrer");
+        };
+
+        window.sendPitchingReplyViaEmail = () => {
+            const toEmail = (document.getElementById("pitchReplyEmailInput")?.value || "").trim();
+            const subject = document.getElementById("pitchReplySubject")?.value || "";
+            const bodyText = document.getElementById("pitchReplyBody")?.value || "";
+
+            const mailtoUrl = `mailto:${encodeURIComponent(toEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+            window.location.href = mailtoUrl;
+        };
+
         function updatePitchingBellUI() {
             const badge = document.getElementById("pitchingBellBadge");
             const countLabel = document.getElementById("pitchingCountLabel");
@@ -3381,18 +3509,46 @@
                 const dec = item.decision || "pending";
                 let statusPill = `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">Baru Masuk</span>`;
                 if (dec === "discussing") {
-                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold"><i class="fa-regular fa-comments mr-1"></i>Menunggu Diskusi Lanjutan</span>`;
+                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold"><i class="fa-regular fa-comments mr-1"></i>Diskusi Lanjutan</span>`;
                 } else if (dec === "accepted") {
                     statusPill = `<span class="px-2 py-0.5 rounded-full bg-sage/25 text-sageDark text-[10px] font-bold"><i class="fa-solid fa-check mr-1"></i>Accepted</span>`;
                 } else if (dec === "declined") {
                     statusPill = `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>Tidak Diambil</span>`;
                 }
 
-                const actionsHtml = dec === "accepted"
-                    ? `<p class="text-[11px] text-sageDark font-semibold mt-2"><i class="fa-solid fa-circle-check mr-1"></i>Sudah masuk ke Income &amp; Project Flows</p>`
-                    : dec === "declined"
-                    ? `<p class="text-[11px] text-muted mt-2">Pitching ditolak / tidak diambil.</p>`
-                    : `
+                // Info kontak PIC yang diisi klien
+                const contactBadges = [];
+                if (item.picWhatsapp) {
+                    contactBadges.push(`<span class="inline-flex items-center gap-1 text-[10px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"><i class="fa-brands fa-whatsapp"></i>${escapeHtml(item.picWhatsapp)}</span>`);
+                }
+                if (item.picEmail) {
+                    contactBadges.push(`<span class="inline-flex items-center gap-1 text-[10px] font-semibold text-roseSoft bg-blush/40 border border-roseSoft/30 px-2 py-0.5 rounded-full"><i class="fa-regular fa-envelope"></i>${escapeHtml(item.picEmail)}</span>`);
+                }
+                const contactRowHtml = contactBadges.length > 0
+                    ? `<div class="flex flex-wrap items-center gap-1.5 mt-1.5">${contactBadges.join("")}</div>`
+                    : "";
+
+                let actionsHtml = "";
+                if (dec === "accepted") {
+                    actionsHtml = `
+                        <div class="mt-2 pt-2 border-t border-[#EFE5D8] flex flex-wrap items-center justify-between gap-2">
+                            <p class="text-[11px] text-sageDark font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Masuk Income &amp; Project Flows</p>
+                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'accepted')"
+                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-espresso cursor-pointer">
+                                <i class="fa-solid fa-paper-plane text-sageDark mr-1"></i> Kirim Info ACC
+                            </button>
+                        </div>`;
+                } else if (dec === "declined") {
+                    actionsHtml = `
+                        <div class="mt-2 pt-2 border-t border-[#EFE5D8] flex flex-wrap items-center justify-between gap-2">
+                            <p class="text-[11px] text-muted">Pitching ditolak.</p>
+                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'declined')"
+                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-rose-600 cursor-pointer">
+                                <i class="fa-solid fa-paper-plane mr-1"></i> Kirim Info Penolakan
+                            </button>
+                        </div>`;
+                } else {
+                    actionsHtml = `
                         <div class="flex flex-wrap items-center gap-1.5 mt-3 pt-2.5 border-t border-[#EFE5D8]">
                             <button type="button" onclick="respondToPitching('${item.id}', 'accepted')"
                                 class="clay-pill px-3 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
@@ -3407,7 +3563,19 @@
                                 <i class="fa-solid fa-xmark mr-1"></i> Tidak
                             </button>
                         </div>
+                        ${dec === "discussing" ? `
+                        <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'discussing')"
+                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-green-700 cursor-pointer">
+                                <i class="fa-brands fa-whatsapp mr-1"></i> Chat WA PIC
+                            </button>
+                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'discussing')"
+                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-roseSoft cursor-pointer">
+                                <i class="fa-regular fa-envelope mr-1"></i> Email PIC
+                            </button>
+                        </div>` : ""}
                     `;
+                }
 
                 return `
                     <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-3.5 text-left">
@@ -3419,6 +3587,7 @@
                             ${statusPill}
                         </div>
                         <p class="text-[11px] text-muted mt-1"><i class="fa-regular fa-calendar mr-1 text-sageDark"></i>Rencana Event: ${escapeHtml(item.eventDate || "-")}</p>
+                        ${contactRowHtml}
                         ${item.brief ? `<div class="mt-2 bg-cream/80 border border-[#E6DACB] rounded-xl px-2.5 py-1.5 text-[11px] text-espresso"><span class="font-semibold text-sageDark">Brief:</span> ${escapeHtml(item.brief)}</div>` : ""}
                         ${actionsHtml}
                     </div>
@@ -3436,6 +3605,45 @@
                     decision,
                     respondedAt: Date.now()
                 });
+
+                if (decision === "accepted") {
+                    const matchedPkg = (creatorRatecard.packages || []).find(pk =>
+                        target.category && pk.name.toLowerCase().includes(target.category.split(" ")[0].toLowerCase())
+                    );
+                    const suggestedFee = matchedPkg ? Number(matchedPkg.price) || 0 : 0;
+
+                    await addDoc(collection(db, `users/${activeUserUid}/projects`), {
+                        clientName: target.brandName || "Brand Campaign",
+                        managementName: target.brandName || "",
+                        category: target.category || "Event Coverage (Reels/TikTok)",
+                        briefSummary: target.brief || "",
+                        date: target.eventDate || new Date().toISOString().slice(0, 10),
+                        amount: suggestedFee,
+                        taxAmount: 0,
+                        taxInputRaw: "",
+                        status: "Pending / Invoice Sent",
+                        pipelineStage: "Brief Diterima",
+                        deadlineDate: target.eventDate || "",
+                        payoutDate: "",
+                        projectSocialPlatform: "Instagram",
+                        projectSocialHandle: "",
+                        portfolioLink: "",
+                        photoData: "",
+                        createdAt: Date.now()
+                    });
+                    showToast(`Pitching "${target.brandName}" di-accept & masuk ke Income & Project Flows!`);
+                    openPitchingReplyModal(pitchId, "accepted");
+                } else if (decision === "discussing") {
+                    showToast(`Membuka template chat diskusi lanjutan untuk "${target.brandName}"...`);
+                    openPitchingReplyModal(pitchId, "discussing");
+                } else {
+                    showToast(`Pitching "${target.brandName}" ditolak.`);
+                    openPitchingReplyModal(pitchId, "declined");
+                }
+            } catch (err) {
+                showToast("Gagal memproses respon pitching: " + err.message, true);
+            }
+        };
 
                 if (decision === "accepted") {
                     const matchedPkg = (creatorRatecard.packages || []).find(pk =>
