@@ -374,16 +374,16 @@
             <form id="authForm" autocomplete="off" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
-                        <i class="fa-regular fa-user text-sageDark mr-1"></i> Username <span class="text-muted font-normal">(untuk akun baru)</span>
+                        <i class="fa-regular fa-user text-sageDark mr-1"></i> Username
                     </label>
-                    <input type="text" id="authUsername" autocomplete="off" placeholder="@username"
+                    <input type="text" id="authUsername" required autocomplete="off" placeholder="@username"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
-                <div>
+                <div id="registerEmailGroup">
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
-                        <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email
+                        <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email <span class="text-roseSoft font-semibold">(wajib untuk verifikasi Sign Up)</span>
                     </label>
-                    <input type="email" id="authEmail" required autocomplete="off" placeholder="halo@narraviastudio.com"
+                    <input type="email" id="authEmail" autocomplete="off" placeholder="halo@narraviastudio.com"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
                 <div>
@@ -2574,13 +2574,74 @@
             authNotice.classList.remove('hidden');
         }
 
+        function normalizeUsernameKey(rawUsername) {
+            return String(rawUsername || "")
+                .trim()
+                .replace(/^@+/, "")
+                .toLowerCase();
+        }
+
+        function formatUsernameDisplay(rawUsername) {
+            const cleaned = String(rawUsername || "").trim().replace(/^@+/, "");
+            return cleaned ? `@${cleaned}` : "@username";
+        }
+
+        async function saveUsernameLookup(usernameDisplay, email, uid) {
+            const unameKey = normalizeUsernameKey(usernameDisplay);
+            if (!unameKey || !email || !uid) return;
+            const lookupObj = {
+                username: formatUsernameDisplay(usernameDisplay),
+                email: email.trim().toLowerCase(),
+                uid,
+                updatedAt: Date.now()
+            };
+            try {
+                localStorage.setItem(`narravia_uname_${unameKey}`, JSON.stringify(lookupObj));
+            } catch (_) {}
+            try {
+                await setDoc(doc(db, `usernames/${unameKey}`), lookupObj, { merge: true });
+            } catch (_) {}
+        }
+
+        async function resolveEmailByUsername(rawUsername) {
+            const unameKey = normalizeUsernameKey(rawUsername);
+            if (!unameKey) return null;
+
+            try {
+                const snap = await getDoc(doc(db, `usernames/${unameKey}`));
+                if (snap.exists() && snap.data()?.email) {
+                    return {
+                        email: String(snap.data().email).trim(),
+                        username: snap.data().username || formatUsernameDisplay(rawUsername),
+                        uid: snap.data().uid || ""
+                    };
+                }
+            } catch (_) {}
+
+            try {
+                const localRaw = JSON.parse(localStorage.getItem(`narravia_uname_${unameKey}`) || "null");
+                if (localRaw && localRaw.email) {
+                    return {
+                        email: String(localRaw.email).trim(),
+                        username: localRaw.username || formatUsernameDisplay(rawUsername),
+                        uid: localRaw.uid || ""
+                    };
+                }
+            } catch (_) {}
+
+            return null;
+        }
+
         function formatFirebaseAuthError(err, fallbackText) {
             const code = err?.code || "";
             if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
-                return "Email atau password salah, atau akun belum terdaftar. Periksa kembali input kamu atau klik Forgot password.";
+                return "Username atau password salah, atau akun belum terdaftar. Periksa kembali input kamu atau klik Forgot password.";
             }
             if (code === "auth/invalid-email") {
                 return "Format email tidak valid.";
+            }
+            if (code === "auth/email-already-in-use") {
+                return "Email tersebut sudah terdaftar. Silakan gunakan email lain atau masuk dengan username kamu.";
             }
             if (code === "auth/too-many-requests") {
                 return "Terlalu banyak percobaan gagal. Tunggu beberapa menit lalu coba lagi.";
@@ -2850,39 +2911,52 @@
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const usernameInput = authUsernameInput.value.trim();
-            const email = authEmailInput.value.trim();
             const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
 
             authError.classList.add('hidden');
             authNotice.classList.add('hidden');
 
+            if (!normalizeUsernameKey(usernameInput)) {
+                showAuthError("Masukkan username kamu untuk masuk.");
+                authUsernameInput.focus();
+                return;
+            }
+
             try {
+                const resolved = await resolveEmailByUsername(usernameInput);
+                if (!resolved || !resolved.email) {
+                    showAuthError("Username tidak ditemukan. Pastikan kamu sudah mendaftar (Sign Up) dengan verifikasi email.");
+                    return;
+                }
+
                 await setPersistence(
                     auth,
                     remember ? browserLocalPersistence : browserSessionPersistence
                 );
+                const formattedUser = formatUsernameDisplay(resolved.username || usernameInput);
                 if (remember) {
-                    saveRememberPreference(true, usernameInput, email);
+                    saveRememberPreference(true, formattedUser, resolved.email);
                 } else {
                     clearRememberedPref();
                 }
 
-                const cred = await signInWithEmailAndPassword(auth, email, password);
+                const cred = await signInWithEmailAndPassword(auth, resolved.email, password);
                 await cred.user.reload();
                 if (!cred.user.emailVerified) {
                     pendingVerifyUser = cred.user;
                     await signOut(auth);
                     showAuthNotice(
-                        `Email ${email} belum diverifikasi. Cek inbox atau folder Spam kamu lalu klik link verifikasi sebelum masuk.`,
+                        `Email ${resolved.email} belum diverifikasi. Cek inbox atau folder Spam kamu lalu klik link verifikasi sebelum masuk.`,
                         true
                     );
                     return;
                 }
-                if (usernameInput && !cred.user.displayName) {
-                    await updateProfile(cred.user, { displayName: usernameInput });
-                    await setDoc(doc(db, `users/${cred.user.uid}`), { username: usernameInput }, { merge: true });
+                if (!cred.user.displayName) {
+                    await updateProfile(cred.user, { displayName: formattedUser });
                 }
+                await setDoc(doc(db, `users/${cred.user.uid}`), { username: formattedUser, email: resolved.email }, { merge: true });
+                await saveUsernameLookup(formattedUser, resolved.email, cred.user.uid);
             } catch (err) {
                 showAuthError(formatFirebaseAuthError(err, "Gagal login"));
             }
@@ -2897,17 +2971,34 @@
             authError.classList.add('hidden');
             authNotice.classList.add('hidden');
 
-            if (!email || password.length < 6) {
-                showAuthError("Isi email dan password minimal 6 karakter.");
+            if (!normalizeUsernameKey(usernameInput)) {
+                showAuthError("Isi username terlebih dahulu untuk mendaftar.");
+                authUsernameInput.focus();
+                return;
+            }
+            if (!email) {
+                showAuthError("Email wajib diisi untuk verifikasi saat mendaftar (Sign Up).");
+                authEmailInput.focus();
+                return;
+            }
+            if (password.length < 6) {
+                showAuthError("Password minimal 6 karakter.");
+                authPasswordInput.focus();
                 return;
             }
 
             try {
+                const existingLookup = await resolveEmailByUsername(usernameInput);
+                if (existingLookup && existingLookup.email && existingLookup.email.toLowerCase() !== email.toLowerCase()) {
+                    showAuthError("Username tersebut sudah digunakan oleh akun lain. Silakan pilih username lain.");
+                    return;
+                }
+
                 await setPersistence(
                     auth,
                     remember ? browserLocalPersistence : browserSessionPersistence
                 );
-                const chosenName = usernameInput || "@username";
+                const chosenName = formatUsernameDisplay(usernameInput);
                 if (remember) {
                     saveRememberPreference(true, chosenName, email);
                 } else {
@@ -2917,12 +3008,13 @@
                 const cred = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(cred.user, { displayName: chosenName });
                 await setDoc(doc(db, `users/${cred.user.uid}`), { username: chosenName, email }, { merge: true });
+                await saveUsernameLookup(chosenName, email, cred.user.uid);
 
                 pendingVerifyUser = cred.user;
                 await sendEmailVerification(cred.user);
                 await signOut(auth);
                 showAuthNotice(
-                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu login di sini.`,
+                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu masuk pakai username & password.`,
                     true
                 );
             } catch (err) {
@@ -2931,20 +3023,27 @@
         });
 
         btnForgotPassword.addEventListener('click', async () => {
-            const email = authEmailInput.value.trim();
+            const emailFromInput = authEmailInput.value.trim();
+            const usernameFromInput = authUsernameInput.value.trim();
             authError.classList.add('hidden');
             authNotice.classList.add('hidden');
 
-            if (!email) {
-                showAuthError("Masukkan alamat email kamu terlebih dahulu, lalu klik Forgot password.");
-                authEmailInput.focus();
+            let targetEmail = emailFromInput;
+            if (!targetEmail && normalizeUsernameKey(usernameFromInput)) {
+                const resolved = await resolveEmailByUsername(usernameFromInput);
+                if (resolved?.email) targetEmail = resolved.email;
+            }
+
+            if (!targetEmail) {
+                showAuthError("Masukkan username kamu (atau isi email), lalu klik Forgot password.");
+                authUsernameInput.focus();
                 return;
             }
 
             try {
-                await sendPasswordResetEmail(auth, email);
+                await sendPasswordResetEmail(auth, targetEmail);
                 showAuthNotice(
-                    `Link reset password sudah dikirim ke ${email}. Cek inbox atau folder Spam kamu untuk mengganti password.`
+                    `Link reset password sudah dikirim ke ${targetEmail}. Cek inbox atau folder Spam kamu untuk mengganti password.`
                 );
             } catch (err) {
                 showAuthError(formatFirebaseAuthError(err, "Gagal mengirim email reset password"));
