@@ -1047,7 +1047,7 @@
                             <i class="fa-regular fa-calendar-days"></i> Content Creator Schedule &amp; Priority
                         </span>
                         <h2 class="font-serif text-2xl font-semibold text-espresso mt-1">
-                            Creator Calendar &amp; Priority Highlights
+                            Calendar &amp; Priority
                         </h2>
                         <p class="text-xs text-muted mt-0.5">
                             Pantau jadwal shooting/event, deadline tayang konten, dan tagihan prioritas tinggi dalam satu kalender.
@@ -1071,9 +1071,7 @@
                     <div class="lg:col-span-8 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-3.5 sm:p-4">
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-[11px]">
                             <div class="flex flex-wrap items-center gap-3 font-semibold">
-                                <span class="inline-flex items-center gap-1.5 text-rose-700"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> High Priority / Mepet (&le;3 Hari)</span>
-                                <span class="inline-flex items-center gap-1.5 text-sageDark"><span class="w-2.5 h-2.5 rounded-full bg-sageDark inline-block"></span> Jadwal Event / Shoot</span>
-                                <span class="inline-flex items-center gap-1.5 text-amber-800"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Deadline Konten / Cair</span>
+                                <span class="inline-flex items-center gap-1.5 text-rose-700"><span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span> Priority (Ditandai Klien)</span>
                             </div>
                         </div>
                         <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-muted pb-1.5 border-b border-[#EADFD3]">
@@ -3320,10 +3318,19 @@
                         <p class="text-[11px] text-muted mt-0.5">${escapeHtml(pkg.desc || "")}</p>
                     </div>
                     <div class="mt-3 pt-2.5 border-t border-[#EFE5D8]">
-                        <label class="block text-[10px] font-semibold text-muted mb-1">Estimasi Tarif Paket (Rp)</label>
-                        <input type="text" inputmode="numeric" value="${formatDotNumber(Number(pkg.price) || 0)}"
-                            oninput="updateRatecardPackagePrice(${idx}, this)"
-                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs font-bold text-sageDark focus:outline-none focus:border-sageDark">
+                        <label class="flex items-center justify-between text-[10px] font-semibold text-muted mb-1">
+                            <span>Estimasi Tarif Paket (Rp)</span>
+                            <span class="text-[10px] text-sageDark font-semibold">Bisa diedit</span>
+                        </label>
+                        <div class="relative flex items-center">
+                            <input id="rcPkgPriceInput_${idx}" type="text" inputmode="numeric" value="${formatDotNumber(Number(pkg.price) || 0)}"
+                                oninput="updateRatecardPackagePrice(${idx}, this)"
+                                class="w-full bg-white border border-[#E4D8CA] rounded-xl pl-3 pr-8 py-1.5 text-xs font-bold text-sageDark focus:outline-none focus:border-sageDark">
+                            <button type="button" onclick="focusRatecardPackagePrice(${idx})" title="Edit nominal tarif" aria-label="Edit nominal tarif"
+                                class="absolute right-2 text-muted hover:text-sageDark text-xs px-1 py-0.5 cursor-pointer">
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join("");
@@ -3367,6 +3374,14 @@
             persistCreatorRatecard();
             if (notifyUser) {
                 showToast(`Estimasi ratecard diperbarui untuk kategori ${tier} Creator!`);
+            }
+        };
+
+        window.focusRatecardPackagePrice = (idx) => {
+            const inp = document.getElementById(`rcPkgPriceInput_${idx}`);
+            if (inp) {
+                inp.focus();
+                inp.select();
             }
         };
 
@@ -3680,16 +3695,8 @@
             }
         };
 
-        function isProjectUrgentOrPriority(r) {
-            if (r.isPriority) return true;
-            const targetDateStr = r.deadlineDate || r.date || "";
-            if (!targetDateStr || r.status === "Lunas") return false;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const target = new Date(targetDateStr + "T00:00:00");
-            if (Number.isNaN(target.getTime())) return false;
-            const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-            return diffDays >= -2 && diffDays <= 3;
+        function isClientMarkedPriority(r) {
+            return Boolean(r && (r.isClientPriority || r.isPriority));
         }
 
         function renderCreatorCalendarAndPriorities() {
@@ -3716,14 +3723,14 @@
             };
 
             records.forEach(r => {
-                const urgent = isProjectUrgentOrPriority(r);
+                const markedPriority = isClientMarkedPriority(r);
                 if (r.date) {
                     addCalEvent(r.date, {
                         id: r.id,
                         title: r.clientName,
                         type: "event",
-                        urgent,
-                        label: `Event: ${r.clientName}`
+                        isClientPriority: markedPriority,
+                        label: markedPriority ? `Priority: ${r.clientName}` : `Event: ${r.clientName}`
                     });
                 }
                 if (r.deadlineDate && r.deadlineDate !== r.date) {
@@ -3731,8 +3738,8 @@
                         id: r.id,
                         title: r.clientName,
                         type: "deadline",
-                        urgent,
-                        label: `Deadline: ${r.clientName}`
+                        isClientPriority: markedPriority,
+                        label: markedPriority ? `Priority: ${r.clientName}` : `Deadline: ${r.clientName}`
                     });
                 }
                 if (r.payoutDate) {
@@ -3740,8 +3747,8 @@
                         id: r.id,
                         title: r.clientName,
                         type: "payout",
-                        urgent,
-                        label: `Cair: ${r.clientName}`
+                        isClientPriority: markedPriority,
+                        label: markedPriority ? `Priority: ${r.clientName}` : `Cair: ${r.clientName}`
                     });
                 }
             });
@@ -3761,22 +3768,20 @@
                     const dd = String(d).padStart(2, "0");
                     const iso = `${year}-${mm}-${dd}`;
                     const dayEvents = eventsByDate[iso] || [];
-                    const hasPriority = dayEvents.some(e => e.urgent);
+                    const hasPriority = dayEvents.some(e => e.isClientPriority);
                     const isToday = iso === todayIso;
 
                     const cellBorder = hasPriority
-                        ? "border-rose-400 bg-rose-50/75"
+                        ? "border-rose-500 bg-rose-50/80"
                         : isToday
                         ? "border-sageDark bg-sage/10"
                         : "border-[#E6DACB] bg-white/90";
 
                     const pillsHtml = dayEvents.slice(0, 2).map(ev => {
-                        const pillStyle = ev.urgent
+                        const pillStyle = ev.isClientPriority
                             ? "bg-rose-600 text-white"
-                            : ev.type === "event"
-                            ? "bg-sage/20 text-sageDark"
-                            : "bg-amber-100 text-amber-900";
-                        return `<div class="px-1.5 py-0.5 rounded-md text-[9px] font-bold truncate ${pillStyle}" title="${escapeHtml(ev.label)}">${ev.urgent ? "★ " : ""}${escapeHtml(ev.title)}</div>`;
+                            : "bg-cream/90 text-espresso border border-[#E2D4C3]";
+                        return `<div class="px-1.5 py-0.5 rounded-md text-[9px] font-bold truncate ${pillStyle}" title="${escapeHtml(ev.label)}">${ev.isClientPriority ? "★ " : ""}${escapeHtml(ev.title)}</div>`;
                     }).join("");
 
                     const moreHtml = dayEvents.length > 2
@@ -3787,7 +3792,7 @@
                         <div class="min-h-[68px] rounded-xl border ${cellBorder} p-1.5 flex flex-col justify-between">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] font-bold ${hasPriority ? "text-rose-700" : isToday ? "text-sageDark" : "text-espresso"}">${d}</span>
-                                ${hasPriority ? `<i class="fa-solid fa-star text-[9px] text-rose-500" title="Priority Schedule"></i>` : ""}
+                                ${hasPriority ? `<i class="fa-solid fa-star text-[9px] text-rose-600" title="Priority (Ditandai Klien)"></i>` : ""}
                             </div>
                             <div class="space-y-0.5 mt-1">
                                 ${pillsHtml}
@@ -3799,8 +3804,8 @@
                 gridEl.innerHTML = cellsHtml;
             }
 
-            // Priority Highlights List
-            const priorityItems = records.filter(r => isProjectUrgentOrPriority(r));
+            // Priority Highlights List (hanya kegiatan yang ditandai priority)
+            const priorityItems = records.filter(r => isClientMarkedPriority(r));
             if (prioBadge) prioBadge.textContent = `${priorityItems.length} priority`;
 
             if (prioListEl) {
