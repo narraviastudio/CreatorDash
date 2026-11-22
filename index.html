@@ -283,16 +283,8 @@
                     <i class="fa-solid fa-arrow-left mr-1 text-sageDark"></i> Masuk / Kembali ke Studio
                 </button>
             </div>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
-                <div id="pubCreatorAvatarBox" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0 shadow-xs">
-                    <img id="pubCreatorAvatarImg" src="" alt="Foto Profil Creator" class="w-full h-full object-cover hidden">
-                    <span id="pubCreatorAvatarInitial" class="font-serif text-3xl sm:text-4xl font-semibold text-espresso">C</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h1 id="pubCreatorTitle" class="font-serif text-2xl sm:text-3xl font-semibold text-espresso">Creator Showcase</h1>
-                    <p id="pubCreatorBio" class="text-xs sm:text-sm text-espresso/90 mt-1.5 leading-relaxed"></p>
-                </div>
-            </div>
+            <h1 id="pubCreatorTitle" class="font-serif text-3xl sm:text-4xl font-semibold text-espresso">Creator Showcase</h1>
+            <p id="pubCreatorBio" class="text-sm text-espresso/90 mt-2 leading-relaxed"></p>
             <div class="flex flex-wrap items-center gap-2.5 mt-4">
                 <span id="pubCollabStatus" class="px-3.5 py-1 rounded-full bg-sage/20 text-sageDark text-xs font-bold"></span>
                 <span id="pubCreatorTierBadge" class="px-3.5 py-1 rounded-full bg-blush/70 text-roseSoft text-xs font-bold"></span>
@@ -324,104 +316,43 @@
             <h2 class="font-serif text-2xl font-semibold text-espresso mt-1.5">Pilih Kategori Kerjasama</h2>
             <p class="text-xs text-muted mt-1">Brand / Management dapat memilih kategori konten untuk pitching kerja sama.</p>
 
-         <form id="clientCategoryForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
-    <div>
-        <label for="clientPickName" class="block text-xs font-semibold text-espresso/80 mb-1">
-            Nama Brand / Klien
-        </label>
-        <input
-            type="text"
-            id="clientPickName"
-            required
-            autocomplete="organization"
-            placeholder="Contoh: Brand Skincare Luna"
-            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
-    </div>
-
-    <div>
-        <label for="clientPickCategory" class="block text-xs font-semibold text-espresso/80 mb-1">
-            Kategori Kerjasama
-        </label>
-        <select
-            id="clientPickCategory"
-            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
-            <option value="Event Coverage (Reels/TikTok)">Event Coverage (Reels/TikTok)</option>
-            <option value="Same Day Edit (SDE)">Same Day Edit (SDE)</option>
-            <option value="Brand Launch / Activation">Brand Launch / Activation</option>
-            <option value="UGC / Behind The Scenes">UGC / Behind The Scenes</option>
-            <option value="Visit Venue">Visit Venue</option>
-            <option value="Visit Booth">Visit Booth</option>
-            <option value="Visit Restaurant / Cafe">Visit Restaurant / Cafe</option>
-            <option value="Visit Hotel">Visit Hotel</option>
-            <option value="Lainnya">Lainnya</option>
-        </select>
-    </div>
-
-    <div>
-        <label for="clientPickWhatsapp" class="block text-xs font-semibold text-espresso/80 mb-1">
-            <i class="fa-brands fa-whatsapp text-green-600 mr-1"></i>
-            WhatsApp PIC
-        </label>
-        <input
-            type="tel"
-            id="clientPickWhatsapp"
-            autocomplete="tel"
-            placeholder="Contoh: 081234567890"
-            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
-    </div>
-
-    <div>
-        <label for="clientPickEmail" class="block text-xs font-semibold text-espresso/80 mb-1">
-            <i class="fa-regular fa-envelope text-roseSoft mr-1"></i>
-            Email PIC
-        </label>
-        <input
-            type="email"
-            id="clientPickEmail"
-            autocomplete="email"
-            placeholder="Contoh: pic@brandluna.com"
-            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
-    </div>
-
-    <p class="sm:col-span-2 text-[11px] text-muted -mt-2">
-        Isi minimal salah satu kontak—WhatsApp atau email—agar creator bisa menghubungi untuk diskusi dan mengirim kabar keputusan pitching.
-    </p>
-
-    <div>
-        <label for="clientPickDate" class="block text-xs font-semibold text-espresso/80 mb-1">
-            Rencana Tanggal Event / Campaign
-        </label>
-        <input
-            type="date"
-            id="clientPickDate"
-            required
-            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
-    </div>
-
-    <div>
-        <label for="clientPickNote" class="block text-xs font-semibold text-espresso/80 mb-1">
-            Catatan Singkat Brief / Deliverable
-        </label>
-        <input
-            type="text"
-            id="clientPickNote"
-            placeholder="Contoh: 2 Reels + 10 foto dokumentasi"
-            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
-    </div>
-
-    <div class="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 pt-2">
-        <span id="clientPickFeedback" role="status" aria-live="polite"
-            class="text-xs font-semibold text-sageDark"></span>
-
-        <button
-            type="submit"
-            id="btnSubmitClientPick"
-            class="clay-pill px-6 py-2.5 text-sm font-semibold text-espresso cursor-pointer">
-            <i class="fa-solid fa-paper-plane mr-1.5 text-roseSoft"></i>
-            Submit Pitching
-        </button>
-    </div>
-</form>
+            <form id="clientCategoryForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Nama Brand / Klien</label>
+                    <input type="text" id="clientPickName" required placeholder="Contoh: Brand Skincare Luna"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Kategori Kerjasama</label>
+                    <select id="clientPickCategory" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                        <option value="Event Coverage (Reels/TikTok)">Event Coverage (Reels/TikTok)</option>
+                        <option value="Same Day Edit (SDE)">Same Day Edit (SDE)</option>
+                        <option value="Brand Launch / Activation">Brand Launch / Activation</option>
+                        <option value="UGC / Behind The Scenes">UGC / Behind The Scenes</option>
+                        <option value="Visit Venue">Visit Venue</option>
+                        <option value="Visit Booth">Visit Booth</option>
+                        <option value="Visit Restaurant / Cafe">Visit Restaurant / Cafe</option>
+                        <option value="Visit Hotel">Visit Hotel</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Rencana Tanggal Event / Campaign</label>
+                    <input type="date" id="clientPickDate" required
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Catatan Singkat Brief / Deliverable</label>
+                    <input type="text" id="clientPickNote" placeholder="Contoh: 2 Reels + 10 foto dokumentasi"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                </div>
+                <div class="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 pt-2">
+                    <span id="clientPickFeedback" class="text-xs font-semibold text-sageDark"></span>
+                    <button type="submit" id="btnSubmitClientPick" class="clay-pill px-6 py-2.5 text-sm font-semibold text-espresso cursor-pointer">
+                        <i class="fa-solid fa-paper-plane mr-1.5 text-roseSoft"></i> Submit Pitching
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -443,31 +374,24 @@
             <form id="authForm" autocomplete="off" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
-                        <i class="fa-regular fa-user text-sageDark mr-1"></i> Username
+                        <i class="fa-regular fa-user text-sageDark mr-1"></i> Username <span class="text-muted font-normal">(untuk akun baru)</span>
                     </label>
-                    <input type="text" id="authUsername" required autocomplete="off" placeholder="username"
-                        oninput="this.value = this.value.replace(/^@+/, '')"
+                    <input type="text" id="authUsername" autocomplete="off" placeholder="@username"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
-                <div id="registerEmailGroup" class="hidden">
+                <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
-                        <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email <span class="text-roseSoft font-semibold">(wajib untuk verifikasi Sign Up)</span>
+                        <i class="fa-regular fa-envelope text-sageDark mr-1"></i> Email
                     </label>
-                    <input type="email" id="authEmail" autocomplete="off" placeholder="halo@narraviastudio.com"
+                    <input type="email" id="authEmail" required autocomplete="off" placeholder="halo@narraviastudio.com"
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-espresso/80 mb-1.5">
                         <i class="fa-solid fa-key text-sageDark mr-1"></i> Password
                     </label>
-                    <div class="relative">
-                        <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
-                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl pl-4 pr-11 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
-                        <button type="button" id="btnTogglePassword" aria-label="Lihat atau sembunyikan password"
-                            class="absolute inset-y-0 right-0 px-3.5 flex items-center text-muted hover:text-espresso transition cursor-pointer">
-                            <i id="togglePasswordIcon" class="fa-regular fa-eye text-sm"></i>
-                        </button>
-                    </div>
+                    <input type="password" id="authPassword" required autocomplete="new-password" placeholder="Minimal 6 karakter"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-4 py-2.5 text-sm text-espresso focus:outline-none focus:border-sageDark transition">
                 </div>
 
                 <div class="flex items-center justify-between pt-0.5">
@@ -496,9 +420,6 @@
                     </button>
                     <button type="button" id="btnRegister" class="clay-pill w-full text-espresso font-semibold py-2.5 text-sm cursor-pointer">
                         <i class="fa-solid fa-user-plus mr-1.5 text-roseSoft"></i> Daftar Akun Baru (Kirim Verifikasi Email)
-                    </button>
-                    <button type="button" id="btnBackToLogin" class="hidden text-xs font-semibold text-muted hover:text-espresso underline pt-1 cursor-pointer">
-                        Kembali ke tampilan Masuk (Sign In)
                     </button>
                 </div>
             </form>
@@ -1022,13 +943,13 @@
                         <i class="fa-solid fa-id-badge"></i> Creator's Profile &amp; Pitching Card
                     </span>
                 </div>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
-                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0 shadow-xs">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0">
                         <img id="socialProfileAvatarImg" src="" alt="Foto Profil User" class="w-full h-full object-cover hidden">
-                        <span id="socialProfileAvatarInitial" class="font-serif text-3xl sm:text-4xl font-semibold text-espresso">U</span>
+                        <span id="socialProfileAvatarInitial" class="font-serif text-2xl font-semibold text-espresso">U</span>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="relative bg-cream/90 border border-[#E2D4C3]/60 rounded-3xl px-4 sm:px-5 py-3.5 text-xs sm:text-[13px] text-espresso leading-relaxed">
+                    <div class="flex-1">
+                        <div class="relative bg-cream/90 border border-[#E2D4C3]/60 rounded-3xl px-5 py-4 text-sm text-espresso leading-relaxed">
                             <p id="socialIntroBubbleText" class="font-medium">
                                 Hi, kenalin aku @username. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
                             </p>
@@ -1100,13 +1021,6 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
-                            <i class="fa-brands fa-whatsapp text-[#25D366] text-sm mr-1.5"></i> Nomor WhatsApp
-                        </label>
-                        <input type="text" id="socWhatsapp" placeholder="Contoh: 081234567890 atau +6281234567890"
-                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-solid fa-location-dot text-sageDark mr-1.5"></i> Domisili
                         </label>
                         <input type="text" id="socDomicile" placeholder="Contoh: Jakarta Timur"
@@ -1157,7 +1071,7 @@
                     <div class="lg:col-span-8 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-3.5 sm:p-4">
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-[11px]">
                             <div class="flex flex-wrap items-center gap-3 font-semibold">
-                                <span class="inline-flex items-center gap-1.5 text-rose-700"><span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span> Priority Task</span>
+                                <span class="inline-flex items-center gap-1.5 text-rose-700"><span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span> Priority (Ditandai Klien)</span>
                             </div>
                         </div>
                         <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-muted pb-1.5 border-b border-[#EADFD3]">
@@ -1353,9 +1267,9 @@
                         <i class="fa-solid fa-file-invoice"></i> Narravia Studio Invoice Builder
                     </span>
                     <h3 class="font-serif text-2xl font-semibold text-espresso mt-1">
-                        Invoicing &amp; Terms Condition
+                        Invoice &amp; Syarat Ketentuan (2 Halaman)
                     </h3>
-                    
+                    <p id="invoiceAutoSaveStatus" class="text-[11px] text-sageDark font-medium mt-0.5">Auto-save aktif per akun</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="button" onclick="clearInvoiceForm()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-roseSoft cursor-pointer">
@@ -1388,9 +1302,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-semibold text-sageDark mb-1">Data Project</label>
+                        <label class="block text-[11px] font-semibold text-sageDark mb-1">Tarik Data dari Project Tersimpan</label>
                         <div class="flex gap-2">
-                            <select id="invoiceProjectSourceSelect" onchange="pullProjectIntoInvoice()" class="flex-1 bg-white border border-[#E4D8CA] rounded-xl px-2.5 py-1.5 text-xs">
+                            <select id="invoiceProjectSourceSelect" class="flex-1 bg-white border border-[#E4D8CA] rounded-xl px-2.5 py-1.5 text-xs">
                                 <option value="">-- Pilih Project --</option>
                             </select>
                             <button type="button" onclick="pullProjectIntoInvoice()" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer shrink-0">
@@ -1607,7 +1521,6 @@
                 threads: "",
                 facebook: "",
                 twitter: "",
-                whatsapp: "",
                 domicile: ""
             };
         }
@@ -1621,18 +1534,18 @@
 
         function createDefaultRatecardData() {
             return {
-                followers: 0,
-                avgViews: 0,
-                engagementRate: 0,
+                followers: 5000,
+                avgViews: 2500,
+                engagementRate: 4.2,
                 tierMode: "AUTO",
                 detectedTier: "Nano",
                 packages: [
-                    { id: "reels", name: "Event Coverage (Reels / TikTok)", desc: "1x Vertical Video HD (30-60s) + Mirroring", price: 0 },
-                    { id: "sde", name: "Same Day Edit (SDE)", desc: "Edit cepat di lokasi event & siap tayang hari H", price: 0 },
-                    { id: "ugc", name: "UGC / Review Visit", desc: "1x Video Review + 5 Foto HD", price: 0 },
-                    { id: "story", name: "Instagram Story Bundle", desc: "3x Frame Story + Link Tag Brand", price: 0 },
-                    { id: "photo", name: "Event Photo Documentation", desc: "15-20 Foto Edited HD siap upload", price: 0 },
-                    { id: "bundle", name: "Full Campaign Bundle", desc: "2x Reels/TikTok + 3x Story + 10 Foto HD", price: 0 }
+                    { id: "reels", name: "Event Coverage (Reels / TikTok)", desc: "1x Vertical Video HD (30-60s) + Mirroring", price: 750000 },
+                    { id: "sde", name: "Same Day Edit (SDE)", desc: "Edit cepat di lokasi event & siap tayang hari H", price: 1100000 },
+                    { id: "ugc", name: "UGC / Review Visit", desc: "1x Video Review + 5 Foto HD", price: 650000 },
+                    { id: "story", name: "Instagram Story Bundle", desc: "3x Frame Story + Link Tag Brand", price: 300000 },
+                    { id: "photo", name: "Event Photo Documentation", desc: "15-20 Foto Edited HD siap upload", price: 600000 },
+                    { id: "bundle", name: "Full Campaign Bundle", desc: "2x Reels/TikTok + 3x Story + 10 Foto HD", price: 1650000 }
                 ]
             };
         }
@@ -1694,12 +1607,11 @@
             };
 
             const list = baseMap[tier] || baseMap.Nano;
-            const hasInsight = (Number(creatorRatecard?.followers) || 0) > 0 || (Number(creatorRatecard?.avgViews) || 0) > 0 || (Number(creatorRatecard?.engagementRate) || 0) > 0;
             return list.map(item => ({
                 id: item.id,
                 name: item.name,
                 desc: item.desc,
-                price: hasInsight ? (Math.round((item.base * mult) / 50000) * 50000) : 0
+                price: Math.round((item.base * mult) / 50000) * 50000
             }));
         }
 
@@ -1758,26 +1670,6 @@
             labelThreadsSlot.innerHTML = getThreadsSvgIcon("w-3.5 h-3.5 text-espresso");
         }
 
-        function normalizeWhatsappEntry(rawWa) {
-            const trimmed = String(rawWa || "").trim();
-            if (!trimmed) return null;
-            if (/^https?:\/\//i.test(trimmed)) {
-                const safe = sanitizeUrl(trimmed);
-                if (!safe) return null;
-                const digitsOnly = trimmed.replace(/[^0-9]/g, "");
-                return { href: safe, label: digitsOnly ? `+${digitsOnly}` : "WhatsApp" };
-            }
-            let digits = trimmed.replace(/[^0-9]/g, "");
-            if (!digits) return null;
-            if (digits.startsWith("0")) {
-                digits = "62" + digits.slice(1);
-            }
-            return {
-                href: `https://wa.me/${digits}`,
-                label: `+${digits}`
-            };
-        }
-
         function renderSocialIconHtml(platform) {
             if (platform === "threads") {
                 return getThreadsSvgIcon("w-3.5 h-3.5 text-espresso");
@@ -1786,7 +1678,6 @@
             if (platform === "tiktok") return `<i class="fa-brands fa-tiktok text-espresso text-sm"></i>`;
             if (platform === "facebook") return `<i class="fa-brands fa-facebook text-sageDark text-sm"></i>`;
             if (platform === "twitter") return `<i class="fa-brands fa-twitter text-roseSoft text-sm"></i>`;
-            if (platform === "whatsapp") return `<i class="fa-brands fa-whatsapp text-[#25D366] text-sm"></i>`;
             return `<i class="fa-solid fa-link text-espresso text-xs"></i>`;
         }
 
@@ -1860,7 +1751,7 @@
                 avatarInitial.classList.remove('hidden');
             }
 
-            ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socWhatsapp', 'socDomicile'].forEach(id => {
+            ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socDomicile'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = "";
             });
@@ -1902,34 +1793,6 @@
         const authUsernameInput = document.getElementById('authUsername');
         const authEmailInput = document.getElementById('authEmail');
         const authPasswordInput = document.getElementById('authPassword');
-        const registerEmailGroup = document.getElementById('registerEmailGroup');
-        const btnTogglePassword = document.getElementById('btnTogglePassword');
-        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
-        const btnBackToLogin = document.getElementById('btnBackToLogin');
-        let isSignUpMode = false;
-
-        function setAuthMode(signUp) {
-            isSignUpMode = signUp;
-            registerEmailGroup.classList.toggle('hidden', !signUp);
-            btnBackToLogin.classList.toggle('hidden', !signUp);
-            authError.classList.add('hidden');
-            authNotice.classList.add('hidden');
-            if (signUp) {
-                authEmailInput.focus();
-            } else {
-                authEmailInput.value = "";
-            }
-        }
-
-        btnTogglePassword.addEventListener('click', () => {
-            const isHidden = authPasswordInput.type === 'password';
-            authPasswordInput.type = isHidden ? 'text' : 'password';
-            togglePasswordIcon.className = isHidden
-                ? 'fa-regular fa-eye-slash text-sm text-sageDark'
-                : 'fa-regular fa-eye text-sm';
-        });
-
-        btnBackToLogin.addEventListener('click', () => setAuthMode(false));
 
         function clearAuthFormInputs(keepRememberCheckbox = false) {
             authUsernameInput.value = "";
@@ -1950,7 +1813,7 @@
             const savedPref = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null");
             if (savedPref && savedPref.remember) {
                 rememberMeCheckbox.checked = true;
-                if (savedPref.username) authUsernameInput.value = String(savedPref.username).replace(/^@+/, '');
+                if (savedPref.username) authUsernameInput.value = savedPref.username;
                 if (savedPref.email) authEmailInput.value = savedPref.email;
             } else {
                 clearRememberedPref();
@@ -2066,7 +1929,6 @@
                 threads: String(nextSocials.threads || "").trim(),
                 facebook: String(nextSocials.facebook || "").trim(),
                 twitter: String(nextSocials.twitter || "").trim(),
-                whatsapp: String(nextSocials.whatsapp || "").trim(),
                 domicile: String(nextSocials.domicile || "").trim()
             };
 
@@ -2095,7 +1957,7 @@
             updateSocialProfileCard();
         };
 
-        ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socWhatsapp', 'socDomicile'].forEach(id => {
+        ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socDomicile'].forEach(id => {
             const el = document.getElementById(id);
             if (!el) return;
             el.addEventListener("input", () => {
@@ -2106,7 +1968,6 @@
                     threads: document.getElementById('socThreads').value.trim(),
                     facebook: document.getElementById('socFacebook').value.trim(),
                     twitter: document.getElementById('socTwitter').value.trim(),
-                    whatsapp: document.getElementById('socWhatsapp').value.trim(),
                     domicile: document.getElementById('socDomicile').value.trim()
                 };
                 persistSocialsToUser(userSocials, activeUserUid);
@@ -2214,26 +2075,9 @@
             }
         };
 
-        function renderPublicShowcaseView({ creatorName, photoURL, bio, collabStatus, rateCardNote, socials, projectList }) {
+        function renderPublicShowcaseView({ creatorName, bio, collabStatus, rateCardNote, socials, projectList }) {
             document.getElementById('pubCreatorTitle').innerText = `${creatorName || "Creator"} — Public Portfolio`;
             document.getElementById('pubCreatorBio').innerText = bio || "";
-
-            const pubAvImg = document.getElementById('pubCreatorAvatarImg');
-            const pubAvInit = document.getElementById('pubCreatorAvatarInitial');
-            const cleanNameForInit = String(creatorName || "Creator").replace(/^@+/, "").trim();
-            if (pubAvInit) pubAvInit.innerText = (cleanNameForInit.charAt(0) || "C").toUpperCase();
-            const safePubPhoto = (photoURL && (photoURL.startsWith("data:image/") || sanitizeUrl(photoURL))) ? photoURL : "";
-            if (pubAvImg && pubAvInit) {
-                if (safePubPhoto) {
-                    pubAvImg.src = safePubPhoto;
-                    pubAvImg.classList.remove('hidden');
-                    pubAvInit.classList.add('hidden');
-                } else {
-                    pubAvImg.src = "";
-                    pubAvImg.classList.add('hidden');
-                    pubAvInit.classList.remove('hidden');
-                }
-            }
             document.getElementById('pubCollabStatus').innerText = collabStatus || "Open Collaboration";
             document.getElementById('pubRateHighlight').innerText = rateCardNote || "";
 
@@ -2243,28 +2087,22 @@
             const rcGrid = document.getElementById('pubRateCardGrid');
             const rcInsight = document.getElementById('pubInsightSummary');
             if (rc && rc.packages && rc.packages.length > 0) {
-                const followersVal = Math.max(0, Number(rc.followers) || 0);
-                const viewsVal = Math.max(0, Number(rc.avgViews) || 0);
-                const erVal = Math.max(0, Number(rc.engagementRate) || 0);
-                const hasInsightData = followersVal > 0 || viewsVal > 0 || erVal > 0;
-                const tierName = rc.detectedTier || classifyCreatorTier(followersVal);
+                const tierName = rc.detectedTier || classifyCreatorTier(rc.followers);
                 const tierRange = tierName === "Macro" ? "100K+ Followers" : (tierName === "Micro" ? "10K–100K Followers" : "1K–10K Followers");
                 if (tierBadge) tierBadge.innerText = `${tierName} Creator (${tierRange})`;
                 if (rcInsight) {
-                    const fStr = followersVal.toLocaleString("id-ID");
-                    const vStr = viewsVal.toLocaleString("id-ID");
-                    rcInsight.innerText = `${fStr} Followers • Avg. ${vStr} Views • ER ${erVal}%`;
+                    const fStr = Number(rc.followers || 0).toLocaleString("id-ID");
+                    const vStr = Number(rc.avgViews || 0).toLocaleString("id-ID");
+                    rcInsight.innerText = `${fStr} Followers • Avg. ${vStr} Views • ER ${rc.engagementRate || 0}%`;
                 }
                 if (rcGrid) {
-                    rcGrid.innerHTML = rc.packages.map(pkg => {
-                        const displayPrice = hasInsightData ? (Number(pkg.price) || 0) : 0;
-                        return `
+                    rcGrid.innerHTML = rc.packages.map(pkg => `
                         <div class="bg-ivory/90 border border-[#E4D8CA] rounded-2xl p-3.5">
                             <p class="text-xs font-bold text-espresso">${escapeHtml(pkg.name)}</p>
                             <p class="text-[11px] text-muted mt-0.5">${escapeHtml(pkg.desc || '')}</p>
-                            <p class="font-serif text-base font-bold text-sageDark mt-2">${formatRupiah(displayPrice)}</p>
+                            <p class="font-serif text-base font-bold text-sageDark mt-2">${formatRupiah(Number(pkg.price) || 0)}</p>
                         </div>
-                    `}).join("");
+                    `).join("");
                 }
                 if (rcBox) rcBox.classList.remove('hidden');
             } else {
@@ -2293,8 +2131,7 @@
                 { entry: normalizeSocialEntry(soc.tiktok, "tiktok"), iconHtml: renderSocialIconHtml("tiktok") },
                 { entry: normalizeSocialEntry(soc.threads, "threads"), iconHtml: renderSocialIconHtml("threads") },
                 { entry: normalizeSocialEntry(soc.facebook, "facebook"), iconHtml: renderSocialIconHtml("facebook") },
-                { entry: normalizeSocialEntry(soc.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") },
-                { entry: normalizeWhatsappEntry(soc.whatsapp), iconHtml: renderSocialIconHtml("whatsapp") }
+                { entry: normalizeSocialEntry(soc.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") }
             ]
                 .filter(item => item.entry)
                 .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft">${item.iconHtml}<span>${escapeHtml(item.entry.label)}</span></a>`)
@@ -2333,7 +2170,6 @@
 
             let latestProfile = {
                 creatorName: fallbackData?.creatorName || "@username",
-                photoURL: fallbackData?.photoURL || "",
                 domicile: fallbackData?.socials?.domicile || "",
                 socials: fallbackData?.socials || createEmptySocials(),
                 collabStatus: fallbackData?.collabStatus || createEmptyPublicShare().collabStatus,
@@ -2350,7 +2186,6 @@
             const syncPublicView = () => {
                 renderPublicShowcaseView({
                     creatorName: latestProfile.creatorName,
-                    photoURL: latestProfile.photoURL,
                     bio: buildIntroBubbleSentence(latestProfile.creatorName, latestProfile.domicile),
                     collabStatus: latestProfile.collabStatus,
                     rateCardNote: latestProfile.rateCardNote,
@@ -2371,7 +2206,6 @@
                     const d = snap.data() || {};
                     latestProfile = {
                         creatorName: d.username || latestProfile.creatorName,
-                        photoURL: d.photoURL ?? latestProfile.photoURL,
                         domicile: d.socials?.domicile ?? latestProfile.domicile,
                         socials: { ...createEmptySocials(), ...(d.socials || {}) },
                         collabStatus: d.publicShare?.collabStatus ?? latestProfile.collabStatus,
@@ -2441,22 +2275,15 @@
             }
         };
 
-       document.getElementById('clientCategoryForm').addEventListener('submit', async (e) => {
+        document.getElementById('clientCategoryForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const targetUid = document.getElementById('publicShareSection').dataset.targetUid || currentUser?.uid;
             const fb = document.getElementById('clientPickFeedback');
             const btn = document.getElementById('btnSubmitClientPick');
             const brandName = document.getElementById('clientPickName').value.trim();
             const chosenCat = document.getElementById('clientPickCategory').value;
-            const picWhatsapp = document.getElementById('clientPickWhatsapp').value.trim();
-            const picEmail = document.getElementById('clientPickEmail').value.trim();
             const eventDate = document.getElementById('clientPickDate').value;
             const note = document.getElementById('clientPickNote').value.trim();
-
-            if (!picWhatsapp && !picEmail) {
-                fb.innerText = "Mohon isi minimal WhatsApp PIC atau Email PIC agar kreator dapat menghubungi kembali.";
-                return;
-            }
 
             if (!targetUid) {
                 fb.innerText = "Tautan belum terhubung ke akun kreator. Kirimkan detail ini langsung ke kreator.";
@@ -2468,21 +2295,11 @@
                 await addDoc(collection(db, `users/${targetUid}/pitchingRequests`), {
                     brandName,
                     category: chosenCat,
-                    picWhatsapp,
-                    picEmail,
                     eventDate,
                     brief: note,
                     decision: "pending",
                     createdAt: Date.now()
                 });
-                fb.innerText = "Pitching berhasil dikirim! Kreator akan menerima notifikasi dan menghubungi PIC via WA/Email.";
-                e.target.reset();
-            } catch (err) {
-                fb.innerText = "Gagal mengirim otomatis: " + err.message;
-            } finally {
-                btn.disabled = false;
-            }
-        });
                 fb.innerText = "Pitching berhasil dikirim! Kreator akan menerima notifikasi dan meninjau penawaranmu.";
                 e.target.reset();
             } catch (err) {
@@ -2551,8 +2368,7 @@
                 { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), iconHtml: renderSocialIconHtml("tiktok") },
                 { entry: normalizeSocialEntry(userSocials.threads, "threads"), iconHtml: renderSocialIconHtml("threads") },
                 { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), iconHtml: renderSocialIconHtml("facebook") },
-                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") },
-                { entry: normalizeWhatsappEntry(userSocials.whatsapp), iconHtml: renderSocialIconHtml("whatsapp") }
+                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") }
             ]
                 .filter(item => item.entry)
                 .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft">${item.iconHtml}<span>${escapeHtml(item.entry.label)}</span></a>`);
@@ -2580,7 +2396,6 @@
                 threads: String(source.threads || "").trim(),
                 facebook: String(source.facebook || "").trim(),
                 twitter: String(source.twitter || "").trim(),
-                whatsapp: String(source.whatsapp || "").trim(),
                 domicile: String(source.domicile || "").trim()
             };
 
@@ -2599,7 +2414,6 @@
             setVal('socThreads', userSocials.threads);
             setVal('socFacebook', userSocials.facebook);
             setVal('socTwitter', userSocials.twitter);
-            setVal('socWhatsapp', userSocials.whatsapp);
             setVal('socDomicile', userSocials.domicile);
 
             updateSocialProfileCard();
@@ -2618,7 +2432,6 @@
                 threads: document.getElementById('socThreads').value.trim(),
                 facebook: document.getElementById('socFacebook').value.trim(),
                 twitter: document.getElementById('socTwitter').value.trim(),
-                whatsapp: document.getElementById('socWhatsapp').value.trim(),
                 domicile: document.getElementById('socDomicile').value.trim()
             };
 
@@ -2691,7 +2504,7 @@
                 const img = new Image();
                 img.onload = async function() {
                     const canvas = document.createElement('canvas');
-                    const size = 600;
+                    const size = 360;
                     canvas.width = size;
                     canvas.height = size;
                     const ctx = canvas.getContext('2d');
@@ -2715,7 +2528,7 @@
                     ctx.imageSmoothingQuality = 'high';
                     ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
 
-                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.94);
+                    const avatarUrl = canvas.toDataURL('image/jpeg', 0.9);
                     try {
                         localStorage.setItem(getScopedKey("avatar", uidSnapshot), avatarUrl);
                     } catch (_) {}
@@ -2754,74 +2567,13 @@
             authNotice.classList.remove('hidden');
         }
 
-        function normalizeUsernameKey(rawUsername) {
-            return String(rawUsername || "")
-                .trim()
-                .replace(/^@+/, "")
-                .toLowerCase();
-        }
-
-        function formatUsernameDisplay(rawUsername) {
-            const cleaned = String(rawUsername || "").trim().replace(/^@+/, "");
-            return cleaned ? `@${cleaned}` : "@username";
-        }
-
-        async function saveUsernameLookup(usernameDisplay, email, uid) {
-            const unameKey = normalizeUsernameKey(usernameDisplay);
-            if (!unameKey || !email || !uid) return;
-            const lookupObj = {
-                username: formatUsernameDisplay(usernameDisplay),
-                email: email.trim().toLowerCase(),
-                uid,
-                updatedAt: Date.now()
-            };
-            try {
-                localStorage.setItem(`narravia_uname_${unameKey}`, JSON.stringify(lookupObj));
-            } catch (_) {}
-            try {
-                await setDoc(doc(db, `usernames/${unameKey}`), lookupObj, { merge: true });
-            } catch (_) {}
-        }
-
-        async function resolveEmailByUsername(rawUsername) {
-            const unameKey = normalizeUsernameKey(rawUsername);
-            if (!unameKey) return null;
-
-            try {
-                const snap = await getDoc(doc(db, `usernames/${unameKey}`));
-                if (snap.exists() && snap.data()?.email) {
-                    return {
-                        email: String(snap.data().email).trim(),
-                        username: snap.data().username || formatUsernameDisplay(rawUsername),
-                        uid: snap.data().uid || ""
-                    };
-                }
-            } catch (_) {}
-
-            try {
-                const localRaw = JSON.parse(localStorage.getItem(`narravia_uname_${unameKey}`) || "null");
-                if (localRaw && localRaw.email) {
-                    return {
-                        email: String(localRaw.email).trim(),
-                        username: localRaw.username || formatUsernameDisplay(rawUsername),
-                        uid: localRaw.uid || ""
-                    };
-                }
-            } catch (_) {}
-
-            return null;
-        }
-
         function formatFirebaseAuthError(err, fallbackText) {
             const code = err?.code || "";
             if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
-                return "Username atau password salah, atau akun belum terdaftar. Periksa kembali input kamu atau klik Forgot password.";
+                return "Email atau password salah, atau akun belum terdaftar. Periksa kembali input kamu atau klik Forgot password.";
             }
             if (code === "auth/invalid-email") {
                 return "Format email tidak valid.";
-            }
-            if (code === "auth/email-already-in-use") {
-                return "Email tersebut sudah terdaftar. Silakan gunakan email lain atau masuk dengan username kamu.";
             }
             if (code === "auth/too-many-requests") {
                 return "Terlalu banyak percobaan gagal. Tunggu beberapa menit lalu coba lagi.";
@@ -2899,7 +2651,7 @@
                 if (rawPref && rawPref.remember) {
                     localStorage.setItem(REMEMBER_KEY, JSON.stringify({
                         ...rawPref,
-                        username: finalName.replace(/^@+/, ''),
+                        username: finalName,
                         email: user.email || rawPref.email || ""
                     }));
                 }
@@ -3091,65 +2843,6 @@
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const usernameInput = authUsernameInput.value.trim();
-            const password = authPasswordInput.value;
-            const remember = rememberMeCheckbox.checked;
-
-            authError.classList.add('hidden');
-            authNotice.classList.add('hidden');
-
-            if (!normalizeUsernameKey(usernameInput)) {
-                showAuthError("Masukkan username kamu untuk masuk.");
-                authUsernameInput.focus();
-                return;
-            }
-
-            try {
-                const resolved = await resolveEmailByUsername(usernameInput);
-                if (!resolved || !resolved.email) {
-                    showAuthError("Username tidak ditemukan. Pastikan kamu sudah mendaftar (Sign Up) dengan verifikasi email.");
-                    return;
-                }
-
-                await setPersistence(
-                    auth,
-                    remember ? browserLocalPersistence : browserSessionPersistence
-                );
-                const formattedUser = formatUsernameDisplay(resolved.username || usernameInput);
-                if (remember) {
-                    saveRememberPreference(true, formattedUser.replace(/^@+/, ''), resolved.email);
-                } else {
-                    clearRememberedPref();
-                }
-
-                const cred = await signInWithEmailAndPassword(auth, resolved.email, password);
-                await cred.user.reload();
-                if (!cred.user.emailVerified) {
-                    pendingVerifyUser = cred.user;
-                    await signOut(auth);
-                    showAuthNotice(
-                        `Email ${resolved.email} belum diverifikasi. Cek inbox atau folder Spam kamu lalu klik link verifikasi sebelum masuk.`,
-                        true
-                    );
-                    return;
-                }
-                if (!cred.user.displayName) {
-                    await updateProfile(cred.user, { displayName: formattedUser });
-                }
-                await setDoc(doc(db, `users/${cred.user.uid}`), { username: formattedUser, email: resolved.email }, { merge: true });
-                await saveUsernameLookup(formattedUser, resolved.email, cred.user.uid);
-            } catch (err) {
-                showAuthError(formatFirebaseAuthError(err, "Gagal login"));
-            }
-        });
-
-        document.getElementById('btnRegister').addEventListener('click', async () => {
-            if (!isSignUpMode) {
-                setAuthMode(true);
-                showAuthNotice("Masukkan email aktif kamu untuk pengiriman link verifikasi akun baru.");
-                return;
-            }
-
-            const usernameInput = authUsernameInput.value.trim().replace(/^@+/, "");
             const email = authEmailInput.value.trim();
             const password = authPasswordInput.value;
             const remember = rememberMeCheckbox.checked;
@@ -3157,36 +2850,59 @@
             authError.classList.add('hidden');
             authNotice.classList.add('hidden');
 
-            if (!normalizeUsernameKey(usernameInput)) {
-                showAuthError("Isi username terlebih dahulu untuk mendaftar.");
-                authUsernameInput.focus();
-                return;
-            }
-            if (!email) {
-                showAuthError("Email wajib diisi untuk verifikasi saat mendaftar (Sign Up).");
-                authEmailInput.focus();
-                return;
-            }
-            if (password.length < 6) {
-                showAuthError("Password minimal 6 karakter.");
-                authPasswordInput.focus();
-                return;
-            }
-
             try {
-                const existingLookup = await resolveEmailByUsername(usernameInput);
-                if (existingLookup && existingLookup.email && existingLookup.email.toLowerCase() !== email.toLowerCase()) {
-                    showAuthError("Username tersebut sudah digunakan oleh akun lain. Silakan pilih username lain.");
-                    return;
-                }
-
                 await setPersistence(
                     auth,
                     remember ? browserLocalPersistence : browserSessionPersistence
                 );
-                const chosenName = formatUsernameDisplay(usernameInput);
                 if (remember) {
                     saveRememberPreference(true, usernameInput, email);
+                } else {
+                    clearRememberedPref();
+                }
+
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                await cred.user.reload();
+                if (!cred.user.emailVerified) {
+                    pendingVerifyUser = cred.user;
+                    await signOut(auth);
+                    showAuthNotice(
+                        `Email ${email} belum diverifikasi. Cek inbox atau folder Spam kamu lalu klik link verifikasi sebelum masuk.`,
+                        true
+                    );
+                    return;
+                }
+                if (usernameInput && !cred.user.displayName) {
+                    await updateProfile(cred.user, { displayName: usernameInput });
+                    await setDoc(doc(db, `users/${cred.user.uid}`), { username: usernameInput }, { merge: true });
+                }
+            } catch (err) {
+                showAuthError(formatFirebaseAuthError(err, "Gagal login"));
+            }
+        });
+
+        document.getElementById('btnRegister').addEventListener('click', async () => {
+            const usernameInput = authUsernameInput.value.trim();
+            const email = authEmailInput.value.trim();
+            const password = authPasswordInput.value;
+            const remember = rememberMeCheckbox.checked;
+
+            authError.classList.add('hidden');
+            authNotice.classList.add('hidden');
+
+            if (!email || password.length < 6) {
+                showAuthError("Isi email dan password minimal 6 karakter.");
+                return;
+            }
+
+            try {
+                await setPersistence(
+                    auth,
+                    remember ? browserLocalPersistence : browserSessionPersistence
+                );
+                const chosenName = usernameInput || "@username";
+                if (remember) {
+                    saveRememberPreference(true, chosenName, email);
                 } else {
                     clearRememberedPref();
                 }
@@ -3194,14 +2910,12 @@
                 const cred = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(cred.user, { displayName: chosenName });
                 await setDoc(doc(db, `users/${cred.user.uid}`), { username: chosenName, email }, { merge: true });
-                await saveUsernameLookup(chosenName, email, cred.user.uid);
 
                 pendingVerifyUser = cred.user;
                 await sendEmailVerification(cred.user);
                 await signOut(auth);
-                setAuthMode(false);
                 showAuthNotice(
-                    `Akun ${usernameInput} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu masuk pakai username & password.`,
+                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu login di sini.`,
                     true
                 );
             } catch (err) {
@@ -3210,27 +2924,20 @@
         });
 
         btnForgotPassword.addEventListener('click', async () => {
-            const emailFromInput = authEmailInput.value.trim();
-            const usernameFromInput = authUsernameInput.value.trim();
+            const email = authEmailInput.value.trim();
             authError.classList.add('hidden');
             authNotice.classList.add('hidden');
 
-            let targetEmail = emailFromInput;
-            if (!targetEmail && normalizeUsernameKey(usernameFromInput)) {
-                const resolved = await resolveEmailByUsername(usernameFromInput);
-                if (resolved?.email) targetEmail = resolved.email;
-            }
-
-            if (!targetEmail) {
-                showAuthError("Masukkan username kamu (atau isi email), lalu klik Forgot password.");
-                authUsernameInput.focus();
+            if (!email) {
+                showAuthError("Masukkan alamat email kamu terlebih dahulu, lalu klik Forgot password.");
+                authEmailInput.focus();
                 return;
             }
 
             try {
-                await sendPasswordResetEmail(auth, targetEmail);
+                await sendPasswordResetEmail(auth, email);
                 showAuthNotice(
-                    `Link reset password sudah dikirim ke ${targetEmail}. Cek inbox atau folder Spam kamu untuk mengganti password.`
+                    `Link reset password sudah dikirim ke ${email}. Cek inbox atau folder Spam kamu untuk mengganti password.`
                 );
             } catch (err) {
                 showAuthError(formatFirebaseAuthError(err, "Gagal mengirim email reset password"));
@@ -3368,134 +3075,6 @@
             updatePitchingBellUI();
         };
 
-        function formatWaNumberForLink(rawPhone) {
-            let digits = String(rawPhone || "").replace(/[^0-9]/g, "");
-            if (!digits) return "";
-            if (digits.startsWith("0")) {
-                digits = "62" + digits.slice(1);
-            }
-            return digits;
-        }
-
-        function buildPitchingReplyTemplate(item, mode) {
-            const creatorName = getUsernameWithoutAt();
-            const brand = item.brandName || "Kak";
-            const cat = item.category || "kolaborasi konten";
-            const eventDate = item.eventDate ? formatIndoLongDate(item.eventDate) : "jadwal yang direncanakan";
-
-            if (mode === "accepted") {
-                return {
-                    badge: "✓ Pitching Accepted",
-                    badgeClass: "bg-sage/20 text-sageDark",
-                    title: `Konfirmasi ACC Pitching — ${brand}`,
-                    subject: `Konfirmasi Kerja Sama Kolaborasi (${cat}) — ${brand} x ${creatorName}`,
-                    body: `Halo tim ${brand},\n\nTerima kasih banyak atas penawaran kerja sama untuk kategori *${cat}* pada tanggal *${eventDate}*.\n\nDengan senang hati saya mengonfirmasi bahwa pitching dari ${brand} saya *ACCEPT / SETUJUI*. Untuk langkah selanjutnya (detail brief, kontrak/MOU, serta pengiriman invoice/DP), silakan informasikan alur berikutnya ya.\n\nTerima kasih, senang bisa berkolaborasi bersama ${brand}!\n\nSalam hangat,\n${creatorName}`
-                };
-            }
-
-            if (mode === "declined") {
-                return {
-                    badge: "✕ Pitching Ditolak",
-                    badgeClass: "bg-rose-100 text-rose-700",
-                    title: `Pemberitahuan Pitching — ${brand}`,
-                    subject: `Update Penawaran Kolaborasi (${cat}) — ${brand} x ${creatorName}`,
-                    body: `Halo tim ${brand},\n\nTerima kasih banyak sudah menghubungi dan mengajak berkolaborasi untuk project *${cat}* pada tanggal *${eventDate}*.\n\nMohon maaf sekali, untuk saat ini saya belum dapat mengambil penawaran tersebut dikarenakan jadwal/ketersediaan slot yang belum sesuai. Semoga di kesempatan dan campaign ${brand} berikutnya kita bisa berkolaborasi bersama ya.\n\nSukses selalu untuk campaign-nya!\n\nSalam hangat,\n${creatorName}`
-                };
-            }
-
-            // Mode: discussing (Diskusi Lanjutan)
-            return {
-                badge: "💬 Diskusi Lanjutan",
-                badgeClass: "bg-sky-100 text-sky-800",
-                title: `Diskusi Lanjutan — ${brand}`,
-                subject: `Diskusi Lanjutan Kolaborasi (${cat}) — ${brand} x ${creatorName}`,
-                body: `Halo tim ${brand},\n\nTerima kasih atas ketertarikan dan pitching kerja sama untuk *${cat}* pada tanggal *${eventDate}*.\n\nSaya tertarik dengan campaign ini dan ingin berdiskusi lebih lanjut terkait detail deliverable, timeline produksi, serta penyesuaian rate card/budget-nya. Kira-kira kapan waktu yang nyaman untuk kita bahas lebih detail?\n\nTerima kasih!\n\nSalam hangat,\n${creatorName}`
-            };
-        }
-
-        window.openPitchingReplyModal = (pitchId, mode = "discussing") => {
-            const item = pitchingRequests.find(p => p.id === pitchId);
-            if (!item) return;
-
-            const tpl = buildPitchingReplyTemplate(item, mode);
-            const badgeEl = document.getElementById("pitchReplyBadge");
-            const titleEl = document.getElementById("pitchReplyTitle");
-            const contactEl = document.getElementById("pitchReplyContactInfo");
-            const subjEl = document.getElementById("pitchReplySubject");
-            const bodyEl = document.getElementById("pitchReplyBody");
-            const waInp = document.getElementById("pitchReplyWaInput");
-            const emailInp = document.getElementById("pitchReplyEmailInput");
-
-            if (badgeEl) {
-                badgeEl.textContent = tpl.badge;
-                badgeEl.className = `inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold ${tpl.badgeClass}`;
-            }
-            if (titleEl) titleEl.textContent = tpl.title;
-            if (subjEl) subjEl.value = tpl.subject;
-            if (bodyEl) bodyEl.value = tpl.body;
-            if (waInp) waInp.value = item.picWhatsapp || "";
-            if (emailInp) emailInp.value = item.picEmail || "";
-
-            const contactParts = [];
-            if (item.picWhatsapp) contactParts.push(`WA: ${item.picWhatsapp}`);
-            if (item.picEmail) contactParts.push(`Email: ${item.picEmail}`);
-            if (contactEl) {
-                contactEl.textContent = contactParts.length > 0
-                    ? `Kontak PIC terdaftar: ${contactParts.join(" • ")}`
-                    : "Kontak PIC belum diisi klien — kamu bisa isi manual di bawah.";
-            }
-
-            // Tutup dropdown notifikasi agar tidak bertumpuk
-            const dropdown = document.getElementById("pitchingNotifDropdown");
-            if (dropdown) dropdown.classList.add("hidden");
-
-            const modal = document.getElementById("pitchingReplyModal");
-            if (modal) {
-                modal.classList.remove("hidden");
-                modal.classList.add("flex");
-            }
-        };
-
-        window.closePitchingReplyModal = () => {
-            const modal = document.getElementById("pitchingReplyModal");
-            if (modal) {
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-            }
-        };
-
-        window.copyPitchingReplyMessage = async () => {
-            const bodyText = document.getElementById("pitchReplyBody")?.value || "";
-            try {
-                await navigator.clipboard.writeText(bodyText);
-                showToast("Template pesan berhasil disalin!");
-            } catch (_) {
-                showToast("Gagal menyalin pesan.", true);
-            }
-        };
-
-        window.sendPitchingReplyViaWa = () => {
-            const rawWa = document.getElementById("pitchReplyWaInput")?.value || "";
-            const bodyText = document.getElementById("pitchReplyBody")?.value || "";
-            const formattedDigits = formatWaNumberForLink(rawWa);
-            const encodedMsg = encodeURIComponent(bodyText);
-
-            const waUrl = formattedDigits
-                ? `https://wa.me/${formattedDigits}?text=${encodedMsg}`
-                : `https://wa.me/?text=${encodedMsg}`;
-
-            window.open(waUrl, "_blank", "noopener,noreferrer");
-        };
-
-        window.sendPitchingReplyViaEmail = () => {
-            const toEmail = (document.getElementById("pitchReplyEmailInput")?.value || "").trim();
-            const subject = document.getElementById("pitchReplySubject")?.value || "";
-            const bodyText = document.getElementById("pitchReplyBody")?.value || "";
-
-            const mailtoUrl = `mailto:${encodeURIComponent(toEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
-            window.location.href = mailtoUrl;
-        };
-
         function updatePitchingBellUI() {
             const badge = document.getElementById("pitchingBellBadge");
             const countLabel = document.getElementById("pitchingCountLabel");
@@ -3526,46 +3105,18 @@
                 const dec = item.decision || "pending";
                 let statusPill = `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">Baru Masuk</span>`;
                 if (dec === "discussing") {
-                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold"><i class="fa-regular fa-comments mr-1"></i>Diskusi Lanjutan</span>`;
+                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold"><i class="fa-regular fa-comments mr-1"></i>Menunggu Diskusi Lanjutan</span>`;
                 } else if (dec === "accepted") {
                     statusPill = `<span class="px-2 py-0.5 rounded-full bg-sage/25 text-sageDark text-[10px] font-bold"><i class="fa-solid fa-check mr-1"></i>Accepted</span>`;
                 } else if (dec === "declined") {
                     statusPill = `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>Tidak Diambil</span>`;
                 }
 
-                // Info kontak PIC yang diisi klien
-                const contactBadges = [];
-                if (item.picWhatsapp) {
-                    contactBadges.push(`<span class="inline-flex items-center gap-1 text-[10px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"><i class="fa-brands fa-whatsapp"></i>${escapeHtml(item.picWhatsapp)}</span>`);
-                }
-                if (item.picEmail) {
-                    contactBadges.push(`<span class="inline-flex items-center gap-1 text-[10px] font-semibold text-roseSoft bg-blush/40 border border-roseSoft/30 px-2 py-0.5 rounded-full"><i class="fa-regular fa-envelope"></i>${escapeHtml(item.picEmail)}</span>`);
-                }
-                const contactRowHtml = contactBadges.length > 0
-                    ? `<div class="flex flex-wrap items-center gap-1.5 mt-1.5">${contactBadges.join("")}</div>`
-                    : "";
-
-                let actionsHtml = "";
-                if (dec === "accepted") {
-                    actionsHtml = `
-                        <div class="mt-2 pt-2 border-t border-[#EFE5D8] flex flex-wrap items-center justify-between gap-2">
-                            <p class="text-[11px] text-sageDark font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Masuk Income &amp; Project Flows</p>
-                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'accepted')"
-                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-espresso cursor-pointer">
-                                <i class="fa-solid fa-paper-plane text-sageDark mr-1"></i> Kirim Info ACC
-                            </button>
-                        </div>`;
-                } else if (dec === "declined") {
-                    actionsHtml = `
-                        <div class="mt-2 pt-2 border-t border-[#EFE5D8] flex flex-wrap items-center justify-between gap-2">
-                            <p class="text-[11px] text-muted">Pitching ditolak.</p>
-                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'declined')"
-                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-rose-600 cursor-pointer">
-                                <i class="fa-solid fa-paper-plane mr-1"></i> Kirim Info Penolakan
-                            </button>
-                        </div>`;
-                } else {
-                    actionsHtml = `
+                const actionsHtml = dec === "accepted"
+                    ? `<p class="text-[11px] text-sageDark font-semibold mt-2"><i class="fa-solid fa-circle-check mr-1"></i>Sudah masuk ke Income &amp; Project Flows</p>`
+                    : dec === "declined"
+                    ? `<p class="text-[11px] text-muted mt-2">Pitching ditolak / tidak diambil.</p>`
+                    : `
                         <div class="flex flex-wrap items-center gap-1.5 mt-3 pt-2.5 border-t border-[#EFE5D8]">
                             <button type="button" onclick="respondToPitching('${item.id}', 'accepted')"
                                 class="clay-pill px-3 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
@@ -3580,19 +3131,7 @@
                                 <i class="fa-solid fa-xmark mr-1"></i> Tidak
                             </button>
                         </div>
-                        ${dec === "discussing" ? `
-                        <div class="flex flex-wrap items-center gap-1.5 mt-2">
-                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'discussing')"
-                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-green-700 cursor-pointer">
-                                <i class="fa-brands fa-whatsapp mr-1"></i> Chat WA PIC
-                            </button>
-                            <button type="button" onclick="openPitchingReplyModal('${item.id}', 'discussing')"
-                                class="clay-pill px-2.5 py-1 text-[10px] font-semibold text-roseSoft cursor-pointer">
-                                <i class="fa-regular fa-envelope mr-1"></i> Email PIC
-                            </button>
-                        </div>` : ""}
                     `;
-                }
 
                 return `
                     <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-3.5 text-left">
@@ -3604,7 +3143,6 @@
                             ${statusPill}
                         </div>
                         <p class="text-[11px] text-muted mt-1"><i class="fa-regular fa-calendar mr-1 text-sageDark"></i>Rencana Event: ${escapeHtml(item.eventDate || "-")}</p>
-                        ${contactRowHtml}
                         ${item.brief ? `<div class="mt-2 bg-cream/80 border border-[#E6DACB] rounded-xl px-2.5 py-1.5 text-[11px] text-espresso"><span class="font-semibold text-sageDark">Brief:</span> ${escapeHtml(item.brief)}</div>` : ""}
                         ${actionsHtml}
                     </div>
@@ -3622,45 +3160,6 @@
                     decision,
                     respondedAt: Date.now()
                 });
-
-                if (decision === "accepted") {
-                    const matchedPkg = (creatorRatecard.packages || []).find(pk =>
-                        target.category && pk.name.toLowerCase().includes(target.category.split(" ")[0].toLowerCase())
-                    );
-                    const suggestedFee = matchedPkg ? Number(matchedPkg.price) || 0 : 0;
-
-                    await addDoc(collection(db, `users/${activeUserUid}/projects`), {
-                        clientName: target.brandName || "Brand Campaign",
-                        managementName: target.brandName || "",
-                        category: target.category || "Event Coverage (Reels/TikTok)",
-                        briefSummary: target.brief || "",
-                        date: target.eventDate || new Date().toISOString().slice(0, 10),
-                        amount: suggestedFee,
-                        taxAmount: 0,
-                        taxInputRaw: "",
-                        status: "Pending / Invoice Sent",
-                        pipelineStage: "Brief Diterima",
-                        deadlineDate: target.eventDate || "",
-                        payoutDate: "",
-                        projectSocialPlatform: "Instagram",
-                        projectSocialHandle: "",
-                        portfolioLink: "",
-                        photoData: "",
-                        createdAt: Date.now()
-                    });
-                    showToast(`Pitching "${target.brandName}" di-accept & masuk ke Income & Project Flows!`);
-                    openPitchingReplyModal(pitchId, "accepted");
-                } else if (decision === "discussing") {
-                    showToast(`Membuka template chat diskusi lanjutan untuk "${target.brandName}"...`);
-                    openPitchingReplyModal(pitchId, "discussing");
-                } else {
-                    showToast(`Pitching "${target.brandName}" ditolak.`);
-                    openPitchingReplyModal(pitchId, "declined");
-                }
-            } catch (err) {
-                showToast("Gagal memproses respon pitching: " + err.message, true);
-            }
-        };
 
                 if (decision === "accepted") {
                     const matchedPkg = (creatorRatecard.packages || []).find(pk =>
@@ -3816,10 +3315,7 @@
                             <span class="text-[10px] font-semibold text-roseSoft bg-blush/50 px-2 py-0.5 rounded-full">Estimasi</span>
                         </div>
                         <h4 class="font-serif text-base font-bold text-espresso mt-1">${escapeHtml(pkg.name)}</h4>
-                        <input id="rcPkgDescInput_${idx}" type="text" value="${escapeHtml(pkg.desc || "")}"
-                            placeholder="Deskripsi layanan (mis. 1x Vertical Video HD (30-60s) + Mirroring)"
-                            oninput="updateRatecardPackageDesc(${idx}, this.value)"
-                            class="w-full mt-1.5 bg-white/90 border border-[#E4D8CA] rounded-xl px-2.5 py-1 text-[11px] text-espresso focus:outline-none focus:border-sageDark">
+                        <p class="text-[11px] text-muted mt-0.5">${escapeHtml(pkg.desc || "")}</p>
                     </div>
                     <div class="mt-3 pt-2.5 border-t border-[#EFE5D8]">
                         <label class="flex items-center justify-between text-[10px] font-semibold text-muted mb-1">
@@ -3888,36 +3384,6 @@
                 inp.select();
             }
         };
-
-        window.updateRatecardPackageDesc = (idx, descVal) => {
-            if (!creatorRatecard.packages || !creatorRatecard.packages[idx]) return;
-            creatorRatecard.packages[idx].desc = descVal;
-            persistCreatorRatecard();
-        };
-
-        function findMatchingRatecardPackage(categoryOrName) {
-            const target = String(categoryOrName || "").trim().toLowerCase();
-            if (!target) return null;
-            const pkgs = Array.isArray(creatorRatecard?.packages) ? creatorRatecard.packages : [];
-            const exact = pkgs.find(p => String(p.name || "").trim().toLowerCase() === target);
-            if (exact) return exact;
-            const tokens = target.split(/[^a-z0-9]+/).filter(t => t.length >= 3);
-            if (tokens.length === 0) return null;
-            let best = null;
-            let bestScore = 0;
-            for (const p of pkgs) {
-                const hay = `${p.name || ""} ${p.desc || ""}`.toLowerCase();
-                let score = 0;
-                for (const tk of tokens) {
-                    if (hay.includes(tk)) score++;
-                }
-                if (score > bestScore) {
-                    bestScore = score;
-                    best = p;
-                }
-            }
-            return bestScore > 0 ? best : null;
-        }
 
         window.updateRatecardPackagePrice = (idx, inputEl) => {
             if (!creatorRatecard.packages || !creatorRatecard.packages[idx]) return;
@@ -4326,7 +3792,7 @@
                         <div class="min-h-[68px] rounded-xl border ${cellBorder} p-1.5 flex flex-col justify-between">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] font-bold ${hasPriority ? "text-rose-700" : isToday ? "text-sageDark" : "text-espresso"}">${d}</span>
-                                ${hasPriority ? `<i class="fa-solid fa-star text-[9px] text-rose-600" title="Priority Task"></i>` : ""}
+                                ${hasPriority ? `<i class="fa-solid fa-star text-[9px] text-rose-600" title="Priority (Ditandai Klien)"></i>` : ""}
                             </div>
                             <div class="space-y-0.5 mt-1">
                                 ${pillsHtml}
@@ -4920,7 +4386,7 @@
             saveInvoiceDraftToLocal(uidSnapshot, snapshot);
 
             const statusEl = document.getElementById('invoiceAutoSaveStatus');
-            
+            if (statusEl) statusEl.innerText = "Auto-save tersimpan";
 
             clearTimeout(invoiceCloudSaveTimer);
             invoiceCloudSaveTimer = setTimeout(async () => {
@@ -4947,73 +4413,30 @@
             ).join('');
         }
 
-        function mapProjectStatusToInvoiceStatus(projStatus) {
-            if (projStatus === "Lunas") return "Lunas";
-            if (projStatus === "DP 50%") return "DP";
-            if (projStatus === "Pending / Invoice Sent") return "Belum Lunas";
-            return "";
-        }
-
-        function formatIndoLongDate(dateStr) {
-            if (!dateStr) return "";
-            const parsed = new Date(String(dateStr).slice(0, 10) + "T00:00:00");
-            if (Number.isNaN(parsed.getTime())) return String(dateStr);
-            return parsed.toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-            });
-        }
-
         window.pullProjectIntoInvoice = () => {
             const selId = document.getElementById('invoiceProjectSourceSelect')?.value || "";
-            if (!selId) {
-                const emptyDraft = createEmptyInvoiceDraft();
-                applyInvoiceDraftToForm(emptyDraft);
-                autoSaveInvoiceDraft();
-                return;
-            }
+            if (!selId) return;
             const proj = records.find(r => r.id === selId);
             if (!proj) return;
 
-            const recipientName = (proj.managementName || proj.clientName || "").trim();
-            document.getElementById('invClientName').value = recipientName;
-
-            const catTitle = proj.category || "Layanan Konten";
-            const matchedPkg = findMatchingRatecardPackage(catTitle);
-            const resolvedDesc = matchedPkg?.desc || proj.briefSummary || proj.clientName || "";
-            const resolvedPrice = (Number(proj.amount) > 0)
-                ? Number(proj.amount)
-                : (Number(matchedPkg?.price) || 0);
-
-            document.getElementById('invClientSubtitle').value = proj.clientName
-                ? `${catTitle} — ${proj.clientName}`
-                : catTitle;
-
-            const mappedStatus = mapProjectStatusToInvoiceStatus(proj.status);
-            if (mappedStatus) {
-                document.getElementById('invStatus').value = mappedStatus;
-            }
-
+            document.getElementById('invClientName').value = proj.clientName || "";
+            document.getElementById('invClientSubtitle').value = proj.category || "";
             if (proj.date) {
-                document.getElementById('invEventDateText').value = formatIndoLongDate(proj.date);
-            }
-            if (!document.getElementById('invDateText').value.trim()) {
-                document.getElementById('invDateText').value = formatIndoLongDate(new Date().toISOString().slice(0, 10));
-            }
-            if (proj.briefSummary) {
-                const notesEl = document.getElementById('invNotes');
-                if (notesEl && !notesEl.value.trim()) {
-                    notesEl.value = proj.briefSummary;
+                const parsed = new Date(proj.date + "T00:00:00");
+                if (!Number.isNaN(parsed.getTime())) {
+                    document.getElementById('invEventDateText').value = parsed.toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    });
                 }
             }
-
             invoiceLineItems = [
                 {
-                    title: matchedPkg?.name || catTitle,
-                    desc: resolvedDesc,
+                    title: proj.category || "Layanan Konten",
+                    desc: proj.clientName || "",
                     qty: 1,
-                    price: resolvedPrice
+                    price: Number(proj.amount) || 0
                 }
             ];
             renderInvoiceEditorItems();
@@ -5041,38 +4464,36 @@
         };
 
         window.applyCategoryPresetToInvoice = (categoryVal) => {
-            if (!categoryVal) {
-                invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
-                renderInvoiceEditorItems();
-                autoSaveInvoiceDraft();
-                return;
-            }
+            if (!categoryVal) return;
             document.getElementById('invClientSubtitle').value = categoryVal;
-            const matchedPkg = findMatchingRatecardPackage(categoryVal);
             const matchedProject = records.find(r => (r.category || "") === categoryVal);
             if (matchedProject) {
-                document.getElementById('invClientName').value = (matchedProject.managementName || matchedProject.clientName || "").trim();
+                document.getElementById('invClientName').value = matchedProject.clientName || "";
                 if (matchedProject.date) {
-                    document.getElementById('invEventDateText').value = formatIndoLongDate(matchedProject.date);
+                    const parsed = new Date(matchedProject.date + "T00:00:00");
+                    if (!Number.isNaN(parsed.getTime())) {
+                        document.getElementById('invEventDateText').value = parsed.toLocaleDateString("id-ID", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric"
+                        });
+                    }
                 }
-                const resolvedPrice = (Number(matchedProject.amount) > 0)
-                    ? Number(matchedProject.amount)
-                    : (Number(matchedPkg?.price) || 0);
                 invoiceLineItems = [
                     {
-                        title: matchedPkg?.name || categoryVal,
-                        desc: matchedPkg?.desc || matchedProject.briefSummary || matchedProject.clientName || "",
+                        title: categoryVal,
+                        desc: matchedProject.clientName || "",
                         qty: 1,
-                        price: resolvedPrice
+                        price: Number(matchedProject.amount) || 0
                     }
                 ];
             } else {
                 invoiceLineItems = [
                     {
-                        title: matchedPkg?.name || categoryVal,
-                        desc: matchedPkg?.desc || "",
+                        title: categoryVal,
+                        desc: "",
                         qty: 1,
-                        price: Number(matchedPkg?.price) || 0
+                        price: 0
                     }
                 ];
             }
