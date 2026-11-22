@@ -269,13 +269,18 @@
         </svg>
     </div>
 
-    <!-- TAMPILAN PORTOFOLIO PUBLIK & FORM PILIHAN KATEGORI KERJASAMA (VIA SHARE LINK) -->
+    <!-- TAMPILAN PORTOFOLIO PUBLIK & FORM PILIHAN KATEGORI KERJASAMA (VIA SHARE LINK, AUTO-REFRESH) -->
     <div id="publicShareSection" class="hidden relative z-10 max-w-5xl mx-auto p-4 sm:p-8 space-y-6">
         <div class="botanical-card p-6 sm:p-8 rounded-3xl">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blush/60 text-roseSoft text-xs font-semibold">
-                    <i class="fa-solid fa-globe"></i> Public Creator Showcase &amp; Brand Inquiry
-                </span>
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blush/60 text-roseSoft text-xs font-semibold">
+                        <i class="fa-solid fa-globe"></i> Public Creator Showcase &amp; Brand Inquiry
+                    </span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-sage/15 text-sageDark text-[11px] font-semibold">
+                        <i class="fa-solid fa-rotate"></i> Auto-Refresh Aktif
+                    </span>
+                </div>
                 <button type="button" onclick="exitPublicShareMode()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
                     <i class="fa-solid fa-arrow-left mr-1 text-sageDark"></i> Masuk / Kembali ke Studio
                 </button>
@@ -303,7 +308,7 @@
                 <i class="fa-solid fa-list-check"></i> Form Pilihan Kategori Kerjasama
             </span>
             <h2 class="font-serif text-2xl font-semibold text-espresso mt-1.5">Pilih Kategori Kerjasama</h2>
-            <p class="text-xs text-muted mt-1">Kirimkan pilihan kategori konten untuk penjajakan kerja sama. Data akan tersinkron ke catatan project kreator jadi Brand / Management dapat memilih kategori konten untuk pitching kerja sama.</p>
+            <p class="text-xs text-muted mt-1">Brand / Management dapat memilih kategori konten untuk pitching kerja sama.</p>
 
             <form id="clientCategoryForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
                 <div>
@@ -785,7 +790,7 @@
                         <span>Portofolio Showcase</span>
                         <i class="fa-solid fa-spa text-sageDark text-base micro-float"></i>
                     </h2>
-                    <div id="showcaseSocialIconsRow" class="flex flex-wrap items-center gap-3 mt-1.5 text-xs font-semibold text-sageDark hidden"></div>
+                    <div id="showcaseSocialIconsRow" class="flex flex-wrap items-center gap-2.5 mt-2 text-xs font-semibold text-sageDark hidden"></div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2.5">
                     <button type="button" onclick="copyPublicPortfolioLink()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer">
@@ -827,7 +832,7 @@
                 <div id="monthlyCollageContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
-            <!-- Karya Berdasarkan Tahun -->
+            <!-- Karya Berdasarkan Tahun (Bisa Diedit Revisinya & Auto-Refresh ke Link Share) -->
             <div>
                 <div id="yearlyPortfolioContainer" class="space-y-8"></div>
             </div>
@@ -898,7 +903,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
-                            <i class="fa-brands fa-threads text-espresso mr-1.5"></i> Link Threads
+                            <span class="inline-flex items-center mr-1 align-middle" id="labelThreadsIconSlot"></span> Link Threads
                         </label>
                         <input type="text" id="socThreads" placeholder="https://threads.net/@username atau @username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
@@ -1016,6 +1021,89 @@
         <footer class="mt-12 pt-5 border-t border-[#E6DACB]/80 text-center text-xs text-muted">
             <i class="fa-solid fa-leaf text-sageDark mr-1"></i> Created by Narravia.Studio
         </footer>
+    </div>
+
+    <!-- MODAL EDIT REVISI KARYA PORTOFOLIO -->
+    <div id="editPortfolioModal" onclick="closeEditPortfolioModal()" class="fixed inset-0 z-50 bg-espresso/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+        <div onclick="event.stopPropagation()" class="botanical-card max-w-xl w-full rounded-3xl p-6 space-y-4 my-auto">
+            <div class="flex items-center justify-between border-b border-[#E6DACB] pb-3">
+                <div>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sage/15 text-sageDark text-[11px] font-semibold">
+                        <i class="fa-solid fa-pen-to-square"></i> Revisi Karya Portofolio
+                    </span>
+                    <h3 class="font-serif text-xl font-semibold text-espresso mt-1">Edit Karya &amp; Sinkron Link Share</h3>
+                </div>
+                <button type="button" aria-label="Tutup modal edit karya" onclick="closeEditPortfolioModal()" class="clay-pill text-muted hover:text-espresso text-base px-3 py-1 cursor-pointer">&times;</button>
+            </div>
+
+            <form id="editPortfolioForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <input type="hidden" id="editPortfolioId">
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Nama Karya / Project</label>
+                    <input type="text" id="editPortfolioTitle" required
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Kategori Konten</label>
+                    <select id="editPortfolioCategory" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                        <option value="Event Coverage (Reels/TikTok)">Event Coverage (Reels/TikTok)</option>
+                        <option value="Same Day Edit (SDE)">Same Day Edit (SDE)</option>
+                        <option value="Brand Launch / Activation">Brand Launch / Activation</option>
+                        <option value="UGC / Behind The Scenes">UGC / Behind The Scenes</option>
+                        <option value="Visit Venue">Visit Venue</option>
+                        <option value="Visit Booth">Visit Booth</option>
+                        <option value="Visit Restaurant / Cafe">Visit Restaurant / Cafe</option>
+                        <option value="Visit Hotel">Visit Hotel</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Tanggal Event</label>
+                    <input type="date" id="editPortfolioDate" required
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Nama Management (Opsional)</label>
+                    <input type="text" id="editPortfolioMgmt"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Sosial Media Project (Opsional)</label>
+                    <div class="flex gap-2">
+                        <select id="editPortfolioSocPlatform" class="bg-ivory border border-[#E4D8CA] rounded-2xl px-2.5 py-2 text-xs focus:outline-none focus:border-sageDark shrink-0">
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Threads">Threads</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Twitter / X">Twitter / X</option>
+                        </select>
+                        <input type="text" id="editPortfolioSocHandle" placeholder="@handle atau link"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3 py-2 text-xs focus:outline-none focus:border-sageDark">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Link Gambar / Portofolio</label>
+                    <div class="flex gap-2">
+                        <input type="url" id="editPortfolioLink" placeholder="https://..."
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3 py-2 text-xs focus:outline-none focus:border-sageDark">
+                        <label title="Ganti foto dari perangkat" class="clay-pill cursor-pointer text-espresso px-3 py-2 text-xs font-semibold flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-image text-roseSoft"></i>
+                            <input type="file" id="editPortfolioPhotoInput" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+                    <p id="editPortfolioPhotoInfo" class="text-[11px] text-sageDark mt-1 truncate hidden"></p>
+                </div>
+
+                <div class="sm:col-span-2 flex items-center justify-end gap-2.5 pt-2">
+                    <button type="button" onclick="closeEditPortfolioModal()" class="clay-pill px-4 py-2 text-xs font-semibold text-muted cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" id="btnSaveEditPortfolio" class="clay-pill px-5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
+                        <i class="fa-solid fa-check mr-1"></i> Simpan Revisi Karya
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- MODAL BUILDER & PREVIEW INVOICE (2 HALAMAN) -->
@@ -1318,11 +1406,15 @@
         let pendingVerifyUser = null;
         let pendingDeleteId = null;
         let editingProjectId = null;
+        let editPortfolioPhotoBase64 = "";
         let unsubscribeRecords = null;
         let unsubscribeProfile = null;
+        let unsubscribePublicProfile = null;
+        let unsubscribePublicProjects = null;
         let autoRefreshTimer = null;
         let invoiceCloudSaveTimer = null;
         let socialCloudSaveTimer = null;
+        let publicShareCloudTimer = null;
         let toastTimer = null;
         let records = [];
         let hdPhotoBase64 = "";
@@ -1331,6 +1423,26 @@
         let userSocials = createEmptySocials();
         let publicShareSettings = createEmptyPublicShare();
         let invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
+
+        function getThreadsSvgIcon(extraClass = "w-3.5 h-3.5 text-espresso") {
+            return `<svg class="${extraClass} shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>`;
+        }
+
+        const labelThreadsSlot = document.getElementById('labelThreadsIconSlot');
+        if (labelThreadsSlot) {
+            labelThreadsSlot.innerHTML = getThreadsSvgIcon("w-3.5 h-3.5 text-espresso");
+        }
+
+        function renderSocialIconHtml(platform) {
+            if (platform === "threads") {
+                return getThreadsSvgIcon("w-3.5 h-3.5 text-espresso");
+            }
+            if (platform === "instagram") return `<i class="fa-brands fa-instagram text-roseSoft text-sm"></i>`;
+            if (platform === "tiktok") return `<i class="fa-brands fa-tiktok text-espresso text-sm"></i>`;
+            if (platform === "facebook") return `<i class="fa-brands fa-facebook text-sageDark text-sm"></i>`;
+            if (platform === "twitter") return `<i class="fa-brands fa-twitter text-roseSoft text-sm"></i>`;
+            return `<i class="fa-solid fa-link text-espresso text-xs"></i>`;
+        }
 
         function showToast(message, isError = false) {
             const banner = document.getElementById("toastBanner");
@@ -1367,9 +1479,21 @@
             return `narravia_${prefix}_${uid}`;
         }
 
+        function stopPublicShareListeners() {
+            if (unsubscribePublicProfile) {
+                unsubscribePublicProfile();
+                unsubscribePublicProfile = null;
+            }
+            if (unsubscribePublicProjects) {
+                unsubscribePublicProjects();
+                unsubscribePublicProjects = null;
+            }
+        }
+
         function resetAllPerUserUiState() {
             activeUserUid = "";
             editingProjectId = null;
+            editPortfolioPhotoBase64 = "";
             currentAvatarDataUrl = "";
             userSocials = createEmptySocials();
             publicShareSettings = createEmptyPublicShare();
@@ -1401,6 +1525,7 @@
                 closePhotoModal();
                 closeInvoiceModal();
                 closeConfirmModal();
+                closeEditPortfolioModal();
                 cancelEditProjectName();
             }
         });
@@ -1549,20 +1674,11 @@
             return clean || "Narravia Studio";
         }
 
-        function buildIntroBubbleSentence(creatorHandle = "") {
+        function buildIntroBubbleSentence(creatorHandle = "", domicileOverride = null) {
             const username = creatorHandle || getActiveUsername();
-            const domicile = (userSocials.domicile || "").trim();
+            const domicile = domicileOverride !== null ? String(domicileOverride || "").trim() : (userSocials.domicile || "").trim();
             const locationPart = domicile ? ` yang berdomisili di ${domicile}` : "";
             return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator${locationPart}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
-        }
-
-        function getSocialBrandIconClass(platform) {
-            if (platform === "instagram") return "fa-brands fa-instagram";
-            if (platform === "tiktok") return "fa-brands fa-tiktok";
-            if (platform === "threads") return "fa-brands fa-threads";
-            if (platform === "facebook") return "fa-brands fa-facebook";
-            if (platform === "twitter") return "fa-brands fa-twitter";
-            return "fa-solid fa-link";
         }
 
         async function persistSocialsToUser(nextSocials, uid = activeUserUid) {
@@ -1619,26 +1735,39 @@
             });
         });
 
-        function loadPublicShareSettings(uid) {
+        function loadPublicShareSettings(uid, remoteShareObj = null) {
             publicShareSettings = createEmptyPublicShare();
-            if (!uid) return;
-            try {
-                const saved = JSON.parse(localStorage.getItem(getScopedKey("public_share", uid)) || "null");
-                if (saved && typeof saved === "object") {
-                    publicShareSettings = {
-                        collabStatus: saved.collabStatus || createEmptyPublicShare().collabStatus,
-                        rateCardNote: saved.rateCardNote || ""
-                    };
+            if (uid) {
+                try {
+                    const saved = JSON.parse(localStorage.getItem(getScopedKey("public_share", uid)) || "null");
+                    if (saved && typeof saved === "object") {
+                        publicShareSettings = {
+                            collabStatus: saved.collabStatus || createEmptyPublicShare().collabStatus,
+                            rateCardNote: saved.rateCardNote || ""
+                        };
+                    }
+                } catch (_) {}
+            }
+            if (remoteShareObj && typeof remoteShareObj === "object") {
+                publicShareSettings = {
+                    collabStatus: remoteShareObj.collabStatus || publicShareSettings.collabStatus,
+                    rateCardNote: remoteShareObj.rateCardNote !== undefined ? remoteShareObj.rateCardNote : publicShareSettings.rateCardNote
+                };
+                if (uid) {
+                    try {
+                        localStorage.setItem(getScopedKey("public_share", uid), JSON.stringify(publicShareSettings));
+                    } catch (_) {}
                 }
-            } catch (_) {}
+            }
             const sel = document.getElementById('pubCollabSelect');
             const inp = document.getElementById('pubRateCardInput');
-            if (sel) sel.value = publicShareSettings.collabStatus;
-            if (inp) inp.value = publicShareSettings.rateCardNote;
+            if (sel && document.activeElement !== sel) sel.value = publicShareSettings.collabStatus;
+            if (inp && document.activeElement !== inp) inp.value = publicShareSettings.rateCardNote;
         }
 
         window.savePublicShareSettings = () => {
             if (!activeUserUid) return;
+            const uidSnapshot = activeUserUid;
             const sel = document.getElementById('pubCollabSelect');
             const inp = document.getElementById('pubRateCardInput');
             const st = document.getElementById('publicShareStatusMsg');
@@ -1647,22 +1776,25 @@
                 rateCardNote: inp ? inp.value.trim() : ""
             };
             try {
-                localStorage.setItem(getScopedKey("public_share", activeUserUid), JSON.stringify(publicShareSettings));
+                localStorage.setItem(getScopedKey("public_share", uidSnapshot), JSON.stringify(publicShareSettings));
             } catch (_) {}
-            if (st) {
-                st.innerText = "Tersimpan otomatis";
-                setTimeout(() => { st.innerText = ""; }, 1400);
-            }
-        };
 
-        function encodeSharePayload(obj) {
-            const bytes = new TextEncoder().encode(JSON.stringify(obj));
-            let binary = "";
-            for (let i = 0; i < bytes.length; i++) {
-                binary += String.fromCharCode(bytes[i]);
+            if (st) {
+                st.innerText = "Tersimpan & sinkron ke link share";
+                setTimeout(() => { st.innerText = ""; }, 1600);
             }
-            return btoa(binary);
-        }
+
+            clearTimeout(publicShareCloudTimer);
+            publicShareCloudTimer = setTimeout(async () => {
+                try {
+                    await setDoc(
+                        doc(db, `users/${uidSnapshot}`),
+                        { publicShare: publicShareSettings },
+                        { merge: true }
+                    );
+                } catch (_) {}
+            }, 300);
+        };
 
         function decodeSharePayload(encoded) {
             const binary = atob(encoded);
@@ -1673,10 +1805,44 @@
             return JSON.parse(new TextDecoder().decode(bytes));
         }
 
-        function buildSharePayload(mode = "portfolio") {
-            const username = getActiveUsername();
+        window.copyPublicPortfolioLink = async () => {
+            const targetUid = activeUserUid || currentUser?.uid || "";
+            if (!targetUid) {
+                showToast("Silakan login terlebih dahulu untuk membuat link portofolio.", true);
+                return;
+            }
+            await setDoc(
+                doc(db, `users/${targetUid}`),
+                {
+                    username: getActiveUsername(),
+                    socials: userSocials,
+                    publicShare: publicShareSettings
+                },
+                { merge: true }
+            ).catch(() => {});
+
+            const url = `${window.location.origin}${window.location.pathname}#portfolio-uid=${encodeURIComponent(targetUid)}`;
+            try {
+                await navigator.clipboard.writeText(url);
+                const lbl = document.getElementById('btnCopyPublicLinkLabel');
+                if (lbl) {
+                    lbl.innerText = "Link Portofolio Tersalin!";
+                    setTimeout(() => { lbl.innerText = "Link Portofolio Publik"; }, 2000);
+                }
+                showToast("Link portofolio publik disalin (otomatis refresh saat ada revisi).");
+            } catch (_) {
+                showToast("Gagal menyalin link otomatis ke clipboard.", true);
+            }
+        };
+
+        function renderPublicShowcaseView({ creatorName, bio, collabStatus, rateCardNote, socials, projectList }) {
+            document.getElementById('pubCreatorTitle').innerText = `${creatorName || "Creator"} — Public Portfolio`;
+            document.getElementById('pubCreatorBio').innerText = bio || "";
+            document.getElementById('pubCollabStatus').innerText = collabStatus || "Open Collaboration";
+            document.getElementById('pubRateHighlight').innerText = rateCardNote || "";
+
             const catCount = {};
-            records.forEach(r => {
+            (projectList || []).forEach(r => {
                 const c = r.category || "Lainnya";
                 catCount[c] = (catCount[c] || 0) + 1;
             });
@@ -1685,103 +1851,140 @@
                 .slice(0, 4)
                 .map(([c]) => c);
 
-            const galleryPreviews = records
-                .filter(r => r.photoData)
-                .slice(0, 6)
+            const catsEl = document.getElementById('pubCategoriesList');
+            catsEl.innerHTML = topCategories.length > 0
+                ? topCategories.map(c => `<span class="px-3 py-1 rounded-full bg-blush/55 text-roseSoft text-xs font-semibold">${escapeHtml(c)}</span>`).join("")
+                : `<span class="text-xs text-muted">Semua kategori konten</span>`;
+
+            const soc = socials || {};
+            const socLinks = [
+                { entry: normalizeSocialEntry(soc.instagram, "instagram"), iconHtml: renderSocialIconHtml("instagram") },
+                { entry: normalizeSocialEntry(soc.tiktok, "tiktok"), iconHtml: renderSocialIconHtml("tiktok") },
+                { entry: normalizeSocialEntry(soc.threads, "threads"), iconHtml: renderSocialIconHtml("threads") },
+                { entry: normalizeSocialEntry(soc.facebook, "facebook"), iconHtml: renderSocialIconHtml("facebook") },
+                { entry: normalizeSocialEntry(soc.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") }
+            ]
+                .filter(item => item.entry)
+                .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft">${item.iconHtml}<span>${escapeHtml(item.entry.label)}</span></a>`)
+                .join("");
+            document.getElementById('pubSocialsList').innerHTML = socLinks;
+
+            const galleryItems = (projectList || [])
+                .filter(r => r.photoData || r.portfolioLink)
                 .map(r => ({
                     title: r.clientName || "Showcase",
                     category: r.category || "Event",
-                    photo: r.photoData
+                    photo: r.photoData || sanitizeUrl(r.portfolioLink)
                 }));
 
-            return {
-                mode,
-                uid: activeUserUid || currentUser?.uid || "",
-                creatorName: username,
-                bio: buildIntroBubbleSentence(username),
-                collabStatus: publicShareSettings.collabStatus,
-                rateCardNote: publicShareSettings.rateCardNote,
-                topCategories,
-                socials: userSocials,
-                galleryPreviews
-            };
+            const gridEl = document.getElementById('pubGalleryGrid');
+            gridEl.innerHTML = galleryItems.map(g => {
+                const safeImg = sanitizeUrl(g.photo) || (String(g.photo || "").startsWith("data:image/") ? g.photo : "");
+                return `
+                    <div class="botanical-card rounded-3xl overflow-hidden">
+                        <div class="aspect-[4/3] bg-cream flex items-center justify-center overflow-hidden">
+                            ${safeImg ? `<img src="${safeImg}" alt="${escapeHtml(g.title)}" class="w-full h-full object-contain">` : `<span class="text-xs text-muted">Preview tidak tersedia</span>`}
+                        </div>
+                        <div class="p-4 text-center">
+                            <p class="font-serif text-sm font-semibold text-espresso truncate">${escapeHtml(g.title)}</p>
+                            <p class="text-[11px] text-muted mt-0.5">${escapeHtml(g.category)}</p>
+                        </div>
+                    </div>
+                `;
+            }).join("");
         }
 
-        window.copyPublicPortfolioLink = async () => {
-            const payload = buildSharePayload("portfolio");
-            const encoded = encodeSharePayload(payload);
-            const url = `${window.location.origin}${window.location.pathname}#portfolio=${encoded}`;
-            try {
-                await navigator.clipboard.writeText(url);
-                const lbl = document.getElementById('btnCopyPublicLinkLabel');
-                if (lbl) {
-                    lbl.innerText = "Link Portofolio Tersalin!";
-                    setTimeout(() => { lbl.innerText = "Link Portofolio Publik"; }, 2000);
-                }
-                showToast("Link portofolio publik berhasil disalin.");
-            } catch (_) {
-                showToast("Gagal menyalin link otomatis ke clipboard.", true);
-            }
-        };
+        function startPublicLiveRefresh(targetUid, fallbackData = null) {
+            stopPublicShareListeners();
+            const pubEl = document.getElementById('publicShareSection');
+            pubEl.dataset.targetUid = targetUid || "";
+
+            let latestProfile = {
+                creatorName: fallbackData?.creatorName || "@username",
+                domicile: fallbackData?.socials?.domicile || "",
+                socials: fallbackData?.socials || createEmptySocials(),
+                collabStatus: fallbackData?.collabStatus || createEmptyPublicShare().collabStatus,
+                rateCardNote: fallbackData?.rateCardNote || ""
+            };
+            let latestProjects = (fallbackData?.galleryPreviews || []).map((g, idx) => ({
+                id: `fallback_${idx}`,
+                clientName: g.title,
+                category: g.category,
+                photoData: g.photo
+            }));
+
+            const syncPublicView = () => {
+                renderPublicShowcaseView({
+                    creatorName: latestProfile.creatorName,
+                    bio: buildIntroBubbleSentence(latestProfile.creatorName, latestProfile.domicile),
+                    collabStatus: latestProfile.collabStatus,
+                    rateCardNote: latestProfile.rateCardNote,
+                    socials: latestProfile.socials,
+                    projectList: latestProjects
+                });
+            };
+
+            syncPublicView();
+
+            if (!targetUid) return;
+
+            unsubscribePublicProfile = onSnapshot(
+                doc(db, `users/${targetUid}`),
+                (snap) => {
+                    if (!snap.exists()) return;
+                    const d = snap.data() || {};
+                    latestProfile = {
+                        creatorName: d.username || latestProfile.creatorName,
+                        domicile: d.socials?.domicile ?? latestProfile.domicile,
+                        socials: { ...createEmptySocials(), ...(d.socials || {}) },
+                        collabStatus: d.publicShare?.collabStatus ?? latestProfile.collabStatus,
+                        rateCardNote: d.publicShare?.rateCardNote ?? latestProfile.rateCardNote
+                    };
+                    syncPublicView();
+                },
+                (err) => console.error("Public profile live sync error:", err)
+            );
+
+            unsubscribePublicProjects = onSnapshot(
+                query(collection(db, `users/${targetUid}/projects`), orderBy("date", "desc")),
+                (snap) => {
+                    latestProjects = snap.docs.map(docSnap => ({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    }));
+                    syncPublicView();
+                },
+                (err) => console.error("Public projects live sync error:", err)
+            );
+        }
 
         function checkPublicShareHash() {
             const hash = window.location.hash || "";
-            const match = hash.match(/^#(portfolio|client-form)=(.+)$/);
+            const uidMatch = hash.match(/^#portfolio-uid=(.+)$/);
+            const legacyMatch = hash.match(/^#(portfolio|client-form)=(.+)$/);
             const pubEl = document.getElementById('publicShareSection');
             const authEl = document.getElementById('authSection');
             const appEl = document.getElementById('appSection');
 
-            if (!match) {
+            if (!uidMatch && !legacyMatch) {
+                stopPublicShareListeners();
                 pubEl.classList.add('hidden');
                 return false;
             }
 
+            pubEl.classList.remove('hidden');
+            authEl.classList.add('hidden');
+            appEl.classList.add('hidden');
+
+            if (uidMatch) {
+                const targetUid = decodeURIComponent(uidMatch[1] || "").trim();
+                startPublicLiveRefresh(targetUid);
+                return true;
+            }
+
             try {
-                const data = decodeSharePayload(match[2]);
-                pubEl.dataset.targetUid = data.uid || "";
-
-                document.getElementById('pubCreatorTitle').innerText = `${data.creatorName || "Creator"} — Public Portfolio`;
-                document.getElementById('pubCreatorBio').innerText = data.bio || "";
-                document.getElementById('pubCollabStatus').innerText = data.collabStatus || "Open Collaboration";
-                document.getElementById('pubRateHighlight').innerText = data.rateCardNote || "";
-
-                const catsEl = document.getElementById('pubCategoriesList');
-                catsEl.innerHTML = (data.topCategories || []).length > 0
-                    ? data.topCategories.map(c => `<span class="px-3 py-1 rounded-full bg-blush/55 text-roseSoft text-xs font-semibold">${escapeHtml(c)}</span>`).join("")
-                    : `<span class="text-xs text-muted">Semua kategori konten</span>`;
-
-                const soc = data.socials || {};
-                const socLinks = [
-                    { entry: normalizeSocialEntry(soc.instagram, "instagram"), icon: getSocialBrandIconClass("instagram"), color: "text-roseSoft" },
-                    { entry: normalizeSocialEntry(soc.tiktok, "tiktok"), icon: getSocialBrandIconClass("tiktok"), color: "text-espresso" },
-                    { entry: normalizeSocialEntry(soc.threads, "threads"), icon: getSocialBrandIconClass("threads"), color: "text-espresso" },
-                    { entry: normalizeSocialEntry(soc.facebook, "facebook"), icon: getSocialBrandIconClass("facebook"), color: "text-sageDark" },
-                    { entry: normalizeSocialEntry(soc.twitter, "twitter"), icon: getSocialBrandIconClass("twitter"), color: "text-roseSoft" }
-                ]
-                    .filter(item => item.entry)
-                    .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="${item.icon} ${item.color}"></i><span>${escapeHtml(item.entry.label)}</span></a>`)
-                    .join("");
-                document.getElementById('pubSocialsList').innerHTML = socLinks;
-
-                const gridEl = document.getElementById('pubGalleryGrid');
-                gridEl.innerHTML = (data.galleryPreviews || []).map(g => {
-                    const safeImg = sanitizeUrl(g.photo) || (String(g.photo || "").startsWith("data:image/") ? g.photo : "");
-                    return `
-                        <div class="botanical-card rounded-3xl overflow-hidden">
-                            <div class="aspect-[4/3] bg-cream flex items-center justify-center overflow-hidden">
-                                ${safeImg ? `<img src="${safeImg}" alt="${escapeHtml(g.title)}" class="w-full h-full object-contain">` : `<span class="text-xs text-muted">Preview tidak tersedia</span>`}
-                            </div>
-                            <div class="p-4 text-center">
-                                <p class="font-serif text-sm font-semibold text-espresso truncate">${escapeHtml(g.title)}</p>
-                                <p class="text-[11px] text-muted mt-0.5">${escapeHtml(g.category)}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join("");
-
-                pubEl.classList.remove('hidden');
-                authEl.classList.add('hidden');
-                appEl.classList.add('hidden');
+                const legacyData = decodeSharePayload(legacyMatch[2]);
+                startPublicLiveRefresh(legacyData.uid || "", legacyData);
                 return true;
             } catch (_) {
                 pubEl.classList.add('hidden');
@@ -1790,6 +1993,7 @@
         }
 
         window.exitPublicShareMode = () => {
+            stopPublicShareListeners();
             window.history.replaceState(null, "", window.location.pathname + window.location.search);
             document.getElementById('publicShareSection').classList.add('hidden');
             if (currentUser && currentUser.emailVerified) {
@@ -1848,11 +2052,11 @@
             if (!row) return;
 
             const items = [
-                { entry: normalizeSocialEntry(userSocials.instagram, "instagram"), icon: getSocialBrandIconClass("instagram"), color: "text-roseSoft" },
-                { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), icon: getSocialBrandIconClass("tiktok"), color: "text-espresso" },
-                { entry: normalizeSocialEntry(userSocials.threads, "threads"), icon: getSocialBrandIconClass("threads"), color: "text-espresso" },
-                { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), icon: getSocialBrandIconClass("facebook"), color: "text-sageDark" },
-                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), icon: getSocialBrandIconClass("twitter"), color: "text-roseSoft" }
+                { entry: normalizeSocialEntry(userSocials.instagram, "instagram"), iconHtml: renderSocialIconHtml("instagram") },
+                { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), iconHtml: renderSocialIconHtml("tiktok") },
+                { entry: normalizeSocialEntry(userSocials.threads, "threads"), iconHtml: renderSocialIconHtml("threads") },
+                { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), iconHtml: renderSocialIconHtml("facebook") },
+                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") }
             ].filter(item => item.entry);
 
             if (items.length === 0) {
@@ -1860,7 +2064,7 @@
                 row.classList.add('hidden');
             } else {
                 row.innerHTML = items
-                    .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(item.entry.label)}" title="${escapeHtml(item.entry.label)}" class="clay-pill w-8 h-8 inline-flex items-center justify-center hover:text-roseSoft"><i class="${item.icon} ${item.color} text-sm"></i></a>`)
+                    .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(item.entry.label)}" title="${escapeHtml(item.entry.label)}" class="clay-pill w-8 h-8 inline-flex items-center justify-center hover:text-roseSoft">${item.iconHtml}</a>`)
                     .join("");
                 row.classList.remove('hidden');
             }
@@ -1898,14 +2102,14 @@
             }
 
             const clickableBadges = [
-                { entry: normalizeSocialEntry(userSocials.instagram, "instagram"), icon: getSocialBrandIconClass("instagram"), color: "text-roseSoft" },
-                { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), icon: getSocialBrandIconClass("tiktok"), color: "text-sageDark" },
-                { entry: normalizeSocialEntry(userSocials.threads, "threads"), icon: getSocialBrandIconClass("threads"), color: "text-espresso" },
-                { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), icon: getSocialBrandIconClass("facebook"), color: "text-sageDark" },
-                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), icon: getSocialBrandIconClass("twitter"), color: "text-roseSoft" }
+                { entry: normalizeSocialEntry(userSocials.instagram, "instagram"), iconHtml: renderSocialIconHtml("instagram") },
+                { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), iconHtml: renderSocialIconHtml("tiktok") },
+                { entry: normalizeSocialEntry(userSocials.threads, "threads"), iconHtml: renderSocialIconHtml("threads") },
+                { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), iconHtml: renderSocialIconHtml("facebook") },
+                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), iconHtml: renderSocialIconHtml("twitter") }
             ]
                 .filter(item => item.entry)
-                .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="${item.icon} ${item.color}"></i><span>${escapeHtml(item.entry.label)}</span></a>`);
+                .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft">${item.iconHtml}<span>${escapeHtml(item.entry.label)}</span></a>`);
 
             chipsRow.innerHTML = clickableBadges.join("");
             cardEl.classList.remove('hidden');
@@ -1979,7 +2183,7 @@
                     { socials: nextSocials },
                     { merge: true }
                 );
-                statusEl.innerText = "Tersimpan otomatis khusus akun kamu!";
+                statusEl.innerText = "Tersimpan & tersinkron ke link share!";
                 showToast("Sosial media & domisili tersimpan.");
                 setTimeout(() => { statusEl.innerText = ""; }, 2500);
             } catch (err) {
@@ -2136,6 +2340,7 @@
             }
             clearTimeout(invoiceCloudSaveTimer);
             clearTimeout(socialCloudSaveTimer);
+            clearTimeout(publicShareCloudTimer);
             records = [];
         }
 
@@ -2152,6 +2357,7 @@
 
             if (typeof profileData === "object") {
                 applySocialsToUi(profileData?.socials || {}, uid);
+                loadPublicShareSettings(uid, profileData?.publicShare || null);
                 if (profileData?.invoiceDraft && typeof profileData.invoiceDraft === "object") {
                     const localDraft = loadInvoiceDraftFromLocal(uid);
                     const mergedDraft = {
@@ -2623,6 +2829,115 @@
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-plus mr-1 text-sageDark"></i> Simpan Project`;
+            }
+        });
+
+        /* ================= EDIT REVISI KARYA DI GALERI PORTOFOLIO ================= */
+        window.openEditPortfolioModal = (projectId) => {
+            const item = records.find(r => r.id === projectId);
+            if (!item) return;
+
+            editPortfolioPhotoBase64 = "";
+            document.getElementById('editPortfolioId').value = item.id;
+            document.getElementById('editPortfolioTitle').value = item.clientName || "";
+            document.getElementById('editPortfolioCategory').value = item.category || "Event Coverage (Reels/TikTok)";
+            document.getElementById('editPortfolioDate').value = item.date || "";
+            document.getElementById('editPortfolioMgmt').value = item.managementName || "";
+            document.getElementById('editPortfolioSocPlatform').value = item.projectSocialPlatform || "Instagram";
+            document.getElementById('editPortfolioSocHandle').value = item.projectSocialHandle || "";
+            document.getElementById('editPortfolioLink').value = item.portfolioLink || "";
+
+            const photoInfo = document.getElementById('editPortfolioPhotoInfo');
+            if (photoInfo) {
+                photoInfo.textContent = item.photoData ? "Menggunakan foto tersimpan (klik ikon gambar untuk mengganti)" : "";
+                photoInfo.classList.toggle('hidden', !item.photoData);
+            }
+
+            const modal = document.getElementById('editPortfolioModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeEditPortfolioModal = () => {
+            editPortfolioPhotoBase64 = "";
+            const modal = document.getElementById('editPortfolioModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        document.getElementById('editPortfolioPhotoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const infoEl = document.getElementById('editPortfolioPhotoInfo');
+            if (!file) return;
+            if (file.size > MAX_RAW_FILE_BYTES) {
+                this.value = "";
+                showToast("Ukuran foto melebihi batas 15 MB.", true);
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const compressed = await compressPhotoForFirestore(event.target.result, 1400, 0.85);
+                editPortfolioPhotoBase64 = compressed || "";
+                if (editPortfolioPhotoBase64 && infoEl) {
+                    infoEl.textContent = `Foto revisi siap (${Math.round(editPortfolioPhotoBase64.length / 1024)} KB): ${file.name}`;
+                    infoEl.classList.remove('hidden');
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('editPortfolioForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser || !activeUserUid) return;
+            const id = document.getElementById('editPortfolioId').value;
+            const existing = records.find(r => r.id === id);
+            if (!id || !existing) return;
+
+            const btn = document.getElementById('btnSaveEditPortfolio');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
+
+            try {
+                const nextTitle = document.getElementById('editPortfolioTitle').value.trim();
+                const nextCategory = document.getElementById('editPortfolioCategory').value;
+                const nextDate = document.getElementById('editPortfolioDate').value;
+                const nextMgmt = document.getElementById('editPortfolioMgmt').value.trim();
+                const nextSocPlatform = document.getElementById('editPortfolioSocPlatform').value;
+                const nextSocHandle = document.getElementById('editPortfolioSocHandle').value.trim();
+                const nextLink = sanitizeUrl(document.getElementById('editPortfolioLink').value.trim());
+
+                let nextPhoto = existing.photoData || "";
+                if (editPortfolioPhotoBase64) {
+                    nextPhoto = editPortfolioPhotoBase64.length > MAX_FIRESTORE_PHOTO_CHARS
+                        ? await compressPhotoForFirestore(editPortfolioPhotoBase64, 1000, 0.72)
+                        : editPortfolioPhotoBase64;
+                } else if (nextLink && nextLink !== existing.portfolioLink) {
+                    const extracted = await extractSuperHdFromLink(nextLink);
+                    if (extracted) nextPhoto = extracted;
+                }
+
+                const patch = {
+                    clientName: nextTitle,
+                    category: nextCategory,
+                    date: nextDate,
+                    managementName: nextMgmt,
+                    projectSocialPlatform: nextSocPlatform,
+                    projectSocialHandle: nextSocHandle,
+                    portfolioLink: nextLink,
+                    photoData: nextPhoto,
+                    updatedAt: Date.now()
+                };
+
+                await updateDoc(doc(db, `users/${activeUserUid}/projects`, id), patch);
+                closeEditPortfolioModal();
+                showToast("Revisi karya tersimpan & otomatis diperbarui di link share.");
+            } catch (err) {
+                showToast("Gagal menyimpan revisi: " + err.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Simpan Revisi Karya`;
             }
         });
 
@@ -4067,10 +4382,10 @@
                 }
 
                 const cleanUser = username.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
-                pdf.save(`rekap_invoice_pajak_${cleanUser}_HD.pdf`);
-                showToast("PDF Rekap Invoice & Pajak HD berhasil diunduh.");
+                pdf.save(`rekap_invoice_tax_${cleanUser}_HD.pdf`);
+                showToast("PDF Rekap Invoice & Pajak berhasil diunduh.");
             } catch (err) {
-                showToast("Gagal membuat PDF: " + err.message, true);
+                showToast("Gagal membuat PDF HD: " + err.message, true);
             } finally {
                 staging.innerHTML = "";
                 btn.disabled = false;
@@ -4078,194 +4393,352 @@
             }
         };
 
-        /* ================= GALERI PORTOFOLIO & KOLASE BULANAN ================= */
+        window.exportToCSV = () => {
+            if (!records.length) return showToast("Belum ada data untuk di-export.", true);
+            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Nominal Fee (Exclude Pajak)", "Pajak", "Status Pembayaran", "Management", "Deadline Konten", "Jatuh Tempo Cair", "Sosmed Project", "Link Portofolio"];
+            const rows = records.map(r => [
+                r.date || "",
+                `"${String(r.clientName || "").replace(/"/g, '""')}"`,
+                `"${String(r.category || "").replace(/"/g, '""')}"`,
+                `"${String(r.pipelineStage || "Brief Diterima").replace(/"/g, '""')}"`,
+                Number(r.amount) || 0,
+                Number(r.taxAmount) || 0,
+                `"${String(r.status || "").replace(/"/g, '""')}"`,
+                `"${String(r.managementName || "").replace(/"/g, '""')}"`,
+                r.deadlineDate || "",
+                r.payoutDate || "",
+                `"${String(r.projectSocialHandle ? `${r.projectSocialPlatform || ""}: ${r.projectSocialHandle}` : "").replace(/"/g, '""')}"`,
+                `"${String(r.portfolioLink || "").replace(/"/g, '""')}"`
+            ]);
+            const csvContent = "data:text/csv;charset=utf-8,"
+                + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `narravia_studio_income_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Data CSV berhasil diunduh.");
+        };
+
+        function createCollageCardElement(ym, items, username) {
+            const monthTitle = formatMonthName(ym);
+            const card = document.createElement("div");
+            card.className = "botanical-card rounded-3xl p-5 flex flex-col justify-between";
+            card.dataset.collageCard = "true";
+
+            const slots = [];
+            for (let i = 0; i < 4; i++) {
+                const item = items[i];
+                if (item) {
+                    const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                    const safeImg = imgSrc && (imgSrc.startsWith("data:image/") || sanitizeUrl(imgSrc)) ? imgSrc : "";
+                    slots.push(`
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-[#E6DACB] group">
+                            ${safeImg
+                                ? `<img src="${safeImg}" alt="${escapeHtml(item.clientName)}" class="w-full h-full object-contain">`
+                                : `<div class="w-full h-full flex items-center justify-center p-2 text-center text-[11px] text-muted">${escapeHtml(item.clientName)}</div>`
+                            }
+                            <div class="absolute bottom-1.5 left-1.5 right-1.5 bg-ivory/90 backdrop-blur-xs px-2.5 py-1 rounded-xl border border-[#E6DACB]">
+                                <p class="text-[11px] font-semibold text-espresso truncate">${escapeHtml(item.clientName)}</p>
+                            </div>
+                        </div>
+                    `);
+                } else {
+                    slots.push(`
+                        <div class="aspect-[4/3] rounded-2xl bg-cream/60 border border-dashed border-[#DFD2C2] flex items-center justify-center text-muted text-[11px]">
+                            <i class="fa-regular fa-image mr-1 opacity-60"></i> Slot ${i + 1}
+                        </div>
+                    `);
+                }
+            }
+
+            const extraCount = items.length > 4 ? items.length - 4 : 0;
+            const extraBadge = extraCount > 0
+                ? `<span class="text-xs font-semibold text-roseSoft bg-blush/50 px-2.5 py-0.5 rounded-full">+${extraCount} karya lainnya</span>`
+                : `<span class="text-xs text-muted">${items.length} / 4 karya</span>`;
+
+            card.innerHTML = `
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sageDark">Kolase Bulanan</span>
+                            <h4 class="font-serif text-lg font-semibold text-espresso">${escapeHtml(monthTitle)}</h4>
+                        </div>
+                        ${extraBadge}
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        ${slots.join("")}
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-[#EFE5D8]" data-export-hide="true">
+                    <span class="text-[11px] text-muted">${escapeHtml(username)} • 4:3 HD</span>
+                    <button type="button" onclick="downloadCollageAsJpg(this, '${escapeHtml(ym)}')"
+                        class="clay-pill text-espresso px-3.5 py-1.5 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-download text-sageDark"></i> <span>Download Kolase JPG (4:3)</span>
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        function createPortfolioItemCard(item) {
+            const card = document.createElement("div");
+            card.className = "botanical-card rounded-3xl overflow-hidden flex flex-col justify-between group micro-card-lift";
+
+            const safeLink = sanitizeUrl(item.portfolioLink);
+            const imgSrc = item.photoData || safeLink;
+            const hasImage = Boolean(imgSrc && (imgSrc.startsWith("data:image/") || sanitizeUrl(imgSrc)));
+
+            let mediaHtml = '';
+            if (hasImage) {
+                mediaHtml = `
+                    <div onclick="openPhotoModal('${item.id}')" class="relative aspect-[4/3] bg-cream overflow-hidden cursor-pointer flex items-center justify-center p-1.5">
+                        <img src="${imgSrc}" alt="${escapeHtml(item.clientName)}" class="w-full h-full object-contain group-hover:scale-[1.02] transition duration-300">
+                        <div class="absolute top-3 right-3 bg-ivory/90 text-espresso text-[11px] font-semibold px-3 py-1 rounded-full border border-[#E6DACB]">
+                            <i class="fa-solid fa-expand mr-1 text-sageDark"></i> Lihat HD
+                        </div>
+                    </div>`;
+            } else if (safeLink) {
+                mediaHtml = `
+                    <div class="aspect-[4/3] bg-cream flex flex-col items-center justify-center p-6 text-center">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-2xl text-sageDark mb-2"></i>
+                        <a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-xs text-sageDark underline break-all font-medium">${escapeHtml(safeLink)}</a>
+                    </div>`;
+            }
+
+            const mgmtBadge = item.managementName
+                ? `<span class="inline-block mt-1.5 text-[11px] font-semibold text-sageDark bg-sage/15 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(item.managementName)}</span>`
+                : '';
+
+            const socBadge = item.projectSocialHandle
+                ? `<span class="inline-block mt-1.5 ml-1 text-[11px] font-semibold text-roseSoft bg-blush/50 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(item.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(item.projectSocialHandle)}</span>`
+                : '';
+
+            const actionFooter = safeLink
+                ? `<div class="mt-3 pt-2.5 border-t border-[#EFE5D8] flex items-center justify-between gap-2">
+                        <a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-xs text-sageDark hover:underline font-semibold inline-flex items-center gap-1">
+                            Buka Link <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                        <button type="button" onclick="openEditPortfolioModal('${item.id}')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">
+                            <i class="fa-regular fa-pen-to-square text-sageDark mr-1"></i> Edit Revisi
+                        </button>
+                   </div>`
+                : `<div class="mt-3 pt-2.5 border-t border-[#EFE5D8] flex items-center justify-end">
+                        <button type="button" onclick="openEditPortfolioModal('${item.id}')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">
+                            <i class="fa-regular fa-pen-to-square text-sageDark mr-1"></i> Edit Revisi
+                        </button>
+                   </div>`;
+
+            card.innerHTML = `
+                ${mediaHtml}
+                <div class="p-4 text-center">
+                    <h4 class="font-serif font-semibold text-base text-espresso">${escapeHtml(item.clientName)}</h4>
+                    <p class="text-xs text-muted mt-0.5">${escapeHtml(item.category)} • ${escapeHtml(item.date || '-')}</p>
+                    <div>${mgmtBadge}${socBadge}</div>
+                    ${actionFooter}
+                </div>`;
+            return card;
+        }
+
         window.renderPortfolio = () => {
-            const collageContainer = document.getElementById('monthlyCollageContainer');
+            updateShowcaseSocialIcons();
+            const monthlyContainer = document.getElementById('monthlyCollageContainer');
             const yearlyContainer = document.getElementById('yearlyPortfolioContainer');
-            collageContainer.innerHTML = '';
+            monthlyContainer.innerHTML = '';
             yearlyContainer.innerHTML = '';
 
-            updateShowcaseSocialIcons();
-
             const portfolioItems = getPortfolioEligibleItems();
+            const username = getActiveUsername();
 
             if (portfolioItems.length === 0) {
-                collageContainer.innerHTML = `
-                    <div class="col-span-full botanical-card p-10 rounded-3xl text-center">
-                        <p class="font-serif text-xl text-espresso mb-2">Belum ada karya yang diunggah</p>
-                        <p class="text-xs text-muted mb-4">Tambahkan link gambar atau unggah foto pada form Input Project Baru agar muncul di kolase bulanan &amp; arsip tahunan.</p>
-                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill px-4 py-2 text-xs font-semibold text-sageDark cursor-pointer">
+                monthlyContainer.innerHTML = `
+                    <div class="col-span-full botanical-card p-10 rounded-3xl text-center text-muted">
+                        <p class="mb-3"><i class="fa-regular fa-images text-2xl mb-1 text-roseSoft block"></i> Belum ada karya dengan foto atau link portofolio.</p>
+                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
                             <i class="fa-solid fa-plus mr-1"></i> Tambah Karya Pertama
                         </button>
                     </div>`;
                 return;
             }
 
-            const groupedByMonth = {};
+            const byMonth = {};
             portfolioItems.forEach(item => {
                 const ym = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
-                if (!groupedByMonth[ym]) groupedByMonth[ym] = [];
-                groupedByMonth[ym].push(item);
+                if (!byMonth[ym]) byMonth[ym] = [];
+                byMonth[ym].push(item);
             });
 
-            const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
-            sortedMonths.forEach(ym => {
-                const monthItems = groupedByMonth[ym];
-                const monthLabel = formatMonthName(ym);
-
-                const collageTilesHtml = monthItems.slice(0, 6).map(item => {
-                    const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
-                    const safeTitle = escapeHtml(item.clientName || 'Karya');
-                    const safeCat = escapeHtml(item.category || 'Event');
-                    const safeDate = escapeHtml(item.date || '');
-                    return `
-                        <div onclick="openPhotoModal('${escapeHtml(imgSrc)}', '${safeTitle}', '${safeCat} • ${safeDate}')"
-                            class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-[#EADFD3]/60 cursor-pointer">
-                            <img src="${escapeHtml(imgSrc)}" alt="${safeTitle}" loading="lazy"
-                                class="w-full h-full object-contain bg-cream group-hover:scale-105 transition duration-500">
-                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/80 via-espresso/30 to-transparent p-2.5">
-                                <p class="text-white text-[11px] font-medium truncate">${safeTitle}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                collageContainer.innerHTML += `
-                    <div class="botanical-card micro-card-lift p-5 sm:p-6 rounded-3xl">
-                        <div class="flex items-center justify-between gap-2 mb-4">
-                            <div>
-                                <span class="text-[11px] uppercase tracking-wider font-semibold text-sageDark">Kolase Bulanan</span>
-                                <h3 class="font-serif text-xl font-semibold text-espresso">${escapeHtml(monthLabel)}</h3>
-                            </div>
-                            <span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold text-muted">
-                                ${monthItems.length} karya
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            ${collageTilesHtml}
-                        </div>
-                    </div>
-                `;
+            Object.keys(byMonth).sort().reverse().forEach(ym => {
+                monthlyContainer.appendChild(createCollageCardElement(ym, byMonth[ym], username));
             });
 
-            const groupedByYear = {};
+            const byYear = {};
             portfolioItems.forEach(item => {
                 const yr = formatYearLabel(item.date);
-                if (!groupedByYear[yr]) groupedByYear[yr] = [];
-                groupedByYear[yr].push(item);
+                if (!byYear[yr]) byYear[yr] = [];
+                byYear[yr].push(item);
             });
 
-            const sortedYears = Object.keys(groupedByYear).sort().reverse();
-            sortedYears.forEach(yr => {
-                const yearItems = groupedByYear[yr];
-                let cardsHtml = '';
+            Object.keys(byYear).sort().reverse().forEach(yr => {
+                const section = document.createElement("div");
+                section.className = "space-y-4";
 
-                yearItems.forEach(item => {
-                    const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
-                    const safeTitle = escapeHtml(item.clientName || 'Karya');
-                    const safeCat = escapeHtml(item.category || 'Event');
-                    const safeDate = escapeHtml(item.date || '');
-                    const mgmtBadge = item.managementName
-                        ? `<p class="text-[11px] text-sageDark font-medium mt-0.5 truncate"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(item.managementName)}</p>`
-                        : '';
-                    const socBadge = item.projectSocialHandle
-                        ? `<p class="text-[11px] text-roseSoft font-medium mt-0.5 truncate"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(item.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(item.projectSocialHandle)}</p>`
-                        : '';
+                const heading = document.createElement("div");
+                heading.className = "flex items-center gap-3";
+                heading.innerHTML = `
+                    <h3 class="font-serif text-xl font-semibold text-espresso">
+                        <i class="fa-solid fa-seedling text-sageDark mr-1.5 text-base"></i> Karya Tahun ${escapeHtml(yr)}
+                    </h3>
+                    <span class="text-xs font-semibold text-roseSoft bg-blush/50 px-3 py-0.5 rounded-full">
+                        ${byYear[yr].length} karya
+                    </span>
+                `;
 
-                    cardsHtml += `
-                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden group flex flex-col">
-                            <div onclick="openPhotoModal('${escapeHtml(imgSrc)}', '${safeTitle}', '${safeCat} • ${safeDate}')"
-                                class="w-full aspect-[4/3] overflow-hidden bg-cream relative cursor-pointer">
-                                <img src="${escapeHtml(imgSrc)}" alt="${safeTitle}" loading="lazy"
-                                    class="w-full h-full object-contain bg-cream group-hover:scale-105 transition duration-500">
-                            </div>
-                            <div class="p-4 text-center flex-1 flex flex-col justify-center">
-                                <p class="text-[11px] font-semibold uppercase tracking-wider text-roseSoft">${safeCat}</p>
-                                <h4 class="font-serif font-semibold text-base text-espresso mt-0.5 truncate">${safeTitle}</h4>
-                                ${mgmtBadge}
-                                ${socBadge}
-                                <p class="text-xs text-muted mt-1">${safeDate}</p>
-                            </div>
-                        </div>
-                    `;
+                const grid = document.createElement("div");
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6";
+                byYear[yr].forEach(item => {
+                    grid.appendChild(createPortfolioItemCard(item));
                 });
 
-                yearlyContainer.innerHTML += `
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between border-b border-[#E6DACB] pb-2">
-                            <h3 class="font-serif text-xl sm:text-2xl font-semibold text-espresso">Tahun ${escapeHtml(yr)}</h3>
-                            <span class="text-xs font-medium text-muted">${yearItems.length} karya</span>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${cardsHtml}
-                        </div>
-                    </div>
-                `;
+                section.appendChild(heading);
+                section.appendChild(grid);
+                yearlyContainer.appendChild(section);
             });
         };
 
-        /* ================= EXPORT CSV ================= */
-        window.exportToCSV = () => {
-            if (records.length === 0) return showToast("Belum ada data untuk di-export.", true);
-            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Nominal Fee (Excl. Pajak)", "Pajak", "Status", "Management", "Deadline Konten", "Jatuh Tempo Cair", "Sosmed Project", "Link Portofolio"];
-            const rows = records.map(r => [
-                r.date || "",
-                r.clientName || "",
-                r.category || "",
-                r.pipelineStage || "Brief Diterima",
-                Number(r.amount) || 0,
-                Number(r.taxAmount) || 0,
-                r.status || "",
-                r.managementName || "",
-                r.deadlineDate || "",
-                r.payoutDate || "",
-                r.projectSocialHandle ? `${r.projectSocialPlatform || "Sosmed"}: ${r.projectSocialHandle}` : "",
-                r.portfolioLink || ""
-            ]);
+        window.downloadCollageAsJpg = async (btnEl, ym) => {
+            if (typeof html2canvas === "undefined") {
+                return showToast("Library export gambar belum termuat. Coba refresh halaman.", true);
+            }
+            const cardEl = btnEl ? btnEl.closest('[data-collageCard="true"]') : null;
+            if (!cardEl) return;
 
-            const csvContent = "data:text/csv;charset=utf-8,"
-                + [headers, ...rows].map(e => e.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+            const originalHtml = btnEl.innerHTML;
+            btnEl.disabled = true;
+            btnEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan JPG 4:3...`;
 
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `narravia_studio_pendapatan_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("File CSV berhasil diunduh.");
+            const staging = document.getElementById("jpgRenderStaging");
+            staging.innerHTML = "";
+
+            try {
+                const username = getActiveUsername();
+                const monthTitle = formatMonthName(ym);
+                const monthItems = getPortfolioEligibleItems().filter(item => {
+                    const itemYm = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
+                    return itemYm === ym;
+                });
+
+                const frame43 = document.createElement("div");
+                frame43.style.width = "1600px";
+                frame43.style.height = "1200px";
+                frame43.style.boxSizing = "border-box";
+                frame43.style.padding = "48px 56px";
+                frame43.style.backgroundColor = "#FAF7F2";
+                frame43.style.backgroundImage = `
+                    radial-gradient(rgba(53, 43, 40, 0.07) 5px, transparent 5.5px),
+                    radial-gradient(rgba(53, 43, 40, 0.07) 5px, transparent 5.5px),
+                    radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.56) 0%, transparent 36%),
+                    radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.22) 0%, transparent 38%),
+                    radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.48) 0%, transparent 40%)
+                `;
+                frame43.style.backgroundSize = "56px 56px, 56px 56px, 100% 100%, 100% 100%, 100% 100%";
+                frame43.style.backgroundPosition = "0 0, 28px 28px, 0 0, 0 0, 0 0";
+                frame43.style.display = "flex";
+                frame43.style.flexDirection = "column";
+                frame43.style.justifyContent = "space-between";
+                frame43.style.fontFamily = "'Plus Jakarta Sans', system-ui, sans-serif";
+
+                const slotsHtml = [];
+                for (let i = 0; i < 4; i++) {
+                    const item = monthItems[i];
+                    if (item) {
+                        const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                        const safeImg = imgSrc && (imgSrc.startsWith("data:image/") || sanitizeUrl(imgSrc)) ? imgSrc : "";
+                        slotsHtml.push(`
+                            <div style="position:relative; border-radius:24px; overflow:hidden; background:#F3ECE2; border:1.5px solid #E2D4C3; display:flex; align-items:center; justify-content:center;">
+                                ${safeImg
+                                    ? `<img src="${safeImg}" alt="${escapeHtml(item.clientName)}" style="width:100%; height:100%; object-fit:contain;">`
+                                    : `<div style="padding:16px; text-align:center; font-size:16px; color:#7A6C67;">${escapeHtml(item.clientName)}</div>`
+                                }
+                                <div style="position:absolute; bottom:14px; left:14px; right:14px; background:rgba(250,247,242,0.94); border:1px solid #E2D4C3; border-radius:16px; padding:10px 16px;">
+                                    <div style="font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.clientName)}</div>
+                                    <div style="font-size:13px; color:#7A6C67; margin-top:2px;">${escapeHtml(item.category || 'Event')} • ${escapeHtml(item.date || '')}</div>
+                                </div>
+                            </div>
+                        `);
+                    } else {
+                        slotsHtml.push(`
+                            <div style="border-radius:24px; background:rgba(243,236,226,0.55); border:2px dashed #DFD2C2; display:flex; align-items:center; justify-content:center; font-size:16px; color:#9C8E89;">
+                                Slot Karya ${i + 1}
+                            </div>
+                        `);
+                    }
+                }
+
+                frame43.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
+                        <div>
+                            <span style="display:inline-block; padding:5px 14px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:13px; font-weight:700; margin-bottom:8px;">
+                                PORTFOLIO COLLAGE • 4:3 HD
+                            </span>
+                            <h2 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:36px; font-weight:700; color:#352B28; line-height:1.15;">
+                                ${escapeHtml(monthTitle)}
+                            </h2>
+                        </div>
+                        <div style="text-align:right;">
+                            <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:#4F6952;">${escapeHtml(username)}</p>
+                            <p style="margin:4px 0 0 0; font-size:14px; color:#7A6C67;">Narravia Studio Showcase</p>
+                        </div>
+                    </div>
+
+                    <div style="flex:1; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); grid-template-rows:repeat(2, minmax(0, 1fr)); gap:22px;">
+                        ${slotsHtml.join("")}
+                    </div>
+
+                    <div style="margin-top:20px; padding-top:12px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#7A6C67;">
+                        <span>Created by Narravia.Studio</span>
+                        <span>${monthItems.length} karya tercatat</span>
+                    </div>
+                `;
+
+                staging.appendChild(frame43);
+
+                const canvas = await html2canvas(frame43, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: "#FAF7F2",
+                    logging: false
+                });
+
+                const safeMonth = String(ym || "collage").replace(/[^a-zA-Z0-9_-]+/g, "_");
+                const link = document.createElement("a");
+                link.download = `kolase_portofolio_${safeMonth}_4x3_HD.jpg`;
+                link.href = canvas.toDataURL("image/jpeg", 0.96);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast(`Kolase JPG 4:3 (${monthTitle}) berhasil diunduh.`);
+            } catch (err) {
+                showToast("Gagal export JPG 4:3: " + err.message, true);
+            } finally {
+                staging.innerHTML = "";
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalHtml;
+            }
         };
 
-        /* ================= NAVIGASI TAB & MODAL ================= */
-        window.switchTab = (tab) => {
-            const isFinance = tab === 'finance';
-            const isPortfolio = tab === 'portfolio';
-            const isSocial = tab === 'social';
-            const isOperations = tab === 'operations';
+        window.openPhotoModal = (id) => {
+            const item = records.find(r => r.id === id);
+            if (!item) return;
+            const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+            if (!imgSrc) return;
 
-            document.getElementById('viewFinance').classList.toggle('hidden', !isFinance);
-            document.getElementById('viewPortfolio').classList.toggle('hidden', !isPortfolio);
-            document.getElementById('viewSocial').classList.toggle('hidden', !isSocial);
-            document.getElementById('viewOperations').classList.toggle('hidden', !isOperations);
-
-            const activeCls = 'clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer';
-            const inactiveCls = 'clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer';
-
-            document.getElementById('tabFinance').className = isFinance ? activeCls : inactiveCls;
-            document.getElementById('tabPortfolio').className = isPortfolio ? activeCls : inactiveCls;
-            document.getElementById('tabSocial').className = isSocial ? activeCls : inactiveCls;
-            document.getElementById('tabOperations').className = isOperations ? activeCls : inactiveCls;
-
-            if (isFinance) renderMonthlyChart();
-            if (isPortfolio) window.renderPortfolio();
-            if (isSocial) updateSocialProfileCard();
-            if (isOperations) renderOperationsTab();
-        };
-
-        window.openPhotoModal = (imgSrc, title, subtitle) => {
             document.getElementById('modalImg').src = imgSrc;
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalSubtitle').innerText = subtitle;
+            document.getElementById('modalTitle').innerText = item.clientName;
+            document.getElementById('modalSubtitle').innerText = `${item.category} • ${item.date || ''}`;
             const modal = document.getElementById('photoModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -4273,9 +4746,38 @@
 
         window.closePhotoModal = () => {
             const modal = document.getElementById('photoModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.getElementById('modalImg').src = '';
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.switchTab = (tab) => {
+            const tabs = ['Finance', 'Portfolio', 'Social', 'Operations'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab' + t);
+                const view = document.getElementById('view' + t);
+                const isActive = t.toLowerCase() === tab;
+
+                if (isActive) {
+                    btn.className = "clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer";
+                    view.classList.remove('hidden');
+                } else {
+                    btn.className = "clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer";
+                    view.classList.add('hidden');
+                }
+            });
+
+            if (tab === 'portfolio') {
+                window.renderPortfolio();
+            } else if (tab === 'social') {
+                updateSocialProfileCard();
+            } else if (tab === 'operations') {
+                renderOperationsTab();
+            } else if (tab === 'finance') {
+                updateSummary();
+                renderMonthlyChart();
+            }
         };
     </script>
 </body>
