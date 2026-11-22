@@ -175,6 +175,13 @@
 </head>
 <body class="font-sans min-h-screen antialiased selection:bg-blush selection:text-espresso">
 
+    <!-- Toast Notification -->
+    <div id="toastBanner" role="status" aria-live="polite"
+        class="fixed bottom-5 right-5 z-[60] hidden max-w-sm botanical-card px-4 py-3 rounded-2xl text-xs font-semibold text-espresso shadow-lg flex items-center gap-2.5 border border-sage/40">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-sageDark text-sm shrink-0"></i>
+        <span id="toastMessage"></span>
+    </div>
+
     <!-- Lapisan Polkadot Background Website -->
     <div class="fixed inset-0 pointer-events-none select-none z-0 polka-layer"></div>
 
@@ -351,7 +358,7 @@
                 </div>
                 <div class="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 pt-2">
                     <span id="clientPickFeedback" class="text-xs font-semibold text-sageDark"></span>
-                    <button type="submit" class="clay-pill px-6 py-2.5 text-sm font-semibold text-espresso cursor-pointer">
+                    <button type="submit" id="btnSubmitClientPick" class="clay-pill px-6 py-2.5 text-sm font-semibold text-espresso cursor-pointer">
                         <i class="fa-solid fa-paper-plane mr-1.5 text-roseSoft"></i> Kirim Pilihan Kategori
                     </button>
                 </div>
@@ -480,7 +487,7 @@
         </header>
 
         <!-- Navigasi Tab -->
-        <div class="flex flex-wrap gap-2.5 mb-7">
+        <nav aria-label="Navigasi Utama" class="flex flex-wrap gap-2.5 mb-7">
             <button onclick="switchTab('finance')" id="tabFinance" class="clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
                 <i class="fa-solid fa-heart mr-1.5 text-blush"></i> Pendapatan &amp; Project
             </button>
@@ -493,7 +500,7 @@
             <button onclick="switchTab('operations')" id="tabOperations" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
                 <i class="fa-solid fa-route mr-1.5 text-roseSoft"></i> Pipeline &amp; Follow-up
             </button>
-        </div>
+        </nav>
 
         <!-- TAB 1: TRACKING PENDAPATAN -->
         <div id="viewFinance">
@@ -839,7 +846,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">Highlight Rate Card / Paket (Tanpa Angka Privat Wajib)</label>
-                        <input type="text" id="pubRateCardInput" oninput="savePublicShareSettings()" placeholder="Contoh: Paket Reels/TikTok, SDE &amp; UGC (DM / Email untuk rate card)"
+                        <input type="text" id="pubRateCardInput" oninput="savePublicShareSettings()" placeholder="Contoh: Paket Reels/TikTok, SDE & UGC (DM / Email untuk rate card)"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm">
                     </div>
                 </div>
@@ -919,35 +926,35 @@
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-brands fa-instagram text-roseSoft mr-1.5"></i> Link Instagram
                         </label>
-                        <input type="url" id="socInstagram" placeholder="https://instagram.com/username"
+                        <input type="text" id="socInstagram" placeholder="https://instagram.com/username atau @username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-brands fa-tiktok text-espresso mr-1.5"></i> Link TikTok
                         </label>
-                        <input type="url" id="socTiktok" placeholder="https://tiktok.com/@username"
+                        <input type="text" id="socTiktok" placeholder="https://tiktok.com/@username atau @username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-solid fa-at text-sageDark mr-1.5"></i> Link Threads
                         </label>
-                        <input type="url" id="socThreads" placeholder="https://threads.net/@username"
+                        <input type="text" id="socThreads" placeholder="https://threads.net/@username atau @username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-brands fa-facebook text-sageDark mr-1.5"></i> Link Facebook
                         </label>
-                        <input type="url" id="socFacebook" placeholder="https://facebook.com/username"
+                        <input type="text" id="socFacebook" placeholder="https://facebook.com/username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
                             <i class="fa-brands fa-twitter text-roseSoft mr-1.5"></i> Link Twitter / X
                         </label>
-                        <input type="url" id="socTwitter" placeholder="https://x.com/username"
+                        <input type="text" id="socTwitter" placeholder="https://x.com/username atau @username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
@@ -1070,7 +1077,7 @@
                     <button type="button" id="btnExportInvoicePdf" onclick="exportClientInvoicePDF()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
                         <i class="fa-solid fa-file-pdf mr-1.5 text-blush"></i> <span id="btnExportInvoicePdfLabel">Export PDF HD</span>
                     </button>
-                    <button type="button" onclick="closeInvoiceModal()" class="clay-pill text-muted hover:text-espresso text-base px-3 py-1 cursor-pointer">&times;</button>
+                    <button type="button" aria-label="Tutup modal invoice" onclick="closeInvoiceModal()" class="clay-pill text-muted hover:text-espresso text-base px-3 py-1 cursor-pointer">&times;</button>
                 </div>
             </div>
 
@@ -1223,6 +1230,27 @@
     <!-- Container Tersembunyi untuk Render JPG HD & PDF Recap -->
     <div id="jpgRenderStaging" style="position: fixed; left: -25000px; top: 0; pointer-events: none; z-index: -1;"></div>
 
+    <!-- MODAL KONFIRMASI HAPUS -->
+    <div id="confirmModal" onclick="closeConfirmModal()" class="fixed inset-0 z-50 bg-espresso/70 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="botanical-card max-w-sm w-full rounded-3xl p-6 text-center space-y-4">
+            <div class="w-11 h-11 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+                <i class="fa-regular fa-trash-can text-base"></i>
+            </div>
+            <div>
+                <h4 class="font-serif text-lg font-semibold text-espresso">Hapus Catatan Project?</h4>
+                <p id="confirmModalDesc" class="text-xs text-muted mt-1">Tindakan ini akan menghapus data project dari daftar.</p>
+            </div>
+            <div class="flex items-center justify-center gap-2.5 pt-1">
+                <button type="button" onclick="closeConfirmModal()" class="clay-pill px-4 py-2 text-xs font-semibold text-muted cursor-pointer">
+                    Batal
+                </button>
+                <button type="button" id="btnConfirmDeleteAction" class="clay-pill px-4 py-2 text-xs font-semibold text-rose-600 cursor-pointer">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL PREVIEW FOTO HD -->
     <div id="photoModal" onclick="closePhotoModal()" class="fixed inset-0 z-50 bg-espresso/75 backdrop-blur-xs hidden items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="botanical-card max-w-4xl w-full rounded-3xl overflow-hidden p-4 sm:p-5">
@@ -1231,7 +1259,7 @@
                     <h4 id="modalTitle" class="font-serif text-lg font-semibold text-espresso"></h4>
                     <p id="modalSubtitle" class="text-xs text-muted"></p>
                 </div>
-                <button onclick="closePhotoModal()" class="clay-pill text-muted hover:text-espresso text-lg px-3 py-1 cursor-pointer shrink-0">&times;</button>
+                <button aria-label="Tutup preview foto" onclick="closePhotoModal()" class="clay-pill text-muted hover:text-espresso text-lg px-3 py-1 cursor-pointer shrink-0">&times;</button>
             </div>
             <div class="w-full max-h-[75vh] overflow-auto rounded-2xl bg-cream flex items-center justify-center p-2">
                 <img id="modalImg" src="" alt="" class="max-w-full max-h-[70vh] object-contain rounded-xl transition-transform duration-200">
@@ -1287,12 +1315,15 @@
         const REMEMBER_KEY = "narravia_remember_pref";
         const MIN_JPG_EVENTS = 3;
         const MAX_FIRESTORE_PHOTO_CHARS = 780000;
+        const MAX_RAW_FILE_BYTES = 15 * 1024 * 1024;
 
         let currentUser = null;
         let pendingVerifyUser = null;
+        let pendingDeleteId = null;
         let unsubscribeRecords = null;
         let unsubscribeProfile = null;
         let autoRefreshTimer = null;
+        let toastTimer = null;
         let records = [];
         let hdPhotoBase64 = "";
         let incomeChartInstance = null;
@@ -1313,6 +1344,44 @@
         let invoiceLineItems = [
             { title: "", desc: "", qty: 1, price: 0 }
         ];
+
+        function showToast(message, isError = false) {
+            const banner = document.getElementById("toastBanner");
+            const msgEl = document.getElementById("toastMessage");
+            const iconEl = document.getElementById("toastIcon");
+            if (!banner || !msgEl || !iconEl) return;
+
+            msgEl.textContent = message;
+            iconEl.className = isError
+                ? "fa-solid fa-circle-exclamation text-rose-600 text-sm shrink-0"
+                : "fa-solid fa-circle-check text-sageDark text-sm shrink-0";
+
+            banner.classList.remove("hidden");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                banner.classList.add("hidden");
+            }, 2600);
+        }
+
+        function sanitizeUrl(rawUrl) {
+            const trimmed = String(rawUrl || "").trim();
+            if (!trimmed) return "";
+            try {
+                const parsed = new URL(trimmed);
+                if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+                    return parsed.href;
+                }
+            } catch (_) {}
+            return "";
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closePhotoModal();
+                closeInvoiceModal();
+                closeConfirmModal();
+            }
+        });
 
         document.addEventListener("click", (e) => {
             const pill = e.target.closest(".clay-pill");
@@ -1413,13 +1482,14 @@
             const trimmed = String(raw || "").trim();
             if (!trimmed) return null;
 
-            let href = trimmed;
+            let href = "";
             let label = trimmed;
 
             if (/^https?:\/\//i.test(trimmed)) {
-                href = trimmed;
+                href = sanitizeUrl(trimmed);
+                if (!href) return null;
                 try {
-                    const u = new URL(trimmed);
+                    const u = new URL(href);
                     const segments = u.pathname.split("/").filter(Boolean);
                     if (segments.length > 0) {
                         const slug = decodeURIComponent(segments[segments.length - 1]);
@@ -1435,7 +1505,8 @@
                     label = trimmed;
                 }
             } else {
-                const cleanHandle = trimmed.replace(/^@+/, "");
+                const cleanHandle = trimmed.replace(/^@+/, "").replace(/[^a-zA-Z0-9._-]/g, "");
+                if (!cleanHandle) return null;
                 if (platform === "instagram") {
                     href = `https://instagram.com/${cleanHandle}`;
                     label = `@${cleanHandle}`;
@@ -1454,7 +1525,7 @@
                 }
             }
 
-            return { href, label };
+            return href ? { href, label } : null;
         }
 
         function getActiveUsername() {
@@ -1496,15 +1567,17 @@
         }
 
         window.copyPitchingCard = async () => {
+            const text = buildPitchingCardText();
             try {
-                await navigator.clipboard.writeText(buildPitchingCardText());
+                await navigator.clipboard.writeText(text);
                 const lbl = document.getElementById('btnCopyPitchLabel');
                 if (lbl) {
                     lbl.innerText = 'Kartu Pitching Tersalin!';
                     setTimeout(() => { lbl.innerText = 'Salin Kartu Pitching'; }, 2000);
                 }
+                showToast("Kartu pitching disalin ke clipboard.");
             } catch (_) {
-                alert(buildPitchingCardText());
+                showToast("Gagal menyalin otomatis. Periksa izin clipboard browser.", true);
             }
         };
 
@@ -1555,6 +1628,24 @@
             }
         };
 
+        function encodeSharePayload(obj) {
+            const bytes = new TextEncoder().encode(JSON.stringify(obj));
+            let binary = "";
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        function decodeSharePayload(encoded) {
+            const binary = atob(encoded);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return JSON.parse(new TextDecoder().decode(bytes));
+        }
+
         function buildSharePayload(mode = "portfolio") {
             const username = getActiveUsername();
             const catCount = {};
@@ -1589,37 +1680,36 @@
             };
         }
 
-        window.copyPublicPortfolioLink = async () => {
-            const payload = buildSharePayload("portfolio");
-            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-            const url = `${window.location.origin}${window.location.pathname}#portfolio=${encoded}`;
+        async function copyShareUrl(mode, labelId, defaultLabel, copiedLabel) {
+            const payload = buildSharePayload(mode);
+            const encoded = encodeSharePayload(payload);
+            const url = `${window.location.origin}${window.location.pathname}#${mode}=${encoded}`;
             try {
                 await navigator.clipboard.writeText(url);
-                const lbl = document.getElementById('btnCopyPublicLinkLabel');
+                const lbl = document.getElementById(labelId);
                 if (lbl) {
-                    lbl.innerText = 'Link Portofolio Tersalin!';
-                    setTimeout(() => { lbl.innerText = 'Link Portofolio Publik'; }, 2000);
+                    lbl.innerText = copiedLabel;
+                    setTimeout(() => { lbl.innerText = defaultLabel; }, 2000);
                 }
+                showToast(`${defaultLabel} berhasil disalin.`);
             } catch (_) {
-                prompt("Salin link portofolio publik:", url);
+                showToast("Gagal menyalin link otomatis ke clipboard.", true);
             }
-        };
+        }
 
-        window.copyClientCategoryFormLink = async () => {
-            const payload = buildSharePayload("client-form");
-            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-            const url = `${window.location.origin}${window.location.pathname}#client-form=${encoded}`;
-            try {
-                await navigator.clipboard.writeText(url);
-                const lbl = document.getElementById('btnCopyClientFormLabel');
-                if (lbl) {
-                    lbl.innerText = 'Link Form Tersalin!';
-                    setTimeout(() => { lbl.innerText = 'Link Form Kategori Klien'; }, 2000);
-                }
-            } catch (_) {
-                prompt("Salin link form pilihan kategori klien:", url);
-            }
-        };
+        window.copyPublicPortfolioLink = () => copyShareUrl(
+            "portfolio",
+            "btnCopyPublicLinkLabel",
+            "Link Portofolio Publik",
+            "Link Portofolio Tersalin!"
+        );
+
+        window.copyClientCategoryFormLink = () => copyShareUrl(
+            "client-form",
+            "btnCopyClientFormLabel",
+            "Link Form Kategori Klien",
+            "Link Form Tersalin!"
+        );
 
         function checkPublicShareHash() {
             const hash = window.location.hash || "";
@@ -1634,8 +1724,7 @@
             }
 
             try {
-                const jsonStr = decodeURIComponent(escape(atob(match[2])));
-                const data = JSON.parse(jsonStr);
+                const data = decodeSharePayload(match[2]);
                 pubEl.dataset.targetUid = data.uid || "";
 
                 document.getElementById('pubCreatorTitle').innerText = `${data.creatorName || "Creator"} — Public Portfolio`;
@@ -1657,17 +1746,20 @@
                 document.getElementById('pubSocialsList').innerHTML = socChips;
 
                 const gridEl = document.getElementById('pubGalleryGrid');
-                gridEl.innerHTML = (data.galleryPreviews || []).map(g => `
-                    <div class="botanical-card rounded-3xl overflow-hidden">
-                        <div class="aspect-[4/3] bg-cream flex items-center justify-center overflow-hidden">
-                            <img src="${g.photo}" alt="${escapeHtml(g.title)}" class="w-full h-full object-contain">
+                gridEl.innerHTML = (data.galleryPreviews || []).map(g => {
+                    const safeImg = sanitizeUrl(g.photo) || (String(g.photo || "").startsWith("data:image/") ? g.photo : "");
+                    return `
+                        <div class="botanical-card rounded-3xl overflow-hidden">
+                            <div class="aspect-[4/3] bg-cream flex items-center justify-center overflow-hidden">
+                                ${safeImg ? `<img src="${safeImg}" alt="${escapeHtml(g.title)}" class="w-full h-full object-contain">` : `<span class="text-xs text-muted">Preview tidak tersedia</span>`}
+                            </div>
+                            <div class="p-4 text-center">
+                                <p class="font-serif text-sm font-semibold text-espresso truncate">${escapeHtml(g.title)}</p>
+                                <p class="text-[11px] text-muted mt-0.5">${escapeHtml(g.category)}</p>
+                            </div>
                         </div>
-                        <div class="p-4 text-center">
-                            <p class="font-serif text-sm font-semibold text-espresso truncate">${escapeHtml(g.title)}</p>
-                            <p class="text-[11px] text-muted mt-0.5">${escapeHtml(g.category)}</p>
-                        </div>
-                    </div>
-                `).join("");
+                    `;
+                }).join("");
 
                 pubEl.classList.remove('hidden');
                 authEl.classList.add('hidden');
@@ -1693,6 +1785,7 @@
             e.preventDefault();
             const targetUid = document.getElementById('publicShareSection').dataset.targetUid || currentUser?.uid;
             const fb = document.getElementById('clientPickFeedback');
+            const btn = document.getElementById('btnSubmitClientPick');
             const brandName = document.getElementById('clientPickName').value.trim();
             const chosenCat = document.getElementById('clientPickCategory').value;
             const eventDate = document.getElementById('clientPickDate').value;
@@ -1703,6 +1796,7 @@
                 return;
             }
 
+            btn.disabled = true;
             try {
                 await addDoc(collection(db, `users/${targetUid}/projects`), {
                     clientName: `${brandName}${note ? ` (${note})` : ""}`,
@@ -1726,6 +1820,8 @@
                 e.target.reset();
             } catch (err) {
                 fb.innerText = "Gagal mengirim otomatis: " + err.message;
+            } finally {
+                btn.disabled = false;
             }
         });
 
@@ -1879,6 +1975,7 @@
                     { merge: true }
                 );
                 statusEl.innerText = "Creator's Profile berhasil dibuat & tersimpan!";
+                showToast("Sosial media & domisili tersimpan.");
                 setTimeout(() => { statusEl.innerText = ""; }, 2500);
             } catch (err) {
                 statusEl.innerText = "Tersimpan lokal (sinkron cloud: " + err.message + ")";
@@ -1924,6 +2021,11 @@
         document.getElementById('userAvatarInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file || !currentUser) return;
+            if (file.size > MAX_RAW_FILE_BYTES) {
+                showToast("Ukuran foto terlalu besar (maksimal 15 MB).", true);
+                this.value = "";
+                return;
+            }
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
@@ -1967,8 +2069,10 @@
                             { photoURL: avatarUrl },
                             { merge: true }
                         );
+                        showToast("Foto profil diperbarui.");
                     } catch (err) {
                         console.error("Gagal sinkron foto profil ke cloud:", err);
+                        showToast("Foto profil tersimpan di perangkat ini.", true);
                     }
                 };
                 img.src = event.target.result;
@@ -1992,7 +2096,7 @@
         function formatFirebaseAuthError(err, fallbackText) {
             const code = err?.code || "";
             if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
-                return "Email atau password salah, atau akun belum terdaftar. Periksa kembali input lo atau klik Forgot password.";
+                return "Email atau password salah, atau akun belum terdaftar. Periksa kembali input kamu atau klik Forgot password.";
             }
             if (code === "auth/invalid-email") {
                 return "Format email tidak valid.";
@@ -2126,19 +2230,21 @@
         }
 
         async function extractSuperHdFromLink(urlStr) {
-            if (!urlStr) return "";
-            const trimmed = urlStr.trim();
-            if (!/^https?:\/\//i.test(trimmed)) return "";
+            const safe = sanitizeUrl(urlStr);
+            if (!safe) return "";
 
-            const directHd = await compressPhotoForFirestore(trimmed, 1400, 0.85);
+            const directHd = await compressPhotoForFirestore(safe, 1400, 0.85);
             if (directHd) return directHd;
 
             try {
-                const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(trimmed)}`;
-                const res = await fetch(apiUrl);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(safe)}`;
+                const res = await fetch(apiUrl, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 if (res.ok) {
                     const json = await res.json();
-                    const candidateImg = json?.data?.image?.url || json?.data?.screenshot?.url || "";
+                    const candidateImg = sanitizeUrl(json?.data?.image?.url || json?.data?.screenshot?.url || "");
                     if (candidateImg) {
                         const extractedHd = await compressPhotoForFirestore(candidateImg, 1400, 0.85);
                         if (extractedHd) return extractedHd;
@@ -2205,6 +2311,12 @@
                 label.classList.add('hidden');
                 return;
             }
+            if (file.size > MAX_RAW_FILE_BYTES) {
+                hdPhotoBase64 = "";
+                this.value = "";
+                showToast("Ukuran foto melebihi batas 15 MB.", true);
+                return;
+            }
             const reader = new FileReader();
             reader.onload = async function(event) {
                 const compressed = await compressPhotoForFirestore(event.target.result, 1400, 0.85);
@@ -2248,7 +2360,7 @@
                     pendingVerifyUser = cred.user;
                     await signOut(auth);
                     showAuthNotice(
-                        `Email ${email} belum diverifikasi. Cek inbox atau folder Spam lo lalu klik link verifikasi sebelum masuk.`,
+                        `Email ${email} belum diverifikasi. Cek inbox atau folder Spam kamu lalu klik link verifikasi sebelum masuk.`,
                         true
                     );
                     return;
@@ -2296,7 +2408,7 @@
                 await sendEmailVerification(cred.user);
                 await signOut(auth);
                 showAuthNotice(
-                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email lo, klik link verifikasinya, lalu login di sini.`,
+                    `Akun ${chosenName} dibuat! Link verifikasi sudah dikirim ke ${email}. Buka email kamu, klik link verifikasinya, lalu login di sini.`,
                     true
                 );
             } catch (err) {
@@ -2310,7 +2422,7 @@
             authNotice.classList.add('hidden');
 
             if (!email) {
-                showAuthError("Masukkan alamat email lo terlebih dahulu, lalu klik Forgot password.");
+                showAuthError("Masukkan alamat email kamu terlebih dahulu, lalu klik Forgot password.");
                 authEmailInput.focus();
                 return;
             }
@@ -2318,7 +2430,7 @@
             try {
                 await sendPasswordResetEmail(auth, email);
                 showAuthNotice(
-                    `Link reset password sudah dikirim ke ${email}. Cek inbox atau folder Spam lo untuk mengganti password.`
+                    `Link reset password sudah dikirim ke ${email}. Cek inbox atau folder Spam kamu untuk mengganti password.`
                 );
             } catch (err) {
                 showAuthError(formatFirebaseAuthError(err, "Gagal mengirim email reset password"));
@@ -2329,7 +2441,7 @@
             if (!pendingVerifyUser) return;
             try {
                 await sendEmailVerification(pendingVerifyUser);
-                showAuthNotice("Link verifikasi baru sudah dikirim ulang. Cek inbox atau folder Spam lo ya.");
+                showAuthNotice("Link verifikasi baru sudah dikirim ulang. Cek inbox atau folder Spam kamu ya.");
             } catch (err) {
                 showAuthError("Tunggu sebentar sebelum kirim ulang verifikasi: " + err.message);
             }
@@ -2425,7 +2537,7 @@
                 const category = document.getElementById('category').value;
                 const date = document.getElementById('date').value;
                 const pipelineStage = document.getElementById('pipelineStage').value;
-                const amount = parseFloat(document.getElementById('amount').value) || 0;
+                const amount = Math.max(0, parseFloat(document.getElementById('amount').value) || 0);
                 const rawTaxInput = document.getElementById('taxInput').value.trim();
                 const parsedTax = parseTaxValue(rawTaxInput, amount);
                 const status = document.getElementById('status').value;
@@ -2434,7 +2546,7 @@
                 const payoutDate = document.getElementById('payoutDate').value || "";
                 const projectSocialPlatform = document.getElementById('projectSocialPlatform').value;
                 const projectSocialHandle = document.getElementById('projectSocialHandle').value.trim();
-                const rawLink = document.getElementById('portfolioLink').value.trim();
+                const rawLink = sanitizeUrl(document.getElementById('portfolioLink').value.trim());
 
                 let finalPhoto = "";
                 if (hdPhotoBase64) {
@@ -2468,8 +2580,9 @@
                 hdPhotoBase64 = "";
                 document.getElementById('photoFileName').classList.add('hidden');
                 document.getElementById('taxCalcPreview').classList.add('hidden');
+                showToast("Project baru berhasil disimpan.");
             } catch (err) {
-                alert("Gagal menyimpan data: " + err.message);
+                showToast("Gagal menyimpan data: " + err.message, true);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-plus mr-1 text-sageDark"></i> Simpan Project`;
@@ -2479,7 +2592,12 @@
         window.toggleStatus = async (id, currentStatus) => {
             if (!currentUser) return;
             const nextStatus = currentStatus === 'Lunas' ? 'DP 50%' : 'Lunas';
-            await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), { status: nextStatus });
+            try {
+                await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), { status: nextStatus });
+                showToast(`Status diubah menjadi ${nextStatus}.`);
+            } catch (err) {
+                showToast("Gagal mengubah status: " + err.message, true);
+            }
         };
 
         window.updatePipelineStage = async (id, nextStage) => {
@@ -2491,14 +2609,49 @@
                     patch.status = 'Pending / Invoice Sent';
                 }
             }
-            await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), patch);
+            try {
+                await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), patch);
+                showToast(`Tahap pipeline: ${nextStage}`);
+            } catch (err) {
+                showToast("Gagal memperbarui pipeline: " + err.message, true);
+            }
         };
 
-        window.deleteRecord = async (id) => {
+        window.deleteRecord = (id) => {
             if (!currentUser) return;
-            if (!confirm('Hapus catatan project ini?')) return;
-            await deleteDoc(doc(db, `users/${currentUser.uid}/projects`, id));
+            pendingDeleteId = id;
+            const target = records.find(r => r.id === id);
+            const descEl = document.getElementById("confirmModalDesc");
+            if (descEl) {
+                descEl.textContent = target
+                    ? `Project "${target.clientName}" akan dihapus secara permanen.`
+                    : "Tindakan ini akan menghapus data project dari daftar.";
+            }
+            const modal = document.getElementById("confirmModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
         };
+
+        window.closeConfirmModal = () => {
+            pendingDeleteId = null;
+            const modal = document.getElementById("confirmModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }
+        };
+
+        document.getElementById("btnConfirmDeleteAction").addEventListener("click", async () => {
+            if (!currentUser || !pendingDeleteId) return;
+            const idToDelete = pendingDeleteId;
+            closeConfirmModal();
+            try {
+                await deleteDoc(doc(db, `users/${currentUser.uid}/projects`, idToDelete));
+                showToast("Catatan project dihapus.");
+            } catch (err) {
+                showToast("Gagal menghapus project: " + err.message, true);
+            }
+        });
 
         window.renderOperationsTab = () => {
             const listEl = document.getElementById('pipelineCardsList');
@@ -2568,7 +2721,7 @@
                                 ${optionsHtml}
                             </select>
                             <button onclick="toggleStatus('${r.id}', '${r.status}')" class="clay-pill px-3 py-1.5 text-xs font-semibold ${r.status === 'Lunas' ? 'text-sageDark' : 'text-roseSoft'} cursor-pointer">
-                                ${r.status}
+                                ${escapeHtml(r.status)}
                             </button>
                             <button type="button" onclick="openInvoiceWithProject('${r.id}')" class="clay-pill px-3 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
                                 <i class="fa-solid fa-file-invoice text-roseSoft mr-1"></i> Invoice
@@ -2615,8 +2768,9 @@
                     btnEl.innerHTML = `<i class="fa-solid fa-check text-sageDark mr-1"></i> Tersalin!`;
                     setTimeout(() => { btnEl.innerHTML = prev; }, 1600);
                 }
+                showToast("Template pesan disalin.");
             } catch (_) {
-                alert(ta.value);
+                showToast("Gagal menyalin pesan otomatis.", true);
             }
         };
 
@@ -2921,13 +3075,13 @@
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-cream/50 transition">
-                        <td class="p-4 text-muted whitespace-nowrap">${r.date || '-'}</td>
+                        <td class="p-4 text-muted whitespace-nowrap">${escapeHtml(r.date || '-')}</td>
                         <td class="p-4 font-semibold text-espresso">${escapeHtml(r.clientName)} ${portfolioBadge}${extraMetaHtml}</td>
                         <td class="p-4 text-muted text-xs">${escapeHtml(r.category)}</td>
                         <td class="p-4 font-semibold text-espresso whitespace-nowrap">${formatRupiah(r.amount)}${taxSubHtml}</td>
                         <td class="p-4 whitespace-nowrap">
                             <button onclick="toggleStatus('${r.id}', '${r.status}')" title="${statusTitle}" class="clay-pill px-3.5 py-1 text-xs font-semibold border ${badgeClass} cursor-pointer">
-                                ${r.status}
+                                ${escapeHtml(r.status)}
                             </button>
                         </td>
                         <td class="p-4 text-right whitespace-nowrap space-x-1">
@@ -3408,7 +3562,7 @@
 
         window.exportClientInvoicePDF = async () => {
             if (typeof html2canvas === "undefined" || !window.jspdf?.jsPDF) {
-                return alert("Library PDF belum termuat. Coba refresh halaman.");
+                return showToast("Library PDF belum termuat. Coba refresh halaman.", true);
             }
 
             if (document.fonts && document.fonts.ready) {
@@ -3465,8 +3619,9 @@
 
                 const safeNum = (data.invNumber || "invoice").replace(/[^a-zA-Z0-9_-]+/g, "_");
                 pdf.save(`${safeNum}_narravia_studio_HD.pdf`);
+                showToast("PDF Invoice HD berhasil diunduh.");
             } catch (err) {
-                alert("Gagal membuat PDF Invoice: " + err.message);
+                showToast("Gagal membuat PDF Invoice: " + err.message, true);
             } finally {
                 staging.innerHTML = "";
                 btn.disabled = false;
@@ -3528,8 +3683,9 @@
                     lbl.innerText = 'Rekap Tersalin!';
                     setTimeout(() => { lbl.innerText = 'Salin Rekap Invoice & Pajak'; }, 2000);
                 }
+                showToast("Rekap invoice & pajak disalin.");
             } catch (_) {
-                alert(summaryText);
+                showToast("Gagal menyalin rekap ke clipboard.", true);
             }
         };
 
@@ -3670,7 +3826,7 @@
 
         window.exportInvoiceTaxPDF = async () => {
             if (typeof html2canvas === "undefined" || !window.jspdf?.jsPDF) {
-                return alert("Library PDF belum termuat. Coba refresh halaman.");
+                return showToast("Library PDF belum termuat. Coba refresh halaman.", true);
             }
 
             if (document.fonts && document.fonts.ready) {
@@ -3729,8 +3885,9 @@
                 }
 
                 pdf.save("narravia_rekap_invoice_tax_HD.pdf");
+                showToast("PDF Rekap Invoice & Pajak berhasil diunduh.");
             } catch (err) {
-                alert("Gagal membuat PDF: " + err.message);
+                showToast("Gagal membuat PDF: " + err.message, true);
             } finally {
                 staging.innerHTML = "";
                 btn.disabled = false;
@@ -3911,8 +4068,9 @@
                              <span class="text-xs font-medium">Konten Tersimpan</span>
                            </div>`;
 
-                    const linkBtn = item.portfolioLink
-                        ? `<a href="${item.portfolioLink}" target="_blank" rel="noopener noreferrer" class="clay-pill inline-flex items-center gap-1.5 text-xs font-semibold text-sageDark px-3.5 py-1.5">
+                    const safeHref = sanitizeUrl(item.portfolioLink);
+                    const linkBtn = safeHref
+                        ? `<a href="${escapeHtml(safeHref)}" target="_blank" rel="noopener noreferrer" class="clay-pill inline-flex items-center gap-1.5 text-xs font-semibold text-sageDark px-3.5 py-1.5">
                              <i class="fa-solid fa-link text-[10px]"></i> Lihat Karya <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                            </a>`
                         : '';
@@ -3924,7 +4082,7 @@
                             </div>
                             <div class="p-5 flex-1 flex flex-col justify-between items-center text-center">
                                 <div class="w-full">
-                                    <p class="text-[11px] text-muted"><i class="fa-regular fa-calendar mr-1"></i>${item.date || ''}</p>
+                                    <p class="text-[11px] text-muted"><i class="fa-regular fa-calendar mr-1"></i>${escapeHtml(item.date || '')}</p>
                                     <h4 class="font-serif text-lg font-semibold text-espresso mt-1 text-center" style="transform:none;">${escapeHtml(item.clientName)}</h4>
                                 </div>
                                 ${linkBtn ? `<div class="mt-4">${linkBtn}</div>` : ''}
@@ -3938,7 +4096,7 @@
                         <div class="flex items-center justify-between gap-2 mb-4">
                             <h3 class="font-serif text-xl font-semibold text-espresso flex items-center gap-2">
                                 <i class="fa-solid fa-award text-sageDark text-base"></i>
-                                <span>Portofolio ${yr}</span>
+                                <span>Portofolio ${escapeHtml(yr)}</span>
                             </h3>
                             <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold">
                                 <i class="fa-solid fa-sparkles text-roseSoft mr-1"></i> ${yearItems.length} Karya
@@ -4034,10 +4192,10 @@
         window.exportPortfolioJPG = async () => {
             const rawItems = sortByRateAndPopularity(getPortfolioEligibleItems());
             if (rawItems.length < MIN_JPG_EVENTS) {
-                return alert(`Portofolio bisa di-export ke JPG HD minimal setelah ada ${MIN_JPG_EVENTS} event (saat ini baru ${rawItems.length} event).`);
+                return showToast(`Minimal ${MIN_JPG_EVENTS} event untuk export JPG HD (saat ini ${rawItems.length}).`, true);
             }
             if (typeof html2canvas === "undefined") {
-                return alert("Library export belum termuat. Coba refresh halaman.");
+                return showToast("Library export belum termuat. Coba refresh halaman.", true);
             }
 
             const btn = document.getElementById("btnExportJpg");
@@ -4089,8 +4247,9 @@
                         : "portofolio_showcase_HD.jpg";
                     triggerJpgDownload(hdJpgUrl, fileName);
                 }
+                showToast("Portofolio JPG HD berhasil diunduh.");
             } catch (err) {
-                alert("Gagal membuat JPG HD: " + err.message);
+                showToast("Gagal membuat JPG HD: " + err.message, true);
             } finally {
                 staging.innerHTML = "";
                 btn.disabled = false;
@@ -4117,58 +4276,66 @@
         };
 
         window.switchTab = (tab) => {
-            const isFinance = tab === 'finance';
-            const isPortfolio = tab === 'portfolio';
-            const isSocial = tab === 'social';
-            const isOperations = tab === 'operations';
+            const views = {
+                finance: 'viewFinance',
+                portfolio: 'viewPortfolio',
+                social: 'viewSocial',
+                operations: 'viewOperations'
+            };
+            const tabs = {
+                finance: 'tabFinance',
+                portfolio: 'tabPortfolio',
+                social: 'tabSocial',
+                operations: 'tabOperations'
+            };
 
-            document.getElementById('viewFinance').classList.toggle('hidden', !isFinance);
-            document.getElementById('viewPortfolio').classList.toggle('hidden', !isPortfolio);
-            document.getElementById('viewSocial').classList.toggle('hidden', !isSocial);
-            document.getElementById('viewOperations').classList.toggle('hidden', !isOperations);
+            Object.keys(views).forEach(key => {
+                const viewEl = document.getElementById(views[key]);
+                const tabEl = document.getElementById(tabs[key]);
+                const active = key === tab;
 
-            const activeCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer";
-            const idleCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer";
+                if (viewEl) viewEl.classList.toggle('hidden', !active);
+                if (tabEl) {
+                    tabEl.classList.toggle('text-white', active);
+                    tabEl.classList.toggle('bg-gradient-to-r', active);
+                    tabEl.classList.toggle('from-sageDark', active);
+                    tabEl.classList.toggle('to-[#3F5542]', active);
+                    tabEl.classList.toggle('text-muted', !active);
+                }
+            });
 
-            document.getElementById('tabFinance').className = isFinance ? activeCls : idleCls;
-            document.getElementById('tabPortfolio').className = isPortfolio ? activeCls : idleCls;
-            document.getElementById('tabSocial').className = isSocial ? activeCls : idleCls;
-            document.getElementById('tabOperations').className = isOperations ? activeCls : idleCls;
-
-            if (isPortfolio) {
-                window.renderPortfolio();
-            } else if (isSocial) {
-                updateSocialProfileCard();
-            } else if (isOperations) {
-                renderOperationsTab();
-            } else if (isFinance) {
-                renderMonthlyChart();
-            }
+            if (tab === 'portfolio') window.renderPortfolio();
+            if (tab === 'social') updateSocialProfileCard();
+            if (tab === 'operations') renderOperationsTab();
         };
 
         window.exportToCSV = () => {
-            if (records.length === 0) return alert('Belum ada data untuk di-export.');
-            let csv = 'Tanggal,Project Name,Kategori,Tahap Pipeline,Nominal Fee (Exclude Pajak),Nominal Pajak,Input Pajak Asli,Status,Management,Deadline,Estimasi Cair,Sosmed Platform,Sosmed Handle,Link\n';
-            records.forEach(r => {
-                const safeClient = String(r.clientName || '').replace(/"/g, '""');
-                const safeCat = String(r.category || '').replace(/"/g, '""');
-                const safeStage = String(r.pipelineStage || 'Brief Diterima').replace(/"/g, '""');
-                const safeTaxRaw = String(r.taxInputRaw || '').replace(/"/g, '""');
-                const safeMgmt = String(r.managementName || '').replace(/"/g, '""');
-                const safeDeadline = String(r.deadlineDate || '').replace(/"/g, '""');
-                const safePayout = String(r.payoutDate || '').replace(/"/g, '""');
-                const safeSocPlat = String(r.projectSocialPlatform || '').replace(/"/g, '""');
-                const safeSocHandle = String(r.projectSocialHandle || '').replace(/"/g, '""');
-                const safeLink = String(r.portfolioLink || '').replace(/"/g, '""');
-                csv += `"${r.date || ''}","${safeClient}","${safeCat}","${safeStage}",${Number(r.amount) || 0},${Number(r.taxAmount) || 0},"${safeTaxRaw}","${r.status}","${safeMgmt}","${safeDeadline}","${safePayout}","${safeSocPlat}","${safeSocHandle}","${safeLink}"\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'narravia_studio_pendapatan.csv';
-            a.click();
-            window.URL.revokeObjectURL(url);
+            if (records.length === 0) return showToast('Belum ada data untuk di-export.', true);
+            const headers = ['Tanggal', 'Project Name', 'Kategori', 'Tahap Pipeline', 'Fee (Exclude Pajak)', 'Pajak', 'Status', 'Management', 'Deadline Konten', 'Jatuh Tempo / Cair', 'Sosial Media', 'Link Portofolio'];
+            const rows = records.map(r => [
+                r.date || '',
+                `"${String(r.clientName || '').replace(/"/g, '""')}"`,
+                `"${String(r.category || '').replace(/"/g, '""')}"`,
+                `"${String(r.pipelineStage || 'Brief Diterima').replace(/"/g, '""')}"`,
+                r.amount || 0,
+                r.taxAmount || 0,
+                `"${String(r.status || '').replace(/"/g, '""')}"`,
+                `"${String(r.managementName || '').replace(/"/g, '""')}"`,
+                r.deadlineDate || '',
+                r.payoutDate || '',
+                `"${String(((r.projectSocialPlatform || '') + ' ' + (r.projectSocialHandle || '')).trim()).replace(/"/g, '""')}"`,
+                `"${String(r.portfolioLink || '').replace(/"/g, '""')}"`
+            ]);
+            const csvContent = "data:text/csv;charset=utf-8,"
+                + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `narravia_studio_income_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Data CSV berhasil diunduh.");
         };
     </script>
 </body>
