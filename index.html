@@ -56,7 +56,7 @@
         .botanical-card {
             background: rgba(255, 253, 250, 0.94);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(229, 217, 202, 0.58);
+            border: 1px solid rgba(229, 217, 202, 0.65);
             box-shadow: 0 10px 30px -12px rgba(79, 105, 82, 0.08);
         }
 
@@ -281,6 +281,84 @@
         </svg>
     </div>
 
+    <!-- TAMPILAN PORTOFOLIO PUBLIK & FORM PILIHAN KATEGORI KLIEN (VIA SHARE LINK) -->
+    <div id="publicShareSection" class="hidden relative z-10 max-w-5xl mx-auto p-4 sm:p-8 space-y-6">
+        <div class="botanical-card p-6 sm:p-8 rounded-3xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blush/60 text-roseSoft text-xs font-semibold">
+                    <i class="fa-solid fa-globe"></i> Public Creator Showcase &amp; Brand Inquiry
+                </span>
+                <button type="button" onclick="exitPublicShareMode()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
+                    <i class="fa-solid fa-arrow-left mr-1 text-sageDark"></i> Masuk / Kembali ke Studio
+                </button>
+            </div>
+            <h1 id="pubCreatorTitle" class="font-serif text-3xl sm:text-4xl font-semibold text-espresso">Creator Showcase</h1>
+            <p id="pubCreatorBio" class="text-sm text-espresso/90 mt-2 leading-relaxed"></p>
+            <div class="flex flex-wrap items-center gap-2.5 mt-4">
+                <span id="pubCollabStatus" class="px-3.5 py-1 rounded-full bg-sage/20 text-sageDark text-xs font-bold"></span>
+                <span id="pubRateHighlight" class="px-3.5 py-1 rounded-full bg-amber-100/90 text-amber-900 text-xs font-semibold"></span>
+            </div>
+            <div class="mt-4">
+                <p class="text-[11px] uppercase tracking-wider font-bold text-muted mb-1.5">Highlight Kategori Konten</p>
+                <div id="pubCategoriesList" class="flex flex-wrap gap-2"></div>
+            </div>
+            <div class="mt-4">
+                <p class="text-[11px] uppercase tracking-wider font-bold text-muted mb-1.5">Media Sosial Aktif</p>
+                <div id="pubSocialsList" class="flex flex-wrap gap-2"></div>
+            </div>
+        </div>
+
+        <!-- Galeri Highlight Publik (4:3 Tanpa Terpotong) -->
+        <div id="pubGalleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+        <!-- Form Pilihan Kategori untuk Brand / Klien -->
+        <div class="botanical-card p-6 sm:p-8 rounded-3xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
+                <i class="fa-solid fa-list-check"></i> Form Pilihan Kategori Klien
+            </span>
+            <h2 class="font-serif text-2xl font-semibold text-espresso mt-1.5">Pilih Kategori Konten yang Diminati</h2>
+            <p class="text-xs text-muted mt-1">Kirimkan pilihan kategori konten untuk penjajakan kerja sama. Data akan tersinkron ke catatan project kreator.</p>
+
+            <form id="clientCategoryForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Nama Brand / Klien</label>
+                    <input type="text" id="clientPickName" required placeholder="Contoh: Brand Skincare Luna"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Kategori Konten Diminati</label>
+                    <select id="clientPickCategory" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                        <option value="Event Coverage (Reels/TikTok)">Event Coverage (Reels/TikTok)</option>
+                        <option value="Same Day Edit (SDE)">Same Day Edit (SDE)</option>
+                        <option value="Brand Launch / Activation">Brand Launch / Activation</option>
+                        <option value="UGC / Behind The Scenes">UGC / Behind The Scenes</option>
+                        <option value="Visit Venue">Visit Venue</option>
+                        <option value="Visit Booth">Visit Booth</option>
+                        <option value="Visit Restaurant / Cafe">Visit Restaurant / Cafe</option>
+                        <option value="Visit Hotel">Visit Hotel</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Rencana Tanggal Event / Campaign</label>
+                    <input type="date" id="clientPickDate" required
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Catatan Singkat Brief / Deliverable</label>
+                    <input type="text" id="clientPickNote" placeholder="Contoh: 2 Reels + 10 foto dokumentasi"
+                        class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
+                </div>
+                <div class="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 pt-2">
+                    <span id="clientPickFeedback" class="text-xs font-semibold text-sageDark"></span>
+                    <button type="submit" class="clay-pill px-6 py-2.5 text-sm font-semibold text-espresso cursor-pointer">
+                        <i class="fa-solid fa-paper-plane mr-1.5 text-roseSoft"></i> Kirim Pilihan Kategori
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- HALAMAN LOGIN / REGISTER -->
     <div id="authSection" class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
         <div class="botanical-card p-8 sm:p-10 rounded-3xl max-w-md w-full relative overflow-hidden">
@@ -412,6 +490,9 @@
             <button onclick="switchTab('social')" id="tabSocial" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
                 <i class="fa-solid fa-share-nodes mr-1.5 text-sageDark"></i> Social Media
             </button>
+            <button onclick="switchTab('operations')" id="tabOperations" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
+                <i class="fa-solid fa-route mr-1.5 text-roseSoft"></i> Pipeline &amp; Follow-up
+            </button>
         </div>
 
         <!-- TAB 1: TRACKING PENDAPATAN -->
@@ -423,6 +504,9 @@
                         <i class="fa-solid fa-seedling text-sageDark text-sm micro-float"></i>
                     </div>
                     <h2 id="totalPaid" class="font-serif text-2xl sm:text-3xl font-semibold text-sageDark mt-1.5">Rp 0</h2>
+                    <button type="button" id="ctaEmptyIncome" onclick="focusNewProjectForm()" class="hidden clay-pill mt-3 px-3.5 py-1.5 text-[11px] font-semibold text-sageDark cursor-pointer">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah Project Pertama
+                    </button>
                 </div>
                 <div class="botanical-card micro-card-lift p-5 rounded-3xl">
                     <div class="flex items-center justify-between">
@@ -430,6 +514,9 @@
                         <i class="fa-solid fa-clock text-roseSoft text-sm"></i>
                     </div>
                     <h2 id="totalPending" class="font-serif text-2xl sm:text-3xl font-semibold text-roseSoft mt-1.5">Rp 0</h2>
+                    <button type="button" id="ctaEmptyInvoice" onclick="openInvoiceModal()" class="hidden clay-pill mt-3 px-3.5 py-1.5 text-[11px] font-semibold text-roseSoft cursor-pointer">
+                        <i class="fa-solid fa-file-invoice mr-1"></i> Buat Invoice Awal
+                    </button>
                 </div>
                 <div class="botanical-card micro-card-lift p-5 rounded-3xl">
                     <div class="flex items-center justify-between">
@@ -440,13 +527,14 @@
                 </div>
             </div>
 
+            <!-- End-to-End Project & Finance Flow Bar -->
             <div class="botanical-card micro-card-lift p-4 sm:px-6 rounded-3xl mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="text-xs text-muted space-y-1">
                     <p class="font-semibold text-espresso text-sm">
-                        <i class="fa-solid fa-file-invoice-dollar text-sageDark mr-1.5"></i> Invoice &amp; Tax Recap Ready
+                        <i class="fa-solid fa-file-invoice-dollar text-sageDark mr-1.5"></i> End-to-End Project &amp; Finance Flow (Deal &rarr; Invoice &rarr; Rekap Pajak)
                     </p>
                     <p>
-                        <i class="fa-solid fa-shield-halved text-sageDark mr-1"></i> Data terenkripsi &amp; siap export ke CSV.
+                        <i class="fa-solid fa-shield-halved text-sageDark mr-1"></i> Siklus kerja terhubung ke invoice &amp; rekap pajak, siap export CSV / PDF HD.
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2.5 shrink-0">
@@ -476,6 +564,9 @@
                         </div>
                         <h3 id="topIncomeCategory" class="font-serif text-lg font-semibold text-espresso mt-1 truncate">Belum ada achievement</h3>
                         <p id="topIncomeAmount" class="text-xs text-muted mt-0.5">Rp 0</p>
+                        <button type="button" id="ctaEmptyAchievement" onclick="focusNewProjectForm()" class="hidden clay-pill mt-2.5 px-3.5 py-1 text-[11px] font-semibold text-sageDark cursor-pointer">
+                            <i class="fa-solid fa-sparkles mr-1"></i> Mulai Catat Achievement
+                        </button>
                     </div>
                     <span class="w-10 h-10 rounded-full bg-sage/15 text-sageDark flex items-center justify-center shrink-0 mt-1">
                         <i class="fa-solid fa-coins"></i>
@@ -518,12 +609,12 @@
                         </h3>
                         <p id="monthProgressSubtitle" class="text-xs text-muted">Bar progress pendapatan bulanan (Lunas &amp; DP/Pending)</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-4 text-xs text-muted">
-                        <span class="inline-flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-xs bg-[#EAB308] inline-block"></span> Lunas
+                    <div class="flex flex-wrap items-center gap-4 text-xs font-semibold text-espresso/85">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100/80 border border-amber-300">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#EAB308] inline-block"></span> Lunas
                         </span>
-                        <span class="inline-flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-xs bg-[#F472B6] inline-block"></span> DP / Pending
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blush/70 border border-roseSoft/50">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#F472B6] inline-block"></span> DP / Pending
                         </span>
                     </div>
                 </div>
@@ -533,7 +624,7 @@
             </div>
 
             <!-- Form Input Project Baru -->
-            <div class="botanical-card p-6 sm:p-7 rounded-3xl mb-8">
+            <div id="incomeFormCard" class="botanical-card p-6 sm:p-7 rounded-3xl mb-8">
                 <h3 class="font-serif text-xl font-semibold mb-4 text-espresso">
                     <i class="fa-solid fa-feather-pointed text-sageDark mr-1.5 text-base"></i> Input Project Baru
                 </h3>
@@ -567,6 +658,17 @@
                         </label>
                         <input type="date" id="date" required
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-diagram-project text-sageDark mr-1"></i> Tahap Pipeline Kerja
+                        </label>
+                        <select id="pipelineStage" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                            <option value="Brief Diterima">Brief Diterima</option>
+                            <option value="Drafting/Produksi">Drafting/Produksi</option>
+                            <option value="Revisi Brand">Revisi Brand</option>
+                            <option value="Post & Invoice Terkirim">Post &amp; Invoice Terkirim</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
@@ -604,14 +706,14 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
-                            <i class="fa-regular fa-calendar-check text-roseSoft mr-1"></i> Deadline Project (Opsional)
+                            <i class="fa-regular fa-calendar-check text-roseSoft mr-1"></i> Deadline Konten (Opsional)
                         </label>
                         <input type="date" id="deadlineDate"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
-                            <i class="fa-regular fa-clock text-sageDark mr-1"></i> Estimasi Tanggal Cair (Opsional)
+                            <i class="fa-regular fa-clock text-sageDark mr-1"></i> Jatuh Tempo / Cair (Opsional)
                         </label>
                         <input type="date" id="payoutDate"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
@@ -646,7 +748,7 @@
                         </div>
                         <p id="photoFileName" class="text-[11px] text-sageDark mt-1 truncate hidden"></p>
                     </div>
-                    <div class="flex items-end justify-end">
+                    <div class="sm:col-span-2 lg:col-span-3 flex items-center justify-end pt-1">
                         <button type="submit" id="btnSubmitProject" class="clay-pill text-espresso font-semibold py-2.5 px-6 text-sm cursor-pointer w-full sm:w-auto">
                             <i class="fa-solid fa-plus mr-1 text-sageDark"></i> Simpan Project
                         </button>
@@ -659,9 +761,9 @@
                 <div class="p-4 sm:px-6 border-b border-[#EADFD3]/60 flex flex-wrap justify-between items-center gap-3">
                     <div>
                         <h3 class="font-serif text-lg font-semibold text-espresso">
-                            <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Riwayat Pemasukan
+                            <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Riwayat Pemasukan &amp; Siklus Project
                         </h3>
-                        <p class="text-[11px] text-muted">Klik status DP / Pending untuk menandai lunas dan otomatis masuk ke Total Pendapatan</p>
+                        <p class="text-[11px] text-muted">Klik status DP / Pending untuk menandai lunas, atau tarik project siap tagih langsung ke Invoice</p>
                     </div>
                     <select id="filterStatus" onchange="renderData()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso focus:outline-none cursor-pointer">
                         <option value="ALL">Semua Status</option>
@@ -689,8 +791,8 @@
         </div>
 
         <!-- TAB 2: GALERI PORTOFOLIO -->
-        <div id="viewPortfolio" class="hidden">
-            <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
+        <div id="viewPortfolio" class="hidden space-y-6">
+            <div class="flex flex-wrap justify-between items-center gap-3">
                 <div>
                     <h2 class="font-serif text-2xl font-semibold text-espresso flex items-center gap-2">
                         <i class="fa-solid fa-wand-magic-sparkles text-roseSoft text-lg"></i>
@@ -699,23 +801,59 @@
                     </h2>
                     <div id="showcaseSocialIconsRow" class="flex flex-wrap items-center gap-3 mt-1.5 text-xs font-semibold text-sageDark hidden"></div>
                 </div>
-                <div class="flex flex-col items-end gap-1">
-                    <button type="button" id="btnExportJpg" onclick="exportPortfolioJPG()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-file-image text-sageDark"></i> <span id="btnExportJpgLabel">Export JPG HD</span>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button type="button" onclick="copyPublicPortfolioLink()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-share-from-square text-roseSoft"></i> <span id="btnCopyPublicLinkLabel">Link Portofolio Publik</span>
                     </button>
-                    <span id="jpgRequirementHint" class="text-[11px] text-muted">Minimal 3 event untuk export JPG HD</span>
+                    <button type="button" onclick="copyClientCategoryFormLink()" class="clay-pill text-sageDark px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-list-check text-sageDark"></i> <span id="btnCopyClientFormLabel">Link Form Kategori Klien</span>
+                    </button>
+                    <div class="flex flex-col items-end gap-1">
+                        <button type="button" id="btnExportJpg" onclick="exportPortfolioJPG()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-file-image text-sageDark"></i> <span id="btnExportJpgLabel">Export JPG HD</span>
+                        </button>
+                        <span id="jpgRequirementHint" class="text-[11px] text-muted">Minimal 3 event untuk export JPG HD</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengaturan Shareable Public View & Form Pilihan Kategori Klien -->
+            <div class="botanical-card p-5 sm:p-6 rounded-3xl">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <div>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blush/60 text-roseSoft text-[11px] font-semibold">
+                            <i class="fa-solid fa-globe"></i> Shareable Portfolio &amp; Client Category Link
+                        </span>
+                        <h3 class="font-serif text-lg font-semibold text-espresso mt-1">Pengaturan Tampilan Publik &amp; Penjajakan Klien</h3>
+                    </div>
+                    <span id="publicShareStatusMsg" class="text-xs font-semibold text-sageDark"></span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">Status Kolaborasi</label>
+                        <select id="pubCollabSelect" onchange="savePublicShareSettings()" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm">
+                            <option value="Open Collaboration — Siap Terima Brand &amp; Event">Open Collaboration — Siap Terima Brand &amp; Event</option>
+                            <option value="Limited Slots Bulan Ini">Limited Slots Bulan Ini</option>
+                            <option value="Booked / Waitlist">Booked / Waitlist</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">Highlight Rate Card / Paket (Tanpa Angka Privat Wajib)</label>
+                        <input type="text" id="pubRateCardInput" oninput="savePublicShareSettings()" placeholder="Contoh: Paket Reels/TikTok, SDE &amp; UGC (DM / Email untuk rate card)"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm">
+                    </div>
                 </div>
             </div>
 
             <!-- Kolom Sambutan dengan border semi-transparan -->
-            <div class="botanical-card p-4 sm:px-6 rounded-3xl mb-6 flex items-center justify-center text-center">
+            <div class="botanical-card p-4 sm:px-6 rounded-3xl flex items-center justify-center text-center">
                 <p id="portfolioGreetingBanner" class="text-sm font-medium text-espresso leading-relaxed">
                     Hi, kenalin aku @username. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
                 </p>
             </div>
 
             <!-- Kolase Portofolio Perbulan -->
-            <div class="mb-8">
+            <div>
                 <div id="monthlyCollageContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
@@ -728,10 +866,13 @@
         <!-- TAB 3: SOCIAL MEDIA -->
         <div id="viewSocial" class="hidden space-y-6">
             <div id="socialProfileBubbleCard" class="botanical-card p-6 sm:p-7 rounded-3xl max-w-3xl">
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
-                        <i class="fa-solid fa-id-badge"></i> Creator's Profile
+                        <i class="fa-solid fa-id-badge"></i> Creator's Profile &amp; Pitching Card
                     </span>
+                    <button type="button" onclick="copyPitchingCard()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
+                        <i class="fa-regular fa-copy text-roseSoft mr-1"></i> <span id="btnCopyPitchLabel">Salin Kartu Pitching</span>
+                    </button>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0">
@@ -760,6 +901,17 @@
                     <p class="text-xs text-muted mt-1">
                         Info sosial media dan domisili kamu
                     </p>
+
+                    <!-- Quick-fill Domisili -->
+                    <div class="flex flex-wrap items-center gap-2 mt-3">
+                        <span class="text-[11px] font-semibold text-muted">Quick-fill Domisili:</span>
+                        <button type="button" onclick="quickFillDomicile('Jakarta Timur')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">Jakarta Timur</button>
+                        <button type="button" onclick="quickFillDomicile('Jakarta Selatan')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">Jakarta Selatan</button>
+                        <button type="button" onclick="quickFillDomicile('Bandung')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">Bandung</button>
+                        <button type="button" onclick="quickFillDomicile('Surabaya')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">Surabaya</button>
+                        <button type="button" onclick="quickFillDomicile('Yogyakarta')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">Yogyakarta</button>
+                        <button type="button" onclick="quickFillDomicile('Bali')" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer">Bali</button>
+                    </div>
                 </div>
 
                 <form id="socialForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -816,6 +968,84 @@
             </div>
         </div>
 
+        <!-- TAB 4: PIPELINE STATUS, DEADLINE REMINDER & TEMPLATE FOLLOW-UP -->
+        <div id="viewOperations" class="hidden space-y-6">
+            <div class="botanical-card p-6 sm:p-7 rounded-3xl">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100/90 text-amber-800 text-[11px] font-semibold">
+                            <i class="fa-solid fa-route"></i> Pipeline Status &amp; Deadline Reminder
+                        </span>
+                        <h2 class="font-serif text-2xl font-semibold text-espresso mt-1">
+                            Siklus Project Terhubung ke Invoice &amp; Penagihan
+                        </h2>
+                        <p class="text-xs text-muted mt-0.5">
+                            Pantau tahapan kerja (Brief Diterima &rarr; Drafting/Produksi &rarr; Revisi Brand &rarr; Post &amp; Invoice Terkirim), deadline konten, &amp; jatuh tempo bayar.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="filterPipelineStage" onchange="renderOperationsTab()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
+                            <option value="ALL">Semua Tahapan</option>
+                            <option value="Brief Diterima">Brief Diterima</option>
+                            <option value="Drafting/Produksi">Drafting/Produksi</option>
+                            <option value="Revisi Brand">Revisi Brand</option>
+                            <option value="Post & Invoice Terkirim">Post &amp; Invoice Terkirim</option>
+                        </select>
+                        <button type="button" onclick="copyInvoiceTaxSummary()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
+                            <i class="fa-regular fa-copy mr-1"></i> Salin Rekap Invoice &amp; Pajak
+                        </button>
+                    </div>
+                </div>
+                <div id="pipelineCardsList" class="space-y-3"></div>
+            </div>
+
+            <div class="botanical-card p-6 sm:p-7 rounded-3xl">
+                <h3 class="font-serif text-xl font-semibold text-espresso mb-1">
+                    <i class="fa-regular fa-comment-dots text-roseSoft mr-1.5"></i> Template Teks Follow-up &amp; Penagihan
+                </h3>
+                <p class="text-xs text-muted mb-4">Pilih project untuk otomatis mengisi detail project &amp; nominal fee, lalu klik salin pesan sopan ke klien.</p>
+
+                <div class="max-w-md mb-4">
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Pilih Project</label>
+                    <select id="followupProjectSelect" onchange="renderFollowupTemplates()" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm">
+                        <option value="">-- Pilih Project --</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-4 flex flex-col justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-amber-800 mb-2"><i class="fa-solid fa-bell mr-1"></i> Reminder DP / Pembayaran</p>
+                            <textarea id="tplReminderDp" rows="5" class="w-full bg-cream/70 border border-[#E4D8CA] rounded-xl p-2.5 text-xs text-espresso"></textarea>
+                        </div>
+                        <button type="button" onclick="copyTemplateText('tplReminderDp', this)" class="clay-pill mt-3 px-3.5 py-1.5 text-xs font-semibold text-espresso w-fit cursor-pointer">
+                            <i class="fa-regular fa-copy text-roseSoft mr-1"></i> Salin Pesan
+                        </button>
+                    </div>
+
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-4 flex flex-col justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-sageDark mb-2"><i class="fa-solid fa-file-invoice mr-1"></i> Penagihan Pelunasan &amp; Invoice</p>
+                            <textarea id="tplReminderPay" rows="5" class="w-full bg-cream/70 border border-[#E4D8CA] rounded-xl p-2.5 text-xs text-espresso"></textarea>
+                        </div>
+                        <button type="button" onclick="copyTemplateText('tplReminderPay', this)" class="clay-pill mt-3 px-3.5 py-1.5 text-xs font-semibold text-espresso w-fit cursor-pointer">
+                            <i class="fa-regular fa-copy text-roseSoft mr-1"></i> Salin Pesan
+                        </button>
+                    </div>
+
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-4 flex flex-col justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-roseSoft mb-2"><i class="fa-solid fa-clapperboard mr-1"></i> Kirim Draft / Preview Konten</p>
+                            <textarea id="tplSendDraft" rows="5" class="w-full bg-cream/70 border border-[#E4D8CA] rounded-xl p-2.5 text-xs text-espresso"></textarea>
+                        </div>
+                        <button type="button" onclick="copyTemplateText('tplSendDraft', this)" class="clay-pill mt-3 px-3.5 py-1.5 text-xs font-semibold text-espresso w-fit cursor-pointer">
+                            <i class="fa-regular fa-copy text-roseSoft mr-1"></i> Salin Pesan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer class="mt-12 pt-5 border-t border-[#E6DACB]/80 text-center text-xs text-muted">
             <i class="fa-solid fa-leaf text-sageDark mr-1"></i> Created by Narravia.Studio
         </footer>
@@ -864,6 +1094,19 @@
                         </select>
                     </div>
 
+                    <!-- Tarik Langsung Project dari Pipeline -->
+                    <div>
+                        <label class="block text-[11px] font-semibold text-sageDark mb-1">Tarik Data dari Project Tersimpan</label>
+                        <div class="flex gap-2">
+                            <select id="invoiceProjectSourceSelect" class="flex-1 bg-white border border-[#E4D8CA] rounded-xl px-2.5 py-1.5 text-xs">
+                                <option value="">-- Pilih Project --</option>
+                            </select>
+                            <button type="button" onclick="pullProjectIntoInvoice()" class="clay-pill px-3 py-1 text-[11px] font-semibold text-espresso cursor-pointer shrink-0">
+                                Tarik
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Invoice</label>
@@ -892,12 +1135,12 @@
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Tanggal Invoice</label>
-                            <input type="text" id="invDateText" placeholder="Contoh: 21 November 2026" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invDateText" placeholder="Contoh: 22 November 2026" oninput="refreshInvoicePreview()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Tanggal Event</label>
-                            <input type="text" id="invEventDateText" placeholder="Contoh: 28 November 2026" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invEventDateText" placeholder="Contoh: 29 November 2026" oninput="refreshInvoicePreview()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                     </div>
@@ -1062,6 +1305,10 @@
             twitter: "",
             domicile: "Jakarta Timur"
         };
+        let publicShareSettings = {
+            collabStatus: "Open Collaboration — Siap Terima Brand & Event",
+            rateCardNote: "Paket Reels/TikTok, SDE & UGC (DM / Email untuk rate card)"
+        };
 
         let invoiceLineItems = [
             { title: "", desc: "", qty: 1, price: 0 }
@@ -1150,6 +1397,18 @@
             return `narravia_socials_${uid || "guest"}`;
         }
 
+        function getPublicShareStorageKey(uid) {
+            return `narravia_public_share_${uid || "guest"}`;
+        }
+
+        window.focusNewProjectForm = () => {
+            switchTab('finance');
+            const card = document.getElementById('incomeFormCard');
+            const inp = document.getElementById('clientName');
+            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (inp) setTimeout(() => inp.focus(), 250);
+        };
+
         function normalizeSocialEntry(raw, platform) {
             const trimmed = String(raw || "").trim();
             if (!trimmed) return null;
@@ -1224,6 +1483,251 @@
             const domicile = (userSocials.domicile || "Jakarta Timur").trim();
             return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator yang berdomisili di ${domicile}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
         }
+
+        function buildPitchingCardText() {
+            const handles = [
+                normalizeSocialEntry(userSocials.instagram, "instagram")?.label ? `IG: ${normalizeSocialEntry(userSocials.instagram, "instagram").label}` : "",
+                normalizeSocialEntry(userSocials.tiktok, "tiktok")?.label ? `TikTok: ${normalizeSocialEntry(userSocials.tiktok, "tiktok").label}` : "",
+                normalizeSocialEntry(userSocials.threads, "threads")?.label ? `Threads: ${normalizeSocialEntry(userSocials.threads, "threads").label}` : "",
+                normalizeSocialEntry(userSocials.facebook, "facebook")?.label ? `FB: ${normalizeSocialEntry(userSocials.facebook, "facebook").label}` : "",
+                normalizeSocialEntry(userSocials.twitter, "twitter")?.label ? `X: ${normalizeSocialEntry(userSocials.twitter, "twitter").label}` : ""
+            ].filter(Boolean).join(" | ");
+            return `${buildIntroBubbleSentence()}\n${handles ? `Kanal: ${handles}\n` : ""}Status: ${publicShareSettings.collabStatus}`;
+        }
+
+        window.copyPitchingCard = async () => {
+            try {
+                await navigator.clipboard.writeText(buildPitchingCardText());
+                const lbl = document.getElementById('btnCopyPitchLabel');
+                if (lbl) {
+                    lbl.innerText = 'Kartu Pitching Tersalin!';
+                    setTimeout(() => { lbl.innerText = 'Salin Kartu Pitching'; }, 2000);
+                }
+            } catch (_) {
+                alert(buildPitchingCardText());
+            }
+        };
+
+        window.quickFillDomicile = (city) => {
+            const el = document.getElementById('socDomicile');
+            if (el) el.value = city;
+            userSocials.domicile = city;
+            if (currentUser) {
+                try {
+                    localStorage.setItem(getSocialStorageKey(currentUser.uid), JSON.stringify(userSocials));
+                } catch (_) {}
+            }
+            updateSocialProfileCard();
+        };
+
+        function loadPublicShareSettings(uid) {
+            try {
+                const saved = JSON.parse(localStorage.getItem(getPublicShareStorageKey(uid)) || "null");
+                if (saved) {
+                    publicShareSettings = {
+                        collabStatus: saved.collabStatus || publicShareSettings.collabStatus,
+                        rateCardNote: saved.rateCardNote ?? publicShareSettings.rateCardNote
+                    };
+                }
+            } catch (_) {}
+            const sel = document.getElementById('pubCollabSelect');
+            const inp = document.getElementById('pubRateCardInput');
+            if (sel) sel.value = publicShareSettings.collabStatus;
+            if (inp) inp.value = publicShareSettings.rateCardNote;
+        }
+
+        window.savePublicShareSettings = () => {
+            const sel = document.getElementById('pubCollabSelect');
+            const inp = document.getElementById('pubRateCardInput');
+            const st = document.getElementById('publicShareStatusMsg');
+            publicShareSettings = {
+                collabStatus: sel ? sel.value : publicShareSettings.collabStatus,
+                rateCardNote: inp ? inp.value.trim() : publicShareSettings.rateCardNote
+            };
+            try {
+                if (currentUser) {
+                    localStorage.setItem(getPublicShareStorageKey(currentUser.uid), JSON.stringify(publicShareSettings));
+                }
+            } catch (_) {}
+            if (st) {
+                st.innerText = "Tersimpan";
+                setTimeout(() => { st.innerText = ""; }, 1400);
+            }
+        };
+
+        function buildSharePayload(mode = "portfolio") {
+            const username = getActiveUsername();
+            const catCount = {};
+            records.forEach(r => {
+                const c = r.category || "Lainnya";
+                catCount[c] = (catCount[c] || 0) + 1;
+            });
+            const topCategories = Object.entries(catCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 4)
+                .map(([c]) => c);
+
+            const galleryPreviews = records
+                .filter(r => r.photoData)
+                .slice(0, 6)
+                .map(r => ({
+                    title: r.clientName || "Showcase",
+                    category: r.category || "Event",
+                    photo: r.photoData
+                }));
+
+            return {
+                mode,
+                uid: currentUser?.uid || "",
+                creatorName: username,
+                bio: buildIntroBubbleSentence(),
+                collabStatus: publicShareSettings.collabStatus,
+                rateCardNote: publicShareSettings.rateCardNote,
+                topCategories,
+                socials: userSocials,
+                galleryPreviews
+            };
+        }
+
+        window.copyPublicPortfolioLink = async () => {
+            const payload = buildSharePayload("portfolio");
+            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+            const url = `${window.location.origin}${window.location.pathname}#portfolio=${encoded}`;
+            try {
+                await navigator.clipboard.writeText(url);
+                const lbl = document.getElementById('btnCopyPublicLinkLabel');
+                if (lbl) {
+                    lbl.innerText = 'Link Portofolio Tersalin!';
+                    setTimeout(() => { lbl.innerText = 'Link Portofolio Publik'; }, 2000);
+                }
+            } catch (_) {
+                prompt("Salin link portofolio publik:", url);
+            }
+        };
+
+        window.copyClientCategoryFormLink = async () => {
+            const payload = buildSharePayload("client-form");
+            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+            const url = `${window.location.origin}${window.location.pathname}#client-form=${encoded}`;
+            try {
+                await navigator.clipboard.writeText(url);
+                const lbl = document.getElementById('btnCopyClientFormLabel');
+                if (lbl) {
+                    lbl.innerText = 'Link Form Tersalin!';
+                    setTimeout(() => { lbl.innerText = 'Link Form Kategori Klien'; }, 2000);
+                }
+            } catch (_) {
+                prompt("Salin link form pilihan kategori klien:", url);
+            }
+        };
+
+        function checkPublicShareHash() {
+            const hash = window.location.hash || "";
+            const match = hash.match(/^#(portfolio|client-form)=(.+)$/);
+            const pubEl = document.getElementById('publicShareSection');
+            const authEl = document.getElementById('authSection');
+            const appEl = document.getElementById('appSection');
+
+            if (!match) {
+                pubEl.classList.add('hidden');
+                return false;
+            }
+
+            try {
+                const jsonStr = decodeURIComponent(escape(atob(match[2])));
+                const data = JSON.parse(jsonStr);
+                pubEl.dataset.targetUid = data.uid || "";
+
+                document.getElementById('pubCreatorTitle').innerText = `${data.creatorName || "Creator"} — Public Portfolio`;
+                document.getElementById('pubCreatorBio').innerText = data.bio || "";
+                document.getElementById('pubCollabStatus').innerText = data.collabStatus || "Open Collaboration";
+                document.getElementById('pubRateHighlight').innerText = data.rateCardNote || "";
+
+                const catsEl = document.getElementById('pubCategoriesList');
+                catsEl.innerHTML = (data.topCategories || []).length > 0
+                    ? data.topCategories.map(c => `<span class="px-3 py-1 rounded-full bg-blush/55 text-roseSoft text-xs font-semibold">${escapeHtml(c)}</span>`).join("")
+                    : `<span class="text-xs text-muted">Semua kategori konten</span>`;
+
+                const soc = data.socials || {};
+                const socChips = [
+                    normalizeSocialEntry(soc.instagram, "instagram")?.label ? `<span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold">IG: ${escapeHtml(normalizeSocialEntry(soc.instagram, "instagram").label)}</span>` : "",
+                    normalizeSocialEntry(soc.tiktok, "tiktok")?.label ? `<span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold">TT: ${escapeHtml(normalizeSocialEntry(soc.tiktok, "tiktok").label)}</span>` : "",
+                    normalizeSocialEntry(soc.threads, "threads")?.label ? `<span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold">Threads: ${escapeHtml(normalizeSocialEntry(soc.threads, "threads").label)}</span>` : ""
+                ].filter(Boolean).join("");
+                document.getElementById('pubSocialsList').innerHTML = socChips;
+
+                const gridEl = document.getElementById('pubGalleryGrid');
+                gridEl.innerHTML = (data.galleryPreviews || []).map(g => `
+                    <div class="botanical-card rounded-3xl overflow-hidden">
+                        <div class="aspect-[4/3] bg-cream flex items-center justify-center overflow-hidden">
+                            <img src="${g.photo}" alt="${escapeHtml(g.title)}" class="w-full h-full object-contain">
+                        </div>
+                        <div class="p-4 text-center">
+                            <p class="font-serif text-sm font-semibold text-espresso truncate">${escapeHtml(g.title)}</p>
+                            <p class="text-[11px] text-muted mt-0.5">${escapeHtml(g.category)}</p>
+                        </div>
+                    </div>
+                `).join("");
+
+                pubEl.classList.remove('hidden');
+                authEl.classList.add('hidden');
+                appEl.classList.add('hidden');
+                return true;
+            } catch (_) {
+                pubEl.classList.add('hidden');
+                return false;
+            }
+        }
+
+        window.exitPublicShareMode = () => {
+            window.history.replaceState(null, "", window.location.pathname + window.location.search);
+            document.getElementById('publicShareSection').classList.add('hidden');
+            if (currentUser && currentUser.emailVerified) {
+                document.getElementById('appSection').classList.remove('hidden');
+            } else {
+                document.getElementById('authSection').classList.remove('hidden');
+            }
+        };
+
+        document.getElementById('clientCategoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const targetUid = document.getElementById('publicShareSection').dataset.targetUid || currentUser?.uid;
+            const fb = document.getElementById('clientPickFeedback');
+            const brandName = document.getElementById('clientPickName').value.trim();
+            const chosenCat = document.getElementById('clientPickCategory').value;
+            const eventDate = document.getElementById('clientPickDate').value;
+            const note = document.getElementById('clientPickNote').value.trim();
+
+            if (!targetUid) {
+                fb.innerText = "Tautan belum terhubung ke akun kreator. Kirimkan detail ini langsung ke kreator.";
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, `users/${targetUid}/projects`), {
+                    clientName: `${brandName}${note ? ` (${note})` : ""}`,
+                    category: chosenCat,
+                    date: eventDate,
+                    amount: 0,
+                    taxAmount: 0,
+                    taxInputRaw: "",
+                    status: "Pending / Invoice Sent",
+                    pipelineStage: "Brief Diterima",
+                    managementName: "",
+                    deadlineDate: eventDate,
+                    payoutDate: "",
+                    projectSocialPlatform: "Instagram",
+                    projectSocialHandle: "",
+                    portfolioLink: "",
+                    photoData: "",
+                    createdAt: Date.now()
+                });
+                fb.innerText = "Pilihan kategori terkirim dan otomatis masuk ke catatan project kreator!";
+                e.target.reset();
+            } catch (err) {
+                fb.innerText = "Gagal mengirim otomatis: " + err.message;
+            }
+        });
 
         function syncGreetingTexts() {
             const sentence = buildIntroBubbleSentence();
@@ -1548,11 +2052,16 @@
         }
 
         function applySnapshotRecords(snapshotDocs) {
-            records = snapshotDocs.map(d => ({ id: d.id, ...d.data() }));
+            records = snapshotDocs.map(d => ({
+                id: d.id,
+                pipelineStage: "Brief Diterima",
+                ...d.data()
+            }));
             updateSummary();
             renderMonthlyChart();
             window.renderData();
             window.renderPortfolio();
+            renderOperationsTab();
         }
 
         async function refreshUserAndData() {
@@ -1847,7 +2356,13 @@
             }
         });
 
+        window.addEventListener("hashchange", () => {
+            checkPublicShareHash();
+        });
+
         onAuthStateChanged(auth, async (user) => {
+            if (checkPublicShareHash()) return;
+
             if (user && user.emailVerified) {
                 currentUser = user;
                 pendingVerifyUser = null;
@@ -1855,6 +2370,7 @@
                 document.getElementById('appSection').classList.remove('hidden');
                 setHeaderUserInfo(user);
                 applySocialsToUi({}, user.uid);
+                loadPublicShareSettings(user.uid);
                 subscribeProfileAndRecords();
                 refreshUserAndData();
             } else {
@@ -1908,6 +2424,7 @@
                 const clientName = document.getElementById('clientName').value.trim();
                 const category = document.getElementById('category').value;
                 const date = document.getElementById('date').value;
+                const pipelineStage = document.getElementById('pipelineStage').value;
                 const amount = parseFloat(document.getElementById('amount').value) || 0;
                 const rawTaxInput = document.getElementById('taxInput').value.trim();
                 const parsedTax = parseTaxValue(rawTaxInput, amount);
@@ -1932,6 +2449,7 @@
                     clientName,
                     category,
                     date,
+                    pipelineStage,
                     amount,
                     taxAmount: parsedTax.taxAmount,
                     taxInputRaw: rawTaxInput,
@@ -1964,10 +2482,142 @@
             await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), { status: nextStatus });
         };
 
+        window.updatePipelineStage = async (id, nextStage) => {
+            if (!currentUser) return;
+            const patch = { pipelineStage: nextStage };
+            if (nextStage === 'Post & Invoice Terkirim') {
+                const target = records.find(r => r.id === id);
+                if (target && target.status === 'DP 50%') {
+                    patch.status = 'Pending / Invoice Sent';
+                }
+            }
+            await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), patch);
+        };
+
         window.deleteRecord = async (id) => {
             if (!currentUser) return;
             if (!confirm('Hapus catatan project ini?')) return;
             await deleteDoc(doc(db, `users/${currentUser.uid}/projects`, id));
+        };
+
+        window.renderOperationsTab = () => {
+            const listEl = document.getElementById('pipelineCardsList');
+            const stageFilter = document.getElementById('filterPipelineStage')?.value || 'ALL';
+            const selEl = document.getElementById('followupProjectSelect');
+
+            if (selEl) {
+                const prevSelected = selEl.value;
+                selEl.innerHTML = `<option value="">-- Pilih Project --</option>` + records.map(r =>
+                    `<option value="${r.id}">${escapeHtml(r.clientName)} (${escapeHtml(r.status)})</option>`
+                ).join("");
+                if (prevSelected && records.some(r => r.id === prevSelected)) {
+                    selEl.value = prevSelected;
+                } else if (records.length > 0 && !prevSelected) {
+                    selEl.value = records[0].id;
+                }
+            }
+            renderFollowupTemplates();
+
+            if (!listEl) return;
+            const filtered = stageFilter === 'ALL'
+                ? records
+                : records.filter(r => (r.pipelineStage || 'Brief Diterima') === stageFilter);
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-6 text-center text-xs text-muted">
+                        Belum ada project di tahapan ini.
+                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill ml-2 px-3 py-1 text-[11px] font-semibold text-sageDark cursor-pointer">
+                            + Tambah Project
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(r => {
+                const stage = r.pipelineStage || 'Brief Diterima';
+                const stages = ['Brief Diterima', 'Drafting/Produksi', 'Revisi Brand', 'Post & Invoice Terkirim'];
+                const optionsHtml = stages.map(st =>
+                    `<option value="${st}" ${st === stage ? 'selected' : ''}>${st}</option>`
+                ).join("");
+
+                const reminderBadges = [];
+                if (r.deadlineDate) {
+                    reminderBadges.push(`<span class="px-2.5 py-0.5 rounded-full bg-blush/55 text-roseSoft text-[11px] font-semibold"><i class="fa-regular fa-calendar-check mr-1"></i>Konten: ${escapeHtml(r.deadlineDate)}</span>`);
+                }
+                if (r.payoutDate) {
+                    reminderBadges.push(`<span class="px-2.5 py-0.5 rounded-full bg-amber-100/90 text-amber-800 text-[11px] font-semibold"><i class="fa-regular fa-clock mr-1"></i>Bayar: ${escapeHtml(r.payoutDate)}</span>`);
+                }
+
+                const isReadyToBill = stage === 'Post & Invoice Terkirim' && r.status !== 'Lunas';
+
+                return `
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h4 class="font-semibold text-sm text-espresso">${escapeHtml(r.clientName)}</h4>
+                                <span class="text-xs text-muted">• ${escapeHtml(r.category || 'Event')}</span>
+                                <span class="text-xs font-bold text-espresso">• ${formatRupiah(r.amount)}</span>
+                                ${isReadyToBill ? `<span class="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-[10px] font-bold">Siap Tagih</span>` : ''}
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">${reminderBadges.join("")}</div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <select onchange="updatePipelineStage('${r.id}', this.value)" class="clay-pill px-3 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
+                                ${optionsHtml}
+                            </select>
+                            <button onclick="toggleStatus('${r.id}', '${r.status}')" class="clay-pill px-3 py-1.5 text-xs font-semibold ${r.status === 'Lunas' ? 'text-sageDark' : 'text-roseSoft'} cursor-pointer">
+                                ${r.status}
+                            </button>
+                            <button type="button" onclick="openInvoiceWithProject('${r.id}')" class="clay-pill px-3 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
+                                <i class="fa-solid fa-file-invoice text-roseSoft mr-1"></i> Invoice
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        };
+
+        window.renderFollowupTemplates = () => {
+            const selId = document.getElementById('followupProjectSelect')?.value || "";
+            const proj = records.find(r => r.id === selId) || {
+                clientName: "Project Kolaborasi",
+                amount: 0,
+                deadlineDate: "-",
+                payoutDate: "-"
+            };
+            const creator = getActiveUsername();
+            const feeStr = formatRupiah(Number(proj.amount) || 0);
+
+            const dpEl = document.getElementById('tplReminderDp');
+            const payEl = document.getElementById('tplReminderPay');
+            const draftEl = document.getElementById('tplSendDraft');
+
+            if (dpEl) {
+                dpEl.value = `Halo kak, izin follow up terkait konfirmasi slot & DP untuk project "${proj.clientName}" (${feeStr}). Apakah sudah dapat diproses agar jadwal produksi berjalan lancar? Terima kasih ya! — ${creator}`;
+            }
+            if (payEl) {
+                payEl.value = `Halo kak, izin mengingatkan terkait pelunasan invoice untuk project "${proj.clientName}" senilai ${feeStr}${proj.payoutDate ? ` (jatuh tempo ${proj.payoutDate})` : ""}. Kabari jika membutuhkan detail tambahan ya. Terima kasih banyak! — ${creator}`;
+            }
+            if (draftEl) {
+                draftEl.value = `Halo kak, draft konten untuk "${proj.clientName}" sudah siap di-review${proj.deadlineDate ? ` (target tayang ${proj.deadlineDate})` : ""}. Silakan kabari jika ada catatan atau revisi ya! — ${creator}`;
+            }
+        };
+
+        window.copyTemplateText = async (textareaId, btnEl) => {
+            const ta = document.getElementById(textareaId);
+            if (!ta) return;
+            try {
+                await navigator.clipboard.writeText(ta.value);
+                if (btnEl) {
+                    const prev = btnEl.innerHTML;
+                    btnEl.innerHTML = `<i class="fa-solid fa-check text-sageDark mr-1"></i> Tersalin!`;
+                    setTimeout(() => { btnEl.innerHTML = prev; }, 1600);
+                }
+            } catch (_) {
+                alert(ta.value);
+            }
         };
 
         const formatRupiah = (num) => new Intl.NumberFormat('id-ID', {
@@ -2185,6 +2835,11 @@
             document.getElementById('totalPending').innerText = formatRupiah(menungguPelunasan);
             document.getElementById('totalProjects').innerText = records.length;
 
+            const isEmpty = records.length === 0;
+            document.getElementById('ctaEmptyIncome')?.classList.toggle('hidden', !isEmpty);
+            document.getElementById('ctaEmptyInvoice')?.classList.toggle('hidden', !isEmpty);
+            document.getElementById('ctaEmptyAchievement')?.classList.toggle('hidden', !isEmpty);
+
             const { incomeRanked, popularRanked } = computeCategoryRankings(records);
 
             const incomeSelect = document.getElementById('rankIncomeSelect');
@@ -2215,7 +2870,15 @@
 
             const filtered = filter === 'ALL' ? records : records.filter(r => r.status === filter);
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-muted"><i class="fa-regular fa-folder-open mr-1.5 text-sageDark"></i> Belum ada project yang tercatat di bagian ini.</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-muted">
+                            <p class="mb-3"><i class="fa-regular fa-folder-open mr-1.5 text-sageDark"></i> Belum ada project yang tercatat di bagian ini.</p>
+                            <button type="button" onclick="focusNewProjectForm()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
+                                <i class="fa-solid fa-plus mr-1"></i> Tambah Project Pertama
+                            </button>
+                        </td>
+                    </tr>`;
                 return;
             }
 
@@ -2229,6 +2892,9 @@
                     : '';
 
                 const metaLines = [];
+                if (r.pipelineStage) {
+                    metaLines.push(`<span class="text-[11px] px-2 py-0.5 rounded-full bg-cream text-espresso font-semibold"><i class="fa-solid fa-diagram-project mr-1 text-sageDark"></i>${escapeHtml(r.pipelineStage)}</span>`);
+                }
                 if (r.managementName) {
                     metaLines.push(`<span class="text-[11px] text-sageDark font-medium"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(r.managementName)}</span>`);
                 }
@@ -2242,7 +2908,7 @@
                     metaLines.push(`<span class="text-[11px] text-roseSoft"><i class="fa-regular fa-clock mr-1"></i>Cair: ${escapeHtml(r.payoutDate)}</span>`);
                 }
                 const extraMetaHtml = metaLines.length > 0
-                    ? `<div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">${metaLines.join('')}</div>`
+                    ? `<div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">${metaLines.join('')}</div>`
                     : '';
 
                 const taxSubHtml = (Number(r.taxAmount) > 0)
@@ -2264,7 +2930,10 @@
                                 ${r.status}
                             </button>
                         </td>
-                        <td class="p-4 text-right whitespace-nowrap">
+                        <td class="p-4 text-right whitespace-nowrap space-x-1">
+                            <button type="button" onclick="openInvoiceWithProject('${r.id}')" class="clay-pill text-sageDark px-2.5 py-1.5 text-xs cursor-pointer" title="Tarik ke Invoice">
+                                <i class="fa-solid fa-file-invoice"></i>
+                            </button>
                             <button onclick="deleteRecord('${r.id}')" class="clay-pill text-muted hover:text-rose-600 px-2.5 py-1.5 text-xs cursor-pointer" title="Hapus">
                                 <i class="fa-regular fa-trash-can"></i>
                             </button>
@@ -2275,9 +2944,58 @@
         };
 
         /* ================= INVOICE BUILDER & 2-PAGE PREVIEW / HD PDF ================= */
+        function syncInvoiceProjectDropdown() {
+            const sel = document.getElementById('invoiceProjectSourceSelect');
+            if (!sel) return;
+            sel.innerHTML = `<option value="">-- Pilih Project --</option>` + records.map(r =>
+                `<option value="${r.id}">${escapeHtml(r.clientName)} (${escapeHtml(r.status)} — ${formatRupiah(r.amount)})</option>`
+            ).join('');
+        }
+
+        window.pullProjectIntoInvoice = () => {
+            const selId = document.getElementById('invoiceProjectSourceSelect')?.value || "";
+            if (!selId) return;
+            const proj = records.find(r => r.id === selId);
+            if (!proj) return;
+
+            document.getElementById('invClientName').value = proj.clientName || "";
+            document.getElementById('invClientSubtitle').value = proj.category || "";
+            if (proj.date) {
+                const parsed = new Date(proj.date + "T00:00:00");
+                if (!Number.isNaN(parsed.getTime())) {
+                    document.getElementById('invEventDateText').value = parsed.toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    });
+                }
+            }
+            invoiceLineItems = [
+                {
+                    title: proj.category || "Layanan Konten",
+                    desc: proj.clientName || "",
+                    qty: 1,
+                    price: Number(proj.amount) || 0
+                }
+            ];
+            renderInvoiceEditorItems();
+            refreshInvoicePreview();
+        };
+
+        window.openInvoiceWithProject = (projectId) => {
+            openInvoiceModal();
+            const sel = document.getElementById('invoiceProjectSourceSelect');
+            if (sel && projectId) {
+                sel.value = projectId;
+                pullProjectIntoInvoice();
+            }
+        };
+
         window.clearInvoiceForm = () => {
             const catDrop = document.getElementById('invoiceCategoryDropdown');
             if (catDrop) catDrop.value = "";
+            const projDrop = document.getElementById('invoiceProjectSourceSelect');
+            if (projDrop) projDrop.value = "";
             document.getElementById('invNumber').value = "";
             document.getElementById('invStatus').value = "";
             document.getElementById('invClientName').value = "";
@@ -2674,6 +3392,7 @@
         };
 
         window.openInvoiceModal = () => {
+            syncInvoiceProjectDropdown();
             renderInvoiceEditorItems();
             refreshInvoicePreview();
             const modal = document.getElementById('invoiceModal');
@@ -2774,8 +3493,9 @@
                     const fee = formatRupiah(Number(item.amount) || 0);
                     const tax = formatRupiah(Number(item.taxAmount) || 0);
                     const taxPctNote = item.taxInputRaw && String(item.taxInputRaw).includes('%') ? ` [${item.taxInputRaw}]` : '';
+                    const stagePart = item.pipelineStage ? ` | Tahap: ${item.pipelineStage}` : '';
                     const mgmtPart = item.managementName ? ` | Mgmt: ${item.managementName}` : '';
-                    return `- ${item.clientName}${mgmtPart} | Fee (Excl. Pajak): ${fee} | Pajak: ${tax}${taxPctNote} (${item.status})`;
+                    return `- ${item.clientName}${stagePart}${mgmtPart} | Fee (Excl. Pajak): ${fee} | Pajak: ${tax}${taxPctNote} (${item.status})`;
                 }).join('\n')
                 : '- Belum ada data project';
 
@@ -2837,7 +3557,7 @@
                             <td style="padding:14px 16px; font-size:14px; color:#7A6C67; white-space:nowrap;">${escapeHtml(item.date || '-')}</td>
                             <td style="padding:14px 16px; font-size:15px; font-weight:600; color:#352B28;">
                                 ${escapeHtml(item.clientName || '-')}
-                                <span style="display:block; font-size:12px; font-weight:400; color:#7A6C67;">${escapeHtml(item.category || '-')}</span>
+                                <span style="display:block; font-size:12px; font-weight:400; color:#7A6C67;">${escapeHtml(item.pipelineStage || item.category || '-')}</span>
                             </td>
                             <td style="padding:14px 16px; font-size:14px; color:#4F6952; font-weight:500;">${mgmtText}</td>
                             <td style="padding:14px 16px; font-size:15px; font-weight:700; color:#352B28; white-space:nowrap;">${fee}</td>
@@ -3087,7 +3807,10 @@
             if (photoItems.length === 0) {
                 collageContainer.innerHTML = `
                     <div class="col-span-full botanical-card text-center py-8 px-4 rounded-3xl text-muted text-xs">
-                        <i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto saat mencatat project untuk membentuk kolase per bulan.
+                        <p><i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto saat mencatat project untuk membentuk kolase per bulan.</p>
+                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill mt-3 px-4 py-1.5 text-[11px] font-semibold text-sageDark cursor-pointer">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Karya Pertama
+                        </button>
                     </div>`;
                 return;
             }
@@ -3160,7 +3883,10 @@
             if (items.length === 0) {
                 yearlyContainer.innerHTML = `
                     <div class="botanical-card text-center py-12 px-4 rounded-3xl text-muted text-sm">
-                        <i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada item portofolio. Tambahkan link konten atau foto saat mencatat project baru.
+                        <p><i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada item portofolio. Tambahkan link konten atau foto saat mencatat project baru.</p>
+                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill mt-3 px-4 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Project Pertama
+                        </button>
                     </div>`;
                 return;
             }
@@ -3394,10 +4120,12 @@
             const isFinance = tab === 'finance';
             const isPortfolio = tab === 'portfolio';
             const isSocial = tab === 'social';
+            const isOperations = tab === 'operations';
 
             document.getElementById('viewFinance').classList.toggle('hidden', !isFinance);
             document.getElementById('viewPortfolio').classList.toggle('hidden', !isPortfolio);
             document.getElementById('viewSocial').classList.toggle('hidden', !isSocial);
+            document.getElementById('viewOperations').classList.toggle('hidden', !isOperations);
 
             const activeCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer";
             const idleCls = "clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer";
@@ -3405,11 +4133,14 @@
             document.getElementById('tabFinance').className = isFinance ? activeCls : idleCls;
             document.getElementById('tabPortfolio').className = isPortfolio ? activeCls : idleCls;
             document.getElementById('tabSocial').className = isSocial ? activeCls : idleCls;
+            document.getElementById('tabOperations').className = isOperations ? activeCls : idleCls;
 
             if (isPortfolio) {
                 window.renderPortfolio();
             } else if (isSocial) {
                 updateSocialProfileCard();
+            } else if (isOperations) {
+                renderOperationsTab();
             } else if (isFinance) {
                 renderMonthlyChart();
             }
@@ -3417,10 +4148,11 @@
 
         window.exportToCSV = () => {
             if (records.length === 0) return alert('Belum ada data untuk di-export.');
-            let csv = 'Tanggal,Project Name,Kategori,Nominal Fee (Exclude Pajak),Nominal Pajak,Input Pajak Asli,Status,Management,Deadline,Estimasi Cair,Sosmed Platform,Sosmed Handle,Link\n';
+            let csv = 'Tanggal,Project Name,Kategori,Tahap Pipeline,Nominal Fee (Exclude Pajak),Nominal Pajak,Input Pajak Asli,Status,Management,Deadline,Estimasi Cair,Sosmed Platform,Sosmed Handle,Link\n';
             records.forEach(r => {
                 const safeClient = String(r.clientName || '').replace(/"/g, '""');
                 const safeCat = String(r.category || '').replace(/"/g, '""');
+                const safeStage = String(r.pipelineStage || 'Brief Diterima').replace(/"/g, '""');
                 const safeTaxRaw = String(r.taxInputRaw || '').replace(/"/g, '""');
                 const safeMgmt = String(r.managementName || '').replace(/"/g, '""');
                 const safeDeadline = String(r.deadlineDate || '').replace(/"/g, '""');
@@ -3428,7 +4160,7 @@
                 const safeSocPlat = String(r.projectSocialPlatform || '').replace(/"/g, '""');
                 const safeSocHandle = String(r.projectSocialHandle || '').replace(/"/g, '""');
                 const safeLink = String(r.portfolioLink || '').replace(/"/g, '""');
-                csv += `"${r.date || ''}","${safeClient}","${safeCat}",${Number(r.amount) || 0},${Number(r.taxAmount) || 0},"${safeTaxRaw}","${r.status}","${safeMgmt}","${safeDeadline}","${safePayout}","${safeSocPlat}","${safeSocHandle}","${safeLink}"\n`;
+                csv += `"${r.date || ''}","${safeClient}","${safeCat}","${safeStage}",${Number(r.amount) || 0},${Number(r.taxAmount) || 0},"${safeTaxRaw}","${r.status}","${safeMgmt}","${safeDeadline}","${safePayout}","${safeSocPlat}","${safeSocHandle}","${safeLink}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
