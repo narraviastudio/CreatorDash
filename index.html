@@ -277,9 +277,7 @@
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blush/60 text-roseSoft text-xs font-semibold">
                         <i class="fa-solid fa-globe"></i> Public Creator Showcase &amp; Brand Inquiry
                     </span>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-sage/15 text-sageDark text-[11px] font-semibold">
-                        <i class="fa-solid fa-rotate"></i> Auto-Refresh Aktif
-                    </span>
+
                 </div>
                 <button type="button" onclick="exitPublicShareMode()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso cursor-pointer">
                     <i class="fa-solid fa-arrow-left mr-1 text-sageDark"></i> Masuk / Kembali ke Studio
@@ -289,6 +287,7 @@
             <p id="pubCreatorBio" class="text-sm text-espresso/90 mt-2 leading-relaxed"></p>
             <div class="flex flex-wrap items-center gap-2.5 mt-4">
                 <span id="pubCollabStatus" class="px-3.5 py-1 rounded-full bg-sage/20 text-sageDark text-xs font-bold"></span>
+                <span id="pubCreatorTierBadge" class="px-3.5 py-1 rounded-full bg-blush/70 text-roseSoft text-xs font-bold"></span>
                 <span id="pubRateHighlight" class="px-3.5 py-1 rounded-full bg-amber-100/90 text-amber-900 text-xs font-semibold"></span>
             </div>
             <div class="mt-4">
@@ -298,6 +297,13 @@
             <div class="mt-4">
                 <p class="text-[11px] uppercase tracking-wider font-bold text-muted mb-1.5">Media Sosial Aktif</p>
                 <div id="pubSocialsList" class="flex flex-wrap gap-2"></div>
+            </div>
+            <div id="pubRateCardBox" class="mt-5 pt-4 border-t border-[#EADFD3] hidden">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <p class="text-[11px] uppercase tracking-wider font-bold text-sageDark"><i class="fa-solid fa-tags mr-1"></i> Official Rate Card &amp; Insight</p>
+                    <span id="pubInsightSummary" class="text-[11px] font-semibold text-muted"></span>
+                </div>
+                <div id="pubRateCardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"></div>
             </div>
         </div>
 
@@ -343,7 +349,7 @@
                 <div class="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 pt-2">
                     <span id="clientPickFeedback" class="text-xs font-semibold text-sageDark"></span>
                     <button type="submit" id="btnSubmitClientPick" class="clay-pill px-6 py-2.5 text-sm font-semibold text-espresso cursor-pointer">
-                        <i class="fa-solid fa-paper-plane mr-1.5 text-roseSoft"></i> Kirim Pilihan Kategori
+                        <i class="fa-solid fa-paper-plane mr-1.5 text-roseSoft"></i> Submit Pitching
                     </button>
                 </div>
             </form>
@@ -457,7 +463,31 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2.5">
+            <div class="flex flex-wrap items-center gap-2.5 relative">
+                <!-- Lonceng Notifikasi Pitching Client -->
+                <div class="relative" id="pitchingNotifWrapper">
+                    <button type="button" id="btnPitchingBell" onclick="togglePitchingNotifDropdown(event)" title="Notifikasi Pitching Client"
+                        class="clay-pill text-espresso w-9 h-9 inline-flex items-center justify-center relative cursor-pointer">
+                        <i class="fa-regular fa-bell text-roseSoft text-sm"></i>
+                        <span id="pitchingBellBadge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-600 text-white text-[10px] font-bold flex items-center justify-center shadow-xs">0</span>
+                    </button>
+
+                    <!-- Dropdown Notifikasi Pitching -->
+                    <div id="pitchingNotifDropdown" onclick="event.stopPropagation()"
+                        class="hidden absolute right-0 sm:right-auto sm:left-0 mt-2.5 w-[330px] sm:w-[410px] max-w-[92vw] botanical-card rounded-3xl p-4 sm:p-5 z-50 border border-[#E2D4C3] shadow-xl">
+                        <div class="flex items-center justify-between gap-2 pb-3 border-b border-[#EADFD3]">
+                            <div>
+                                <h4 class="font-serif text-base font-semibold text-espresso flex items-center gap-1.5">
+                                    <i class="fa-solid fa-bell text-roseSoft text-xs"></i> Pitching Masuk dari Client
+                                </h4>
+                                <p class="text-[11px] text-muted">Accept untuk otomatis masuk ke Income &amp; Project Flows</p>
+                            </div>
+                            <span id="pitchingCountLabel" class="px-2.5 py-0.5 rounded-full bg-blush/60 text-roseSoft text-[11px] font-bold">0 baru</span>
+                        </div>
+                        <div id="pitchingNotifList" class="mt-3 space-y-3 max-h-[380px] overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
                 <button type="button" onclick="openInvoiceModal()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold transition inline-flex items-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-file-invoice text-roseSoft"></i> Buat Invoice
                 </button>
@@ -476,7 +506,7 @@
                 <i class="fa-solid fa-heart mr-1.5 text-blush"></i> Pendapatan &amp; Project
             </button>
             <button onclick="switchTab('portfolio')" id="tabPortfolio" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
-                <i class="fa-solid fa-images mr-1.5 text-roseSoft"></i> Galeri Portofolio
+                <i class="fa-solid fa-images mr-1.5 text-roseSoft"></i> Portofolio &amp; Ratecard
             </button>
             <button onclick="switchTab('social')" id="tabSocial" class="clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer">
                 <i class="fa-solid fa-share-nodes mr-1.5 text-sageDark"></i> Social Media
@@ -690,9 +720,16 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
-                            <i class="fa-solid fa-building-user text-sageDark mr-1"></i> Nama Management (Opsional)
+                            <i class="fa-solid fa-building-user text-sageDark mr-1"></i> Nama Brand / Management (Opsional)
                         </label>
-                        <input type="text" id="managementName" placeholder="Contoh: Narravia Talent Mgmt"
+                        <input type="text" id="managementName" placeholder="Contoh: Brand Luna / Narravia Mgmt"
+                            class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">
+                            <i class="fa-regular fa-file-lines text-roseSoft mr-1"></i> Briefing Singkat (Opsional)
+                        </label>
+                        <input type="text" id="projectBrief" placeholder="Contoh: 2 Reels + 10 foto dokumentasi"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm focus:outline-none focus:border-sageDark">
                     </div>
                     <div>
@@ -752,7 +789,7 @@
                 <div class="p-4 sm:px-6 border-b border-[#EADFD3]/60 flex flex-wrap justify-between items-center gap-3">
                     <div>
                         <h3 class="font-serif text-lg font-semibold text-espresso">
-                            <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Riwayat Pemasukan &amp; Siklus Project
+                            <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Income &amp; Project Flows
                         </h3>
                         <p class="text-[11px] text-muted">Klik ikon pensil pada Project Name untuk mengedit nama project, klik status untuk ubah pembayaran, atau tarik ke Invoice</p>
                     </div>
@@ -781,13 +818,13 @@
             </div>
         </div>
 
-        <!-- TAB 2: GALERI PORTOFOLIO -->
+        <!-- TAB 2: PORTOFOLIO & RATECARD -->
         <div id="viewPortfolio" class="hidden space-y-6">
             <div class="flex flex-wrap justify-between items-center gap-3">
                 <div>
                     <h2 class="font-serif text-2xl font-semibold text-espresso flex items-center gap-2">
                         <i class="fa-solid fa-wand-magic-sparkles text-roseSoft text-lg"></i>
-                        <span>Portofolio Showcase</span>
+                        <span>Portofolio &amp; Ratecard</span>
                         <i class="fa-solid fa-spa text-sageDark text-base micro-float"></i>
                     </h2>
                     <div id="showcaseSocialIconsRow" class="flex flex-wrap items-center gap-2.5 mt-2 text-xs font-semibold text-sageDark hidden"></div>
@@ -797,6 +834,73 @@
                         <i class="fa-solid fa-share-from-square text-roseSoft"></i> <span id="btnCopyPublicLinkLabel">Link Portofolio Publik</span>
                     </button>
                 </div>
+            </div>
+
+            <!-- KALKULATOR & RATE CARD CREATOR (NANO / MICRO / MACRO BERDASARKAN FOLLOWERS & INSIGHT) -->
+            <div class="botanical-card p-5 sm:p-6 rounded-3xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sage/15 text-sageDark text-[11px] font-semibold">
+                            <i class="fa-solid fa-chart-line"></i> Creator Tier &amp; Smart Ratecard
+                        </span>
+                        <h3 class="font-serif text-xl font-semibold text-espresso mt-1">
+                            Rate Card Otomatis (Nano / Micro / Macro)
+                        </h3>
+                        <p class="text-xs text-muted">Dihitung otomatis dari total followers, rata-rata views/reach insight, dan engagement rate kamu.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span id="creatorTierBadge" class="px-3.5 py-1.5 rounded-full bg-blush/70 text-roseSoft text-xs font-bold">
+                            Nano Creator (1K – 10K)
+                        </span>
+                        <button type="button" onclick="recalculateRatecardFromInsight(true)" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Hitung Ulang Ratecard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Input Insight & Followers -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-4">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-users text-sageDark mr-1"></i> Total Followers (IG / TikTok)
+                        </label>
+                        <input type="number" id="rcFollowersInput" min="0" placeholder="Contoh: 8500" oninput="handleInsightInputChange()"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
+                        <p class="text-[10px] text-muted mt-1">Nano: &lt;10K • Micro: 10K–100K • Macro: &gt;100K</p>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-eye text-roseSoft mr-1"></i> Avg. Views / Reach per Konten
+                        </label>
+                        <input type="number" id="rcAvgViewsInput" min="0" placeholder="Contoh: 4200" oninput="handleInsightInputChange()"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
+                        <p class="text-[10px] text-muted mt-1">Rata-rata views 30 hari terakhir</p>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-heart-pulse text-roseSoft mr-1"></i> Engagement Rate (%)
+                        </label>
+                        <input type="number" id="rcEngagementInput" min="0" max="100" step="0.1" placeholder="Contoh: 4.5" oninput="handleInsightInputChange()"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
+                        <p class="text-[10px] text-muted mt-1">Bonus multiplier jika ER &ge; 4%</p>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
+                            <i class="fa-solid fa-layer-group text-sageDark mr-1"></i> Kategori Creator (Manual / Auto)
+                        </label>
+                        <select id="rcTierOverrideSelect" onchange="handleTierSelectChange()"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
+                            <option value="AUTO">Otomatis dari Followers</option>
+                            <option value="Nano">Nano Creator (1K – 10K)</option>
+                            <option value="Micro">Micro Creator (10K – 100K)</option>
+                            <option value="Macro">Macro Creator (100K – 1M)</option>
+                        </select>
+                        <p id="rcInsightScoreHint" class="text-[10px] text-sageDark font-semibold mt-1">Insight Score: Standar</p>
+                    </div>
+                </div>
+
+                <!-- Daftar Paket Ratecard yang Bisa Diedit Nominalnya -->
+                <div id="ratecardPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
             </div>
 
             <!-- Form Pengajuan Pitching Kerjasama -->
@@ -949,10 +1053,10 @@
                             <i class="fa-solid fa-route"></i> Pipeline Status &amp; Deadline Reminder
                         </span>
                         <h2 class="font-serif text-2xl font-semibold text-espresso mt-1">
-                            Siklus Project Terhubung ke Invoice &amp; Penagihan
+                            Project &amp; Flows
                         </h2>
                         <p class="text-xs text-muted mt-0.5">
-                            Pantau tahapan kerja (Brief Diterima &rarr; Drafting/Produksi &rarr; Revisi Brand &rarr; Post &amp; Invoice Terkirim), deadline konten, &amp; jatuh tempo bayar.
+                            Monitoring Workflows, Deadline &amp; Payments.
                         </p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
@@ -1380,6 +1484,89 @@
             };
         }
 
+        function createDefaultRatecardData() {
+            return {
+                followers: 5000,
+                avgViews: 2500,
+                engagementRate: 4.2,
+                tierMode: "AUTO",
+                detectedTier: "Nano",
+                packages: [
+                    { id: "reels", name: "Event Coverage (Reels / TikTok)", desc: "1x Vertical Video HD (30-60s) + Mirroring", price: 750000 },
+                    { id: "sde", name: "Same Day Edit (SDE)", desc: "Edit cepat di lokasi event & siap tayang hari H", price: 1100000 },
+                    { id: "ugc", name: "UGC / Review Visit", desc: "1x Video Review + 5 Foto HD", price: 650000 },
+                    { id: "story", name: "Instagram Story Bundle", desc: "3x Frame Story + Link Tag Brand", price: 300000 },
+                    { id: "photo", name: "Event Photo Documentation", desc: "15-20 Foto Edited HD siap upload", price: 600000 },
+                    { id: "bundle", name: "Full Campaign Bundle", desc: "2x Reels/TikTok + 3x Story + 10 Foto HD", price: 1650000 }
+                ]
+            };
+        }
+
+        let creatorRatecard = createDefaultRatecardData();
+        let ratecardCloudTimer = null;
+
+        function classifyCreatorTier(followers) {
+            const f = Math.max(0, Number(followers) || 0);
+            if (f >= 100000) return "Macro";
+            if (f >= 10000) return "Micro";
+            return "Nano";
+        }
+
+        function computeInsightMultiplier(followers, avgViews, er) {
+            const f = Math.max(1, Number(followers) || 0);
+            const v = Math.max(0, Number(avgViews) || 0);
+            const engagement = Math.max(0, Number(er) || 0);
+
+            const viewRatio = v / f;
+            let mult = 1.0;
+            if (viewRatio >= 1.0) mult += 0.35;
+            else if (viewRatio >= 0.5) mult += 0.2;
+            else if (viewRatio >= 0.25) mult += 0.1;
+
+            if (engagement >= 6.0) mult += 0.25;
+            else if (engagement >= 4.0) mult += 0.15;
+            else if (engagement >= 2.5) mult += 0.05;
+
+            return mult;
+        }
+
+        function buildRecommendedPackagesForTier(tier, mult = 1.0) {
+            const baseMap = {
+                Nano: [
+                    { id: "reels", name: "Event Coverage (Reels / TikTok)", desc: "1x Vertical Video HD (30-60s) + Mirroring", base: 650000 },
+                    { id: "sde", name: "Same Day Edit (SDE)", desc: "Edit cepat di lokasi event & siap tayang hari H", base: 950000 },
+                    { id: "ugc", name: "UGC / Review Visit", desc: "1x Video Review + 5 Foto HD", base: 550000 },
+                    { id: "story", name: "Instagram Story Bundle", desc: "3x Frame Story + Link Tag Brand", base: 250000 },
+                    { id: "photo", name: "Event Photo Documentation", desc: "15-20 Foto Edited HD siap upload", base: 500000 },
+                    { id: "bundle", name: "Full Campaign Bundle", desc: "2x Reels/TikTok + 3x Story + 10 Foto HD", base: 1450000 }
+                ],
+                Micro: [
+                    { id: "reels", name: "Event Coverage (Reels / TikTok)", desc: "1x Vertical Video HD (30-60s) + Mirroring", base: 1850000 },
+                    { id: "sde", name: "Same Day Edit (SDE)", desc: "Edit cepat di lokasi event & siap tayang hari H", base: 2600000 },
+                    { id: "ugc", name: "UGC / Review Visit", desc: "1x Video Review + 8 Foto HD", base: 1500000 },
+                    { id: "story", name: "Instagram Story Bundle", desc: "3x Frame Story + Link Tag Brand", base: 650000 },
+                    { id: "photo", name: "Event Photo Documentation", desc: "20-30 Foto Edited HD siap upload", base: 1350000 },
+                    { id: "bundle", name: "Full Campaign Bundle", desc: "2x Reels/TikTok + 3x Story + 15 Foto HD", base: 3900000 }
+                ],
+                Macro: [
+                    { id: "reels", name: "Event Coverage (Reels / TikTok)", desc: "1x Vertical Video HD (30-60s) + Mirroring", base: 5500000 },
+                    { id: "sde", name: "Same Day Edit (SDE)", desc: "Edit cepat di lokasi event & siap tayang hari H", base: 7500000 },
+                    { id: "ugc", name: "UGC / Review Visit", desc: "1x Video Review + 10 Foto HD", base: 4500000 },
+                    { id: "story", name: "Instagram Story Bundle", desc: "3x Frame Story + Link Tag Brand", base: 1800000 },
+                    { id: "photo", name: "Event Photo Documentation", desc: "30+ Foto Edited HD siap upload", base: 3800000 },
+                    { id: "bundle", name: "Full Campaign Bundle", desc: "2x Reels/TikTok + 3x Story + 20 Foto HD", base: 11500000 }
+                ]
+            };
+
+            const list = baseMap[tier] || baseMap.Nano;
+            return list.map(item => ({
+                id: item.id,
+                name: item.name,
+                desc: item.desc,
+                price: Math.round((item.base * mult) / 50000) * 50000
+            }));
+        }
+
         function createEmptyInvoiceDraft() {
             return {
                 invNumber: "",
@@ -1408,9 +1595,11 @@
         let editingProjectId = null;
         let editPortfolioPhotoBase64 = "";
         let unsubscribeRecords = null;
+        let unsubscribePitching = null;
         let unsubscribeProfile = null;
         let unsubscribePublicProfile = null;
         let unsubscribePublicProjects = null;
+        let pitchingRequests = [];
         let autoRefreshTimer = null;
         let invoiceCloudSaveTimer = null;
         let socialCloudSaveTimer = null;
@@ -1499,6 +1688,9 @@
             publicShareSettings = createEmptyPublicShare();
             invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
             records = [];
+            pitchingRequests = [];
+            creatorRatecard = createDefaultRatecardData();
+            updatePitchingBellUI();
 
             const avatarImg = document.getElementById('userAvatarImg');
             const avatarInitial = document.getElementById('userAvatarInitial');
@@ -1841,6 +2033,35 @@
             document.getElementById('pubCollabStatus').innerText = collabStatus || "Open Collaboration";
             document.getElementById('pubRateHighlight').innerText = rateCardNote || "";
 
+            const rc = arguments[0]?.ratecard || null;
+            const tierBadge = document.getElementById('pubCreatorTierBadge');
+            const rcBox = document.getElementById('pubRateCardBox');
+            const rcGrid = document.getElementById('pubRateCardGrid');
+            const rcInsight = document.getElementById('pubInsightSummary');
+            if (rc && rc.packages && rc.packages.length > 0) {
+                const tierName = rc.detectedTier || classifyCreatorTier(rc.followers);
+                const tierRange = tierName === "Macro" ? "100K+ Followers" : (tierName === "Micro" ? "10K–100K Followers" : "1K–10K Followers");
+                if (tierBadge) tierBadge.innerText = `${tierName} Creator (${tierRange})`;
+                if (rcInsight) {
+                    const fStr = Number(rc.followers || 0).toLocaleString("id-ID");
+                    const vStr = Number(rc.avgViews || 0).toLocaleString("id-ID");
+                    rcInsight.innerText = `${fStr} Followers • Avg. ${vStr} Views • ER ${rc.engagementRate || 0}%`;
+                }
+                if (rcGrid) {
+                    rcGrid.innerHTML = rc.packages.map(pkg => `
+                        <div class="bg-ivory/90 border border-[#E4D8CA] rounded-2xl p-3.5">
+                            <p class="text-xs font-bold text-espresso">${escapeHtml(pkg.name)}</p>
+                            <p class="text-[11px] text-muted mt-0.5">${escapeHtml(pkg.desc || '')}</p>
+                            <p class="font-serif text-base font-bold text-sageDark mt-2">${formatRupiah(Number(pkg.price) || 0)}</p>
+                        </div>
+                    `).join("");
+                }
+                if (rcBox) rcBox.classList.remove('hidden');
+            } else {
+                if (tierBadge) tierBadge.innerText = "Content Creator";
+                if (rcBox) rcBox.classList.add('hidden');
+            }
+
             const catCount = {};
             (projectList || []).forEach(r => {
                 const c = r.category || "Lainnya";
@@ -1904,7 +2125,8 @@
                 domicile: fallbackData?.socials?.domicile || "",
                 socials: fallbackData?.socials || createEmptySocials(),
                 collabStatus: fallbackData?.collabStatus || createEmptyPublicShare().collabStatus,
-                rateCardNote: fallbackData?.rateCardNote || ""
+                rateCardNote: fallbackData?.rateCardNote || "",
+                ratecard: fallbackData?.ratecard || null
             };
             let latestProjects = (fallbackData?.galleryPreviews || []).map((g, idx) => ({
                 id: `fallback_${idx}`,
@@ -1920,6 +2142,7 @@
                     collabStatus: latestProfile.collabStatus,
                     rateCardNote: latestProfile.rateCardNote,
                     socials: latestProfile.socials,
+                    ratecard: latestProfile.ratecard,
                     projectList: latestProjects
                 });
             };
@@ -1938,7 +2161,8 @@
                         domicile: d.socials?.domicile ?? latestProfile.domicile,
                         socials: { ...createEmptySocials(), ...(d.socials || {}) },
                         collabStatus: d.publicShare?.collabStatus ?? latestProfile.collabStatus,
-                        rateCardNote: d.publicShare?.rateCardNote ?? latestProfile.rateCardNote
+                        rateCardNote: d.publicShare?.rateCardNote ?? latestProfile.rateCardNote,
+                        ratecard: d.ratecard ?? latestProfile.ratecard
                     };
                     syncPublicView();
                 },
@@ -2020,25 +2244,15 @@
 
             btn.disabled = true;
             try {
-                await addDoc(collection(db, `users/${targetUid}/projects`), {
-                    clientName: `${brandName}${note ? ` (${note})` : ""}`,
+                await addDoc(collection(db, `users/${targetUid}/pitchingRequests`), {
+                    brandName,
                     category: chosenCat,
-                    date: eventDate,
-                    amount: 0,
-                    taxAmount: 0,
-                    taxInputRaw: "",
-                    status: "Pending / Invoice Sent",
-                    pipelineStage: "Brief Diterima",
-                    managementName: "",
-                    deadlineDate: eventDate,
-                    payoutDate: "",
-                    projectSocialPlatform: "Instagram",
-                    projectSocialHandle: "",
-                    portfolioLink: "",
-                    photoData: "",
+                    eventDate,
+                    brief: note,
+                    decision: "pending",
                     createdAt: Date.now()
                 });
-                fb.innerText = "Pilihan kategori terkirim dan otomatis masuk ke catatan project kreator!";
+                fb.innerText = "Pitching berhasil dikirim! Kreator akan menerima notifikasi dan meninjau penawaranmu.";
                 e.target.reset();
             } catch (err) {
                 fb.innerText = "Gagal mengirim otomatis: " + err.message;
@@ -2330,6 +2544,10 @@
                 unsubscribeRecords();
                 unsubscribeRecords = null;
             }
+            if (unsubscribePitching) {
+                unsubscribePitching();
+                unsubscribePitching = null;
+            }
             if (unsubscribeProfile) {
                 unsubscribeProfile();
                 unsubscribeProfile = null;
@@ -2342,6 +2560,9 @@
             clearTimeout(socialCloudSaveTimer);
             clearTimeout(publicShareCloudTimer);
             records = [];
+            pitchingRequests = [];
+            creatorRatecard = createDefaultRatecardData();
+            updatePitchingBellUI();
         }
 
         function setHeaderUserInfo(user, profileData = {}) {
@@ -2369,6 +2590,12 @@
                     applyInvoiceDraftToForm(mergedDraft);
                     refreshInvoicePreview();
                 }
+            }
+
+            if (typeof profileData === "object" && profileData?.ratecard) {
+                loadCreatorRatecard(uid, profileData.ratecard);
+            } else {
+                loadCreatorRatecard(uid, null);
             }
 
             try {
@@ -2760,12 +2987,298 @@
                 }
             );
 
+            const qPitch = query(collection(db, `users/${uid}/pitchingRequests`), orderBy("createdAt", "desc"));
+            unsubscribePitching = onSnapshot(
+                qPitch,
+                (snapshot) => {
+                    if (activeUserUid !== uid) return;
+                    pitchingRequests = snapshot.docs.map(d => ({
+                        id: d.id,
+                        ...d.data()
+                    }));
+                    updatePitchingBellUI();
+                },
+                (err) => {
+                    console.error("Pitching sync error:", err);
+                }
+            );
+
             autoRefreshTimer = setInterval(() => {
                 if (!document.hidden && currentUser && activeUserUid === uid) {
                     refreshUserAndData();
                 }
             }, 30000);
         }
+
+        /* ================= NOTIFIKASI LONCENG PITCHING CLIENT ================= */
+        document.addEventListener("click", (e) => {
+            const wrapper = document.getElementById("pitchingNotifWrapper");
+            const dropdown = document.getElementById("pitchingNotifDropdown");
+            if (wrapper && dropdown && !wrapper.contains(e.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
+
+        window.togglePitchingNotifDropdown = (e) => {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById("pitchingNotifDropdown");
+            if (!dropdown) return;
+            dropdown.classList.toggle("hidden");
+            updatePitchingBellUI();
+        };
+
+        function updatePitchingBellUI() {
+            const badge = document.getElementById("pitchingBellBadge");
+            const countLabel = document.getElementById("pitchingCountLabel");
+            const listEl = document.getElementById("pitchingNotifList");
+
+            const activeItems = pitchingRequests.filter(p => p.decision !== "declined" && p.decision !== "accepted");
+            const pendingCount = activeItems.length;
+
+            if (badge) {
+                badge.textContent = String(pendingCount);
+                badge.classList.toggle("hidden", pendingCount === 0);
+            }
+            if (countLabel) {
+                countLabel.textContent = `${pendingCount} perlu respon`;
+            }
+            if (!listEl) return;
+
+            if (pitchingRequests.length === 0) {
+                listEl.innerHTML = `
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-4 text-center text-xs text-muted">
+                        <i class="fa-regular fa-bell-slash text-base text-sageDark mb-1 block"></i>
+                        Belum ada pitching dari client.
+                    </div>`;
+                return;
+            }
+
+            listEl.innerHTML = pitchingRequests.map(item => {
+                const dec = item.decision || "pending";
+                let statusPill = `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">Baru Masuk</span>`;
+                if (dec === "discussing") {
+                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[10px] font-bold"><i class="fa-regular fa-comments mr-1"></i>Menunggu Diskusi Lanjutan</span>`;
+                } else if (dec === "accepted") {
+                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-sage/25 text-sageDark text-[10px] font-bold"><i class="fa-solid fa-check mr-1"></i>Accepted</span>`;
+                } else if (dec === "declined") {
+                    statusPill = `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>Tidak Diambil</span>`;
+                }
+
+                const actionsHtml = dec === "accepted"
+                    ? `<p class="text-[11px] text-sageDark font-semibold mt-2"><i class="fa-solid fa-circle-check mr-1"></i>Sudah masuk ke Income &amp; Project Flows</p>`
+                    : dec === "declined"
+                    ? `<p class="text-[11px] text-muted mt-2">Pitching ditolak / tidak diambil.</p>`
+                    : `
+                        <div class="flex flex-wrap items-center gap-1.5 mt-3 pt-2.5 border-t border-[#EFE5D8]">
+                            <button type="button" onclick="respondToPitching('${item.id}', 'accepted')"
+                                class="clay-pill px-3 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer">
+                                <i class="fa-solid fa-check mr-1"></i> Accept
+                            </button>
+                            <button type="button" onclick="respondToPitching('${item.id}', 'discussing')"
+                                class="clay-pill px-3 py-1 text-[11px] font-semibold text-amber-800 cursor-pointer">
+                                <i class="fa-regular fa-comments mr-1"></i> Diskusi Lanjutan
+                            </button>
+                            <button type="button" onclick="respondToPitching('${item.id}', 'declined')"
+                                class="clay-pill px-3 py-1 text-[11px] font-semibold text-rose-600 cursor-pointer">
+                                <i class="fa-solid fa-xmark mr-1"></i> Tidak
+                            </button>
+                        </div>
+                    `;
+
+                return `
+                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-3.5 text-left">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <p class="font-serif text-sm font-bold text-espresso">${escapeHtml(item.brandName || "Brand / Client")}</p>
+                                <p class="text-[11px] font-semibold text-roseSoft mt-0.5"><i class="fa-solid fa-tag mr-1"></i>${escapeHtml(item.category || "-")}</p>
+                            </div>
+                            ${statusPill}
+                        </div>
+                        <p class="text-[11px] text-muted mt-1"><i class="fa-regular fa-calendar mr-1 text-sageDark"></i>Rencana Event: ${escapeHtml(item.eventDate || "-")}</p>
+                        ${item.brief ? `<div class="mt-2 bg-cream/80 border border-[#E6DACB] rounded-xl px-2.5 py-1.5 text-[11px] text-espresso"><span class="font-semibold text-sageDark">Brief:</span> ${escapeHtml(item.brief)}</div>` : ""}
+                        ${actionsHtml}
+                    </div>
+                `;
+            }).join("");
+        }
+
+        window.respondToPitching = async (pitchId, decision) => {
+            if (!currentUser || !activeUserUid) return;
+            const target = pitchingRequests.find(p => p.id === pitchId);
+            if (!target) return;
+
+            try {
+                await updateDoc(doc(db, `users/${activeUserUid}/pitchingRequests`, pitchId), {
+                    decision,
+                    respondedAt: Date.now()
+                });
+
+                if (decision === "accepted") {
+                    const matchedPkg = (creatorRatecard.packages || []).find(pk =>
+                        target.category && pk.name.toLowerCase().includes(target.category.split(" ")[0].toLowerCase())
+                    );
+                    const suggestedFee = matchedPkg ? Number(matchedPkg.price) || 0 : 0;
+
+                    await addDoc(collection(db, `users/${activeUserUid}/projects`), {
+                        clientName: target.brandName || "Brand Campaign",
+                        managementName: target.brandName || "",
+                        category: target.category || "Event Coverage (Reels/TikTok)",
+                        briefSummary: target.brief || "",
+                        date: target.eventDate || new Date().toISOString().slice(0, 10),
+                        amount: suggestedFee,
+                        taxAmount: 0,
+                        taxInputRaw: "",
+                        status: "Pending / Invoice Sent",
+                        pipelineStage: "Brief Diterima",
+                        deadlineDate: target.eventDate || "",
+                        payoutDate: "",
+                        projectSocialPlatform: "Instagram",
+                        projectSocialHandle: "",
+                        portfolioLink: "",
+                        photoData: "",
+                        createdAt: Date.now()
+                    });
+                    showToast(`Pitching "${target.brandName}" di-accept & masuk ke Income & Project Flows!`);
+                } else if (decision === "discussing") {
+                    showToast(`Status "${target.brandName}" ditandai Menunggu Diskusi Lanjutan.`);
+                } else {
+                    showToast(`Pitching dari "${target.brandName}" ditolak.`);
+                }
+            } catch (err) {
+                showToast("Gagal memproses respon pitching: " + err.message, true);
+            }
+        };
+
+        /* ================= PORTOFOLIO & RATECARD (NANO / MICRO / MACRO) ================= */
+        function loadCreatorRatecard(uid, remoteRc = null) {
+            let base = createDefaultRatecardData();
+            if (uid) {
+                try {
+                    const localRc = JSON.parse(localStorage.getItem(getScopedKey("ratecard", uid)) || "null");
+                    if (localRc && typeof localRc === "object") {
+                        base = { ...base, ...localRc };
+                    }
+                } catch (_) {}
+            }
+            if (remoteRc && typeof remoteRc === "object") {
+                base = { ...base, ...remoteRc };
+                if (uid) {
+                    try {
+                        localStorage.setItem(getScopedKey("ratecard", uid), JSON.stringify(base));
+                    } catch (_) {}
+                }
+            }
+            creatorRatecard = base;
+            renderRatecardUI();
+        }
+
+        function persistCreatorRatecard() {
+            if (!activeUserUid) return;
+            const uidSnapshot = activeUserUid;
+            try {
+                localStorage.setItem(getScopedKey("ratecard", uidSnapshot), JSON.stringify(creatorRatecard));
+            } catch (_) {}
+
+            clearTimeout(ratecardCloudTimer);
+            ratecardCloudTimer = setTimeout(async () => {
+                if (activeUserUid !== uidSnapshot) return;
+                try {
+                    await setDoc(
+                        doc(db, `users/${uidSnapshot}`),
+                        { ratecard: creatorRatecard },
+                        { merge: true }
+                    );
+                } catch (_) {}
+            }, 350);
+        }
+
+        function renderRatecardUI() {
+            const fInp = document.getElementById("rcFollowersInput");
+            const vInp = document.getElementById("rcAvgViewsInput");
+            const eInp = document.getElementById("rcEngagementInput");
+            const tSel = document.getElementById("rcTierOverrideSelect");
+            const badge = document.getElementById("creatorTierBadge");
+            const hint = document.getElementById("rcInsightScoreHint");
+            const grid = document.getElementById("ratecardPackagesGrid");
+
+            if (fInp && document.activeElement !== fInp) fInp.value = creatorRatecard.followers || "";
+            if (vInp && document.activeElement !== vInp) vInp.value = creatorRatecard.avgViews || "";
+            if (eInp && document.activeElement !== eInp) eInp.value = creatorRatecard.engagementRate || "";
+            if (tSel && document.activeElement !== tSel) tSel.value = creatorRatecard.tierMode || "AUTO";
+
+            const activeTier = creatorRatecard.tierMode === "AUTO"
+                ? classifyCreatorTier(creatorRatecard.followers)
+                : creatorRatecard.tierMode;
+            creatorRatecard.detectedTier = activeTier;
+
+            const tierLabelMap = {
+                Nano: "Nano Creator (1K – 10K)",
+                Micro: "Micro Creator (10K – 100K)",
+                Macro: "Macro Creator (100K – 1M)"
+            };
+            if (badge) badge.textContent = tierLabelMap[activeTier] || tierLabelMap.Nano;
+
+            const mult = computeInsightMultiplier(creatorRatecard.followers, creatorRatecard.avgViews, creatorRatecard.engagementRate);
+            if (hint) {
+                const boostPct = Math.round((mult - 1) * 100);
+                hint.textContent = boostPct > 0
+                    ? `Insight Multiplier: +${boostPct}% (High Reach/ER)`
+                    : `Insight Multiplier: Standar Tier ${activeTier}`;
+            }
+
+            if (!grid) return;
+            const pkgs = Array.isArray(creatorRatecard.packages) ? creatorRatecard.packages : [];
+            grid.innerHTML = pkgs.map((pkg, idx) => `
+                <div class="bg-ivory border border-[#E4D8CA] rounded-2xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-sageDark">${escapeHtml(activeTier)} Tier</span>
+                            <span class="text-[10px] font-semibold text-roseSoft bg-blush/50 px-2 py-0.5 rounded-full">Ratecard</span>
+                        </div>
+                        <h4 class="font-serif text-base font-bold text-espresso mt-1">${escapeHtml(pkg.name)}</h4>
+                        <p class="text-[11px] text-muted mt-0.5">${escapeHtml(pkg.desc || "")}</p>
+                    </div>
+                    <div class="mt-3 pt-2.5 border-t border-[#EFE5D8]">
+                        <label class="block text-[10px] font-semibold text-muted mb-1">Tarif Paket (Rp)</label>
+                        <input type="number" min="0" step="25000" value="${Number(pkg.price) || 0}"
+                            oninput="updateRatecardPackagePrice(${idx}, this.value)"
+                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs font-bold text-sageDark focus:outline-none focus:border-sageDark">
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        window.handleInsightInputChange = () => {
+            creatorRatecard.followers = Math.max(0, parseInt(document.getElementById("rcFollowersInput")?.value || "0", 10) || 0);
+            creatorRatecard.avgViews = Math.max(0, parseInt(document.getElementById("rcAvgViewsInput")?.value || "0", 10) || 0);
+            creatorRatecard.engagementRate = Math.max(0, parseFloat(document.getElementById("rcEngagementInput")?.value || "0") || 0);
+            recalculateRatecardFromInsight(false);
+        };
+
+        window.handleTierSelectChange = () => {
+            creatorRatecard.tierMode = document.getElementById("rcTierOverrideSelect")?.value || "AUTO";
+            recalculateRatecardFromInsight(false);
+        };
+
+        window.recalculateRatecardFromInsight = (notifyUser = false) => {
+            const tier = creatorRatecard.tierMode === "AUTO"
+                ? classifyCreatorTier(creatorRatecard.followers)
+                : creatorRatecard.tierMode;
+            creatorRatecard.detectedTier = tier;
+            const mult = computeInsightMultiplier(creatorRatecard.followers, creatorRatecard.avgViews, creatorRatecard.engagementRate);
+            creatorRatecard.packages = buildRecommendedPackagesForTier(tier, mult);
+            renderRatecardUI();
+            persistCreatorRatecard();
+            if (notifyUser) {
+                showToast(`Ratecard disesuaikan untuk kategori ${tier} Creator berdasarkan followers & insight!`);
+            }
+        };
+
+        window.updateRatecardPackagePrice = (idx, val) => {
+            if (!creatorRatecard.packages || !creatorRatecard.packages[idx]) return;
+            creatorRatecard.packages[idx].price = Math.max(0, parseFloat(val) || 0);
+            persistCreatorRatecard();
+        };
 
         document.getElementById('incomeForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -2785,6 +3298,7 @@
                 const parsedTax = parseTaxValue(rawTaxInput, amount);
                 const status = document.getElementById('status').value;
                 const managementName = document.getElementById('managementName').value.trim();
+                const briefSummary = document.getElementById('projectBrief')?.value.trim() || "";
                 const deadlineDate = document.getElementById('deadlineDate').value || "";
                 const payoutDate = document.getElementById('payoutDate').value || "";
                 const projectSocialPlatform = document.getElementById('projectSocialPlatform').value;
@@ -2810,6 +3324,7 @@
                     taxInputRaw: rawTaxInput,
                     status,
                     managementName,
+                    briefSummary,
                     deadlineDate,
                     payoutDate,
                     projectSocialPlatform,
@@ -3423,11 +3938,14 @@
                     : '';
 
                 const metaLines = [];
+                if (r.managementName) {
+                    metaLines.push(`<span class="text-[11px] px-2.5 py-0.5 rounded-full bg-sage/15 text-sageDark font-semibold"><i class="fa-solid fa-building-user mr-1"></i>Brand/Mgmt: ${escapeHtml(r.managementName)}</span>`);
+                }
+                if (r.category) {
+                    metaLines.push(`<span class="text-[11px] px-2.5 py-0.5 rounded-full bg-blush/50 text-roseSoft font-semibold"><i class="fa-solid fa-tag mr-1"></i>${escapeHtml(r.category)}</span>`);
+                }
                 if (r.pipelineStage) {
                     metaLines.push(`<span class="text-[11px] px-2 py-0.5 rounded-full bg-cream text-espresso font-semibold"><i class="fa-solid fa-diagram-project mr-1 text-sageDark"></i>${escapeHtml(r.pipelineStage)}</span>`);
-                }
-                if (r.managementName) {
-                    metaLines.push(`<span class="text-[11px] text-sageDark font-medium"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(r.managementName)}</span>`);
                 }
                 if (r.projectSocialHandle) {
                     metaLines.push(`<span class="text-[11px] text-roseSoft font-medium"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(r.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(r.projectSocialHandle)}</span>`);
@@ -3438,8 +3956,11 @@
                 if (r.payoutDate) {
                     metaLines.push(`<span class="text-[11px] text-roseSoft"><i class="fa-regular fa-clock mr-1"></i>Cair: ${escapeHtml(r.payoutDate)}</span>`);
                 }
-                const extraMetaHtml = metaLines.length > 0
-                    ? `<div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">${metaLines.join('')}</div>`
+                const briefHtml = r.briefSummary
+                    ? `<p class="text-[11px] text-espresso/85 bg-ivory border border-[#EADFD3] rounded-xl px-2.5 py-1 mt-1.5 max-w-md"><i class="fa-regular fa-file-lines text-sageDark mr-1"></i><span class="font-semibold">Brief:</span> ${escapeHtml(r.briefSummary)}</p>`
+                    : '';
+                const extraMetaHtml = (metaLines.length > 0 || briefHtml)
+                    ? `<div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 mt-1.5">${metaLines.join('')}</div>${briefHtml}`
                     : '';
 
                 const isEditingName = editingProjectId === r.id;
@@ -4769,6 +5290,7 @@
             });
 
             if (tab === 'portfolio') {
+                renderRatecardUI();
                 window.renderPortfolio();
             } else if (tab === 'social') {
                 updateSocialProfileCard();
