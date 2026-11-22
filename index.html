@@ -904,7 +904,7 @@
                         Social Media Kamu
                     </h2>
                     <p class="text-xs text-muted mt-1">
-                        Info sosial media dan domisili kamu
+                        Info sosial media dan domisili kamu (otomatis tersimpan khusus untuk akun ini)
                     </p>
 
                     <!-- Quick-fill Domisili -->
@@ -1067,6 +1067,7 @@
                     <h3 class="font-serif text-2xl font-semibold text-espresso mt-1">
                         Invoice &amp; Syarat Ketentuan (2 Halaman)
                     </h3>
+                    <p id="invoiceAutoSaveStatus" class="text-[11px] text-sageDark font-medium mt-0.5">Auto-save aktif per akun</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="button" onclick="clearInvoiceForm()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-roseSoft cursor-pointer">
@@ -1113,12 +1114,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Invoice</label>
-                            <input type="text" id="invNumber" placeholder="Contoh: INV/NS/2026/11/001" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invNumber" placeholder="Contoh: INV/NS/2026/11/001" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Status Pembayaran</label>
-                            <select id="invStatus" onchange="refreshInvoicePreview()"
+                            <select id="invStatus" onchange="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                                 <option value="">Pilih Status</option>
                                 <option value="Belum Lunas">Belum Lunas</option>
@@ -1128,22 +1129,22 @@
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Kepada (Nama Client)</label>
-                            <input type="text" id="invClientName" placeholder="Nama client" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invClientName" placeholder="Nama client" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Keterangan Client / Paket</label>
-                            <input type="text" id="invClientSubtitle" placeholder="Keterangan paket / project" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invClientSubtitle" placeholder="Keterangan paket / project" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Tanggal Invoice</label>
-                            <input type="text" id="invDateText" placeholder="Contoh: 22 November 2026" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invDateText" placeholder="Contoh: 22 November 2026" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Tanggal Event</label>
-                            <input type="text" id="invEventDateText" placeholder="Contoh: 29 November 2026" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invEventDateText" placeholder="Contoh: 29 November 2026" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                     </div>
@@ -1161,12 +1162,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Biaya Transport (Rp)</label>
-                            <input type="number" id="invTransport" min="0" step="1000" placeholder="0" oninput="refreshInvoicePreview()"
+                            <input type="number" id="invTransport" min="0" step="1000" placeholder="0" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Persentase DP (%)</label>
-                            <input type="number" id="invDpPercent" min="0" max="100" step="1" placeholder="0" oninput="refreshInvoicePreview()"
+                            <input type="number" id="invDpPercent" min="0" max="100" step="1" placeholder="0" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                     </div>
@@ -1174,17 +1175,17 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Bank</label>
-                            <input type="text" id="invBank" placeholder="Nama bank" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invBank" placeholder="Nama bank" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Atas Nama</label>
-                            <input type="text" id="invAccountHolder" placeholder="Atas nama rekening" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invAccountHolder" placeholder="Atas nama rekening" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Rekening</label>
-                            <input type="text" id="invAccountNumber" placeholder="Nomor rekening" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invAccountNumber" placeholder="Nomor rekening" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                     </div>
@@ -1192,25 +1193,25 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">No. Kontak / WA</label>
-                            <input type="text" id="invPhone" placeholder="Nomor WhatsApp" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invPhone" placeholder="Nomor WhatsApp" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Email Studio</label>
-                            <input type="text" id="invEmail" placeholder="Email studio" oninput="refreshInvoicePreview()"
+                            <input type="text" id="invEmail" placeholder="Email studio" oninput="handleInvoiceFieldChange()"
                                 class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Catatan (1 baris per catatan)</label>
-                        <textarea id="invNotes" rows="3" placeholder="Tulis catatan invoice di sini..." oninput="refreshInvoicePreview()"
+                        <textarea id="invNotes" rows="3" placeholder="Tulis catatan invoice di sini..." oninput="handleInvoiceFieldChange()"
                             class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark"></textarea>
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-semibold text-espresso/80 mb-1">Syarat &amp; Ketentuan (Halaman 2, 1 poin per baris)</label>
-                        <textarea id="invTerms" rows="4" placeholder="Tulis poin syarat & ketentuan di sini..." oninput="refreshInvoicePreview()"
+                        <textarea id="invTerms" rows="4" placeholder="Tulis poin syarat & ketentuan di sini..." oninput="handleInvoiceFieldChange()"
                             class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-sageDark"></textarea>
                     </div>
                 </div>
@@ -1312,33 +1313,62 @@
         const MAX_FIRESTORE_PHOTO_CHARS = 780000;
         const MAX_RAW_FILE_BYTES = 15 * 1024 * 1024;
 
+        function createEmptySocials() {
+            return {
+                instagram: "",
+                tiktok: "",
+                threads: "",
+                facebook: "",
+                twitter: "",
+                domicile: ""
+            };
+        }
+
+        function createEmptyPublicShare() {
+            return {
+                collabStatus: "Open Collaboration — Siap Terima Brand & Event",
+                rateCardNote: ""
+            };
+        }
+
+        function createEmptyInvoiceDraft() {
+            return {
+                invNumber: "",
+                invStatus: "",
+                clientName: "",
+                clientSubtitle: "",
+                invDateText: "",
+                invEventDateText: "",
+                transport: "",
+                dpPercent: "",
+                bank: "",
+                accountHolder: "",
+                accountNumber: "",
+                phone: "",
+                email: "",
+                notes: "",
+                terms: "",
+                items: [{ title: "", desc: "", qty: 1, price: 0 }]
+            };
+        }
+
         let currentUser = null;
+        let activeUserUid = "";
         let pendingVerifyUser = null;
         let pendingDeleteId = null;
         let unsubscribeRecords = null;
         let unsubscribeProfile = null;
         let autoRefreshTimer = null;
+        let invoiceCloudSaveTimer = null;
+        let socialCloudSaveTimer = null;
         let toastTimer = null;
         let records = [];
         let hdPhotoBase64 = "";
         let incomeChartInstance = null;
         let currentAvatarDataUrl = "";
-        let userSocials = {
-            instagram: "",
-            tiktok: "",
-            threads: "",
-            facebook: "",
-            twitter: "",
-            domicile: "Jakarta Timur"
-        };
-        let publicShareSettings = {
-            collabStatus: "Open Collaboration — Siap Terima Brand & Event",
-            rateCardNote: "Paket Reels/TikTok, SDE & UGC (DM / Email untuk rate card)"
-        };
-
-        let invoiceLineItems = [
-            { title: "", desc: "", qty: 1, price: 0 }
-        ];
+        let userSocials = createEmptySocials();
+        let publicShareSettings = createEmptyPublicShare();
+        let invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
 
         function showToast(message, isError = false) {
             const banner = document.getElementById("toastBanner");
@@ -1368,6 +1398,39 @@
                 }
             } catch (_) {}
             return "";
+        }
+
+        function getScopedKey(prefix, uid) {
+            if (!uid) return "";
+            return `narravia_${prefix}_${uid}`;
+        }
+
+        function resetAllPerUserUiState() {
+            activeUserUid = "";
+            currentAvatarDataUrl = "";
+            userSocials = createEmptySocials();
+            publicShareSettings = createEmptyPublicShare();
+            invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
+            records = [];
+
+            const avatarImg = document.getElementById('userAvatarImg');
+            const avatarInitial = document.getElementById('userAvatarInitial');
+            if (avatarImg) {
+                avatarImg.src = "";
+                avatarImg.classList.add('hidden');
+            }
+            if (avatarInitial) {
+                avatarInitial.innerText = "U";
+                avatarInitial.classList.remove('hidden');
+            }
+
+            ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socDomicile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+
+            applyInvoiceDraftToForm(createEmptyInvoiceDraft());
+            updateSocialProfileCard();
         }
 
         document.addEventListener("keydown", (e) => {
@@ -1453,18 +1516,6 @@
             } catch (_) {}
         }
 
-        function getAvatarStorageKey(uid) {
-            return `narravia_avatar_${uid || "guest"}`;
-        }
-
-        function getSocialStorageKey(uid) {
-            return `narravia_socials_${uid || "guest"}`;
-        }
-
-        function getPublicShareStorageKey(uid) {
-            return `narravia_public_share_${uid || "guest"}`;
-        }
-
         window.focusNewProjectForm = () => {
             switchTab('finance');
             const card = document.getElementById('incomeFormCard');
@@ -1546,8 +1597,9 @@
 
         function buildIntroBubbleSentence() {
             const username = getActiveUsername();
-            const domicile = (userSocials.domicile || "Jakarta Timur").trim();
-            return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator yang berdomisili di ${domicile}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
+            const domicile = (userSocials.domicile || "").trim();
+            const locationPart = domicile ? ` yang berdomisili di ${domicile}` : "";
+            return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator${locationPart}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
         }
 
         function buildPitchingCardExportElement(createdByLabel, introSentence, collabStatusText, avatarSrc, socialBadges) {
@@ -1715,25 +1767,69 @@
             }
         };
 
+        async function persistSocialsToUser(nextSocials, uid = activeUserUid) {
+            if (!uid) return;
+            const cleanSocials = {
+                instagram: String(nextSocials.instagram || "").trim(),
+                tiktok: String(nextSocials.tiktok || "").trim(),
+                threads: String(nextSocials.threads || "").trim(),
+                facebook: String(nextSocials.facebook || "").trim(),
+                twitter: String(nextSocials.twitter || "").trim(),
+                domicile: String(nextSocials.domicile || "").trim()
+            };
+
+            try {
+                localStorage.setItem(getScopedKey("socials", uid), JSON.stringify(cleanSocials));
+            } catch (_) {}
+
+            clearTimeout(socialCloudSaveTimer);
+            socialCloudSaveTimer = setTimeout(async () => {
+                try {
+                    await setDoc(
+                        doc(db, `users/${uid}`),
+                        { socials: cleanSocials },
+                        { merge: true }
+                    );
+                } catch (_) {}
+            }, 350);
+        }
+
         window.quickFillDomicile = (city) => {
+            if (!activeUserUid) return;
             const el = document.getElementById('socDomicile');
             if (el) el.value = city;
             userSocials.domicile = city;
-            if (currentUser) {
-                try {
-                    localStorage.setItem(getSocialStorageKey(currentUser.uid), JSON.stringify(userSocials));
-                } catch (_) {}
-            }
+            persistSocialsToUser(userSocials, activeUserUid);
             updateSocialProfileCard();
         };
 
+        ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socDomicile'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener("input", () => {
+                if (!activeUserUid) return;
+                userSocials = {
+                    instagram: document.getElementById('socInstagram').value.trim(),
+                    tiktok: document.getElementById('socTiktok').value.trim(),
+                    threads: document.getElementById('socThreads').value.trim(),
+                    facebook: document.getElementById('socFacebook').value.trim(),
+                    twitter: document.getElementById('socTwitter').value.trim(),
+                    domicile: document.getElementById('socDomicile').value.trim()
+                };
+                persistSocialsToUser(userSocials, activeUserUid);
+                updateSocialProfileCard();
+            });
+        });
+
         function loadPublicShareSettings(uid) {
+            publicShareSettings = createEmptyPublicShare();
+            if (!uid) return;
             try {
-                const saved = JSON.parse(localStorage.getItem(getPublicShareStorageKey(uid)) || "null");
-                if (saved) {
+                const saved = JSON.parse(localStorage.getItem(getScopedKey("public_share", uid)) || "null");
+                if (saved && typeof saved === "object") {
                     publicShareSettings = {
-                        collabStatus: saved.collabStatus || publicShareSettings.collabStatus,
-                        rateCardNote: saved.rateCardNote ?? publicShareSettings.rateCardNote
+                        collabStatus: saved.collabStatus || createEmptyPublicShare().collabStatus,
+                        rateCardNote: saved.rateCardNote || ""
                     };
                 }
             } catch (_) {}
@@ -1744,20 +1840,19 @@
         }
 
         window.savePublicShareSettings = () => {
+            if (!activeUserUid) return;
             const sel = document.getElementById('pubCollabSelect');
             const inp = document.getElementById('pubRateCardInput');
             const st = document.getElementById('publicShareStatusMsg');
             publicShareSettings = {
-                collabStatus: sel ? sel.value : publicShareSettings.collabStatus,
-                rateCardNote: inp ? inp.value.trim() : publicShareSettings.rateCardNote
+                collabStatus: sel ? sel.value : createEmptyPublicShare().collabStatus,
+                rateCardNote: inp ? inp.value.trim() : ""
             };
             try {
-                if (currentUser) {
-                    localStorage.setItem(getPublicShareStorageKey(currentUser.uid), JSON.stringify(publicShareSettings));
-                }
+                localStorage.setItem(getScopedKey("public_share", activeUserUid), JSON.stringify(publicShareSettings));
             } catch (_) {}
             if (st) {
-                st.innerText = "Tersimpan";
+                st.innerText = "Tersimpan otomatis";
                 setTimeout(() => { st.innerText = ""; }, 1400);
             }
         };
@@ -1803,7 +1898,7 @@
 
             return {
                 mode,
-                uid: currentUser?.uid || "",
+                uid: activeUserUid || currentUser?.uid || "",
                 creatorName: username,
                 bio: buildIntroBubbleSentence(),
                 collabStatus: publicShareSettings.collabStatus,
@@ -2041,51 +2136,51 @@
             cardEl.classList.remove('hidden');
         }
 
-        function clearSocialFormInputs() {
-            const ids = ['socInstagram', 'socTiktok', 'socThreads', 'socFacebook', 'socTwitter', 'socDomicile'];
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = "";
-            });
-        }
-
-        function applySocialsToUi(socialObj = {}, uid = "") {
-            let cached = {};
+        function applySocialsToUi(socialObj = {}, uid = activeUserUid) {
+            if (!uid) return;
+            let cached = createEmptySocials();
             try {
-                cached = JSON.parse(localStorage.getItem(getSocialStorageKey(uid || currentUser?.uid)) || "{}");
+                const rawCached = JSON.parse(localStorage.getItem(getScopedKey("socials", uid)) || "null");
+                if (rawCached && typeof rawCached === "object") {
+                    cached = { ...cached, ...rawCached };
+                }
             } catch (_) {}
 
+            const hasRemoteSocials = socialObj && typeof socialObj === "object" && Object.keys(socialObj).length > 0;
+            const source = hasRemoteSocials ? { ...cached, ...socialObj } : cached;
+
             userSocials = {
-                instagram: (socialObj.instagram ?? cached.instagram ?? "").trim(),
-                tiktok: (socialObj.tiktok ?? cached.tiktok ?? "").trim(),
-                threads: (socialObj.threads ?? cached.threads ?? "").trim(),
-                facebook: (socialObj.facebook ?? cached.facebook ?? "").trim(),
-                twitter: (socialObj.twitter ?? cached.twitter ?? "").trim(),
-                domicile: (socialObj.domicile ?? cached.domicile ?? "Jakarta Timur").trim() || "Jakarta Timur"
+                instagram: String(source.instagram || "").trim(),
+                tiktok: String(source.tiktok || "").trim(),
+                threads: String(source.threads || "").trim(),
+                facebook: String(source.facebook || "").trim(),
+                twitter: String(source.twitter || "").trim(),
+                domicile: String(source.domicile || "").trim()
             };
 
             try {
-                localStorage.setItem(getSocialStorageKey(uid || currentUser?.uid), JSON.stringify(userSocials));
+                localStorage.setItem(getScopedKey("socials", uid), JSON.stringify(userSocials));
             } catch (_) {}
 
-            const hasAnySocial = Boolean(
-                userSocials.instagram ||
-                userSocials.tiktok ||
-                userSocials.threads ||
-                userSocials.facebook ||
-                userSocials.twitter
-            );
-
-            if (hasAnySocial) {
-                clearSocialFormInputs();
-            }
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && document.activeElement !== el) {
+                    el.value = val;
+                }
+            };
+            setVal('socInstagram', userSocials.instagram);
+            setVal('socTiktok', userSocials.tiktok);
+            setVal('socThreads', userSocials.threads);
+            setVal('socFacebook', userSocials.facebook);
+            setVal('socTwitter', userSocials.twitter);
+            setVal('socDomicile', userSocials.domicile);
 
             updateSocialProfileCard();
         }
 
         document.getElementById('socialForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
+            if (!currentUser || !activeUserUid) return;
             const btn = document.getElementById('btnSaveSocial');
             const statusEl = document.getElementById('socialSaveStatus');
             btn.disabled = true;
@@ -2096,29 +2191,31 @@
                 threads: document.getElementById('socThreads').value.trim(),
                 facebook: document.getElementById('socFacebook').value.trim(),
                 twitter: document.getElementById('socTwitter').value.trim(),
-                domicile: document.getElementById('socDomicile').value.trim() || "Jakarta Timur"
+                domicile: document.getElementById('socDomicile').value.trim()
             };
 
-            applySocialsToUi(nextSocials, currentUser.uid);
-            clearSocialFormInputs();
+            userSocials = nextSocials;
+            updateSocialProfileCard();
 
             try {
+                localStorage.setItem(getScopedKey("socials", activeUserUid), JSON.stringify(nextSocials));
                 await setDoc(
-                    doc(db, `users/${currentUser.uid}`),
+                    doc(db, `users/${activeUserUid}`),
                     { socials: nextSocials },
                     { merge: true }
                 );
-                statusEl.innerText = "Creator's Profile berhasil dibuat & tersimpan!";
+                statusEl.innerText = "Tersimpan otomatis khusus akun kamu!";
                 showToast("Sosial media & domisili tersimpan.");
                 setTimeout(() => { statusEl.innerText = ""; }, 2500);
             } catch (err) {
-                statusEl.innerText = "Tersimpan lokal (sinkron cloud: " + err.message + ")";
+                statusEl.innerText = "Tersimpan lokal (" + err.message + ")";
             } finally {
                 btn.disabled = false;
             }
         });
 
         function renderUserAvatar(uid, displayName, remotePhotoUrl = "") {
+            if (!uid) return;
             const imgEl = document.getElementById('userAvatarImg');
             const initialEl = document.getElementById('userAvatarInitial');
             const cleanSrc = String(displayName || "@username").replace(/^@+/, "").trim();
@@ -2127,7 +2224,7 @@
 
             let savedAvatar = "";
             try {
-                savedAvatar = localStorage.getItem(getAvatarStorageKey(uid)) || "";
+                savedAvatar = localStorage.getItem(getScopedKey("avatar", uid)) || "";
             } catch (_) {}
 
             const finalAvatar = remotePhotoUrl || savedAvatar || "";
@@ -2135,7 +2232,7 @@
 
             if (remotePhotoUrl) {
                 try {
-                    localStorage.setItem(getAvatarStorageKey(uid), remotePhotoUrl);
+                    localStorage.setItem(getScopedKey("avatar", uid), remotePhotoUrl);
                 } catch (_) {}
             }
 
@@ -2154,12 +2251,13 @@
 
         document.getElementById('userAvatarInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
-            if (!file || !currentUser) return;
+            if (!file || !currentUser || !activeUserUid) return;
             if (file.size > MAX_RAW_FILE_BYTES) {
                 showToast("Ukuran foto terlalu besar (maksimal 15 MB).", true);
                 this.value = "";
                 return;
             }
+            const uidSnapshot = activeUserUid;
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
@@ -2191,15 +2289,16 @@
 
                     const avatarUrl = canvas.toDataURL('image/jpeg', 0.9);
                     try {
-                        localStorage.setItem(getAvatarStorageKey(currentUser.uid), avatarUrl);
+                        localStorage.setItem(getScopedKey("avatar", uidSnapshot), avatarUrl);
                     } catch (_) {}
 
+                    if (activeUserUid !== uidSnapshot) return;
                     const currentName = document.getElementById('userDisplayName').innerText;
-                    renderUserAvatar(currentUser.uid, currentName, avatarUrl);
+                    renderUserAvatar(uidSnapshot, currentName, avatarUrl);
 
                     try {
                         await setDoc(
-                            doc(db, `users/${currentUser.uid}`),
+                            doc(db, `users/${uidSnapshot}`),
                             { photoURL: avatarUrl },
                             { merge: true }
                         );
@@ -2260,10 +2359,13 @@
                 clearInterval(autoRefreshTimer);
                 autoRefreshTimer = null;
             }
+            clearTimeout(invoiceCloudSaveTimer);
+            clearTimeout(socialCloudSaveTimer);
             records = [];
         }
 
         function setHeaderUserInfo(user, profileData = {}) {
+            const uid = user.uid;
             const firestoreUsername = typeof profileData === "string" ? profileData : (profileData?.username || "");
             const firestorePhotoUrl = typeof profileData === "object" ? (profileData?.photoURL || "") : "";
             const finalName = (firestoreUsername || user.displayName || "@username").trim();
@@ -2271,10 +2373,21 @@
             document.getElementById('userDisplayName').innerText = finalName;
             document.getElementById('userEmailDisplay').innerText = user.email || "";
             document.getElementById('verifiedBadge').classList.toggle('hidden', !user.emailVerified);
-            renderUserAvatar(user.uid, finalName, firestorePhotoUrl);
+            renderUserAvatar(uid, finalName, firestorePhotoUrl);
 
             if (typeof profileData === "object") {
-                applySocialsToUi(profileData?.socials || {}, user.uid);
+                applySocialsToUi(profileData?.socials || {}, uid);
+                if (profileData?.invoiceDraft && typeof profileData.invoiceDraft === "object") {
+                    const localDraft = loadInvoiceDraftFromLocal(uid);
+                    const mergedDraft = {
+                        ...createEmptyInvoiceDraft(),
+                        ...profileData.invoiceDraft,
+                        ...(localDraft && localDraft._updatedAt > (profileData.invoiceDraft._updatedAt || 0) ? localDraft : {})
+                    };
+                    saveInvoiceDraftToLocal(uid, mergedDraft);
+                    applyInvoiceDraftToForm(mergedDraft);
+                    refreshInvoicePreview();
+                }
             }
 
             try {
@@ -2303,15 +2416,19 @@
         }
 
         async function refreshUserAndData() {
-            if (!currentUser) return;
+            if (!currentUser || !activeUserUid) return;
+            const uidSnapshot = activeUserUid;
             try {
                 await currentUser.reload();
-                const userSnap = await getDoc(doc(db, `users/${currentUser.uid}`));
+                if (activeUserUid !== uidSnapshot) return;
+                const userSnap = await getDoc(doc(db, `users/${uidSnapshot}`));
+                if (activeUserUid !== uidSnapshot) return;
                 const profileObj = userSnap.exists() ? userSnap.data() : {};
                 setHeaderUserInfo(currentUser, profileObj);
 
-                const q = query(collection(db, `users/${currentUser.uid}/projects`), orderBy("date", "desc"));
+                const q = query(collection(db, `users/${uidSnapshot}/projects`), orderBy("date", "desc"));
                 const projSnap = await getDocs(q);
+                if (activeUserUid !== uidSnapshot) return;
                 applySnapshotRecords(projSnap.docs);
             } catch (_) {}
         }
@@ -2583,6 +2700,7 @@
 
         document.getElementById('btnLogout').addEventListener('click', async () => {
             stopRealtimeSync();
+            resetAllPerUserUiState();
             await signOut(auth);
             if (!rememberMeCheckbox.checked) {
                 clearRememberedPref();
@@ -2591,13 +2709,13 @@
         });
 
         document.addEventListener("visibilitychange", () => {
-            if (!document.hidden && currentUser) {
+            if (!document.hidden && currentUser && activeUserUid) {
                 refreshUserAndData();
             }
         });
 
         window.addEventListener("pageshow", () => {
-            if (currentUser) {
+            if (currentUser && activeUserUid) {
                 refreshUserAndData();
             }
         });
@@ -2610,40 +2728,50 @@
             if (checkPublicShareHash()) return;
 
             if (user && user.emailVerified) {
+                if (activeUserUid && activeUserUid !== user.uid) {
+                    stopRealtimeSync();
+                    resetAllPerUserUiState();
+                }
                 currentUser = user;
-                pendingVerifyUser = null;
+                activeUserUid = user.uid;
+
                 document.getElementById('authSection').classList.add('hidden');
                 document.getElementById('appSection').classList.remove('hidden');
-                setHeaderUserInfo(user);
-                applySocialsToUi({}, user.uid);
+
+                const localDraft = loadInvoiceDraftFromLocal(user.uid);
+                applyInvoiceDraftToForm(localDraft || createEmptyInvoiceDraft());
                 loadPublicShareSettings(user.uid);
-                subscribeProfileAndRecords();
+                setHeaderUserInfo(user);
+                subscribeProfileAndRecords(user.uid);
                 refreshUserAndData();
             } else {
                 currentUser = null;
                 stopRealtimeSync();
+                resetAllPerUserUiState();
                 document.getElementById('authSection').classList.remove('hidden');
                 document.getElementById('appSection').classList.add('hidden');
             }
         });
 
-        function subscribeProfileAndRecords() {
+        function subscribeProfileAndRecords(uid) {
             stopRealtimeSync();
-            if (!currentUser) return;
+            if (!currentUser || !uid) return;
 
             unsubscribeProfile = onSnapshot(
-                doc(db, `users/${currentUser.uid}`),
+                doc(db, `users/${uid}`),
                 (snap) => {
+                    if (activeUserUid !== uid || !currentUser) return;
                     const profileObj = snap.exists() ? snap.data() : {};
                     setHeaderUserInfo(currentUser, profileObj);
                 },
                 (err) => console.error("Profile sync error:", err)
             );
 
-            const q = query(collection(db, `users/${currentUser.uid}/projects`), orderBy("date", "desc"));
+            const q = query(collection(db, `users/${uid}/projects`), orderBy("date", "desc"));
             unsubscribeRecords = onSnapshot(
                 q,
                 (snapshot) => {
+                    if (activeUserUid !== uid) return;
                     applySnapshotRecords(snapshot.docs);
                 },
                 (err) => {
@@ -2652,7 +2780,7 @@
             );
 
             autoRefreshTimer = setInterval(() => {
-                if (!document.hidden && currentUser) {
+                if (!document.hidden && currentUser && activeUserUid === uid) {
                     refreshUserAndData();
                 }
             }, 30000);
@@ -2660,7 +2788,7 @@
 
         document.getElementById('incomeForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            if (!currentUser) return;
+            if (!currentUser || !activeUserUid) return;
 
             const btn = document.getElementById('btnSubmitProject');
             btn.disabled = true;
@@ -2691,7 +2819,7 @@
                     finalPhoto = await extractSuperHdFromLink(rawLink);
                 }
 
-                await addDoc(collection(db, `users/${currentUser.uid}/projects`), {
+                await addDoc(collection(db, `users/${activeUserUid}/projects`), {
                     clientName,
                     category,
                     date,
@@ -2724,10 +2852,10 @@
         });
 
         window.toggleStatus = async (id, currentStatus) => {
-            if (!currentUser) return;
+            if (!currentUser || !activeUserUid) return;
             const nextStatus = currentStatus === 'Lunas' ? 'DP 50%' : 'Lunas';
             try {
-                await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), { status: nextStatus });
+                await updateDoc(doc(db, `users/${activeUserUid}/projects`, id), { status: nextStatus });
                 showToast(`Status diubah menjadi ${nextStatus}.`);
             } catch (err) {
                 showToast("Gagal mengubah status: " + err.message, true);
@@ -2735,7 +2863,7 @@
         };
 
         window.updatePipelineStage = async (id, nextStage) => {
-            if (!currentUser) return;
+            if (!currentUser || !activeUserUid) return;
             const patch = { pipelineStage: nextStage };
             if (nextStage === 'Post & Invoice Terkirim') {
                 const target = records.find(r => r.id === id);
@@ -2744,7 +2872,7 @@
                 }
             }
             try {
-                await updateDoc(doc(db, `users/${currentUser.uid}/projects`, id), patch);
+                await updateDoc(doc(db, `users/${activeUserUid}/projects`, id), patch);
                 showToast(`Tahap pipeline: ${nextStage}`);
             } catch (err) {
                 showToast("Gagal memperbarui pipeline: " + err.message, true);
@@ -2752,7 +2880,7 @@
         };
 
         window.deleteRecord = (id) => {
-            if (!currentUser) return;
+            if (!currentUser || !activeUserUid) return;
             pendingDeleteId = id;
             const target = records.find(r => r.id === id);
             const descEl = document.getElementById("confirmModalDesc");
@@ -2776,11 +2904,11 @@
         };
 
         document.getElementById("btnConfirmDeleteAction").addEventListener("click", async () => {
-            if (!currentUser || !pendingDeleteId) return;
+            if (!currentUser || !activeUserUid || !pendingDeleteId) return;
             const idToDelete = pendingDeleteId;
             closeConfirmModal();
             try {
-                await deleteDoc(doc(db, `users/${currentUser.uid}/projects`, idToDelete));
+                await deleteDoc(doc(db, `users/${activeUserUid}/projects`, idToDelete));
                 showToast("Catatan project dihapus.");
             } catch (err) {
                 showToast("Gagal menghapus project: " + err.message, true);
@@ -3231,7 +3359,107 @@
             });
         };
 
-        /* ================= INVOICE BUILDER & 2-PAGE PREVIEW / HD PDF ================= */
+        /* ================= INVOICE BUILDER (PER-USER AUTO-SAVE) ================= */
+        function loadInvoiceDraftFromLocal(uid) {
+            if (!uid) return null;
+            try {
+                const raw = JSON.parse(localStorage.getItem(getScopedKey("invoice_draft", uid)) || "null");
+                if (raw && typeof raw === "object") return raw;
+            } catch (_) {}
+            return null;
+        }
+
+        function saveInvoiceDraftToLocal(uid, draftObj) {
+            if (!uid) return;
+            try {
+                localStorage.setItem(getScopedKey("invoice_draft", uid), JSON.stringify(draftObj));
+            } catch (_) {}
+        }
+
+        function buildDraftSnapshotFromForm() {
+            return {
+                invNumber: document.getElementById('invNumber')?.value || "",
+                invStatus: document.getElementById('invStatus')?.value || "",
+                clientName: document.getElementById('invClientName')?.value || "",
+                clientSubtitle: document.getElementById('invClientSubtitle')?.value || "",
+                invDateText: document.getElementById('invDateText')?.value || "",
+                invEventDateText: document.getElementById('invEventDateText')?.value || "",
+                transport: document.getElementById('invTransport')?.value || "",
+                dpPercent: document.getElementById('invDpPercent')?.value || "",
+                bank: document.getElementById('invBank')?.value || "",
+                accountHolder: document.getElementById('invAccountHolder')?.value || "",
+                accountNumber: document.getElementById('invAccountNumber')?.value || "",
+                phone: document.getElementById('invPhone')?.value || "",
+                email: document.getElementById('invEmail')?.value || "",
+                notes: document.getElementById('invNotes')?.value || "",
+                terms: document.getElementById('invTerms')?.value || "",
+                items: invoiceLineItems.map(it => ({
+                    title: it.title || "",
+                    desc: it.desc || "",
+                    qty: Math.max(1, parseInt(it.qty, 10) || 1),
+                    price: Math.max(0, parseFloat(it.price) || 0)
+                })),
+                _updatedAt: Date.now()
+            };
+        }
+
+        function applyInvoiceDraftToForm(draft) {
+            const safe = { ...createEmptyInvoiceDraft(), ...(draft || {}) };
+            document.getElementById('invNumber').value = safe.invNumber;
+            document.getElementById('invStatus').value = safe.invStatus;
+            document.getElementById('invClientName').value = safe.clientName;
+            document.getElementById('invClientSubtitle').value = safe.clientSubtitle;
+            document.getElementById('invDateText').value = safe.invDateText;
+            document.getElementById('invEventDateText').value = safe.invEventDateText;
+            document.getElementById('invTransport').value = safe.transport;
+            document.getElementById('invDpPercent').value = safe.dpPercent;
+            document.getElementById('invBank').value = safe.bank;
+            document.getElementById('invAccountHolder').value = safe.accountHolder;
+            document.getElementById('invAccountNumber').value = safe.accountNumber;
+            document.getElementById('invPhone').value = safe.phone;
+            document.getElementById('invEmail').value = safe.email;
+            document.getElementById('invNotes').value = safe.notes;
+            document.getElementById('invTerms').value = safe.terms;
+
+            invoiceLineItems = Array.isArray(safe.items) && safe.items.length > 0
+                ? safe.items.map(it => ({
+                    title: it.title || "",
+                    desc: it.desc || "",
+                    qty: Math.max(1, parseInt(it.qty, 10) || 1),
+                    price: Math.max(0, parseFloat(it.price) || 0)
+                }))
+                : [{ title: "", desc: "", qty: 1, price: 0 }];
+
+            renderInvoiceEditorItems();
+        }
+
+        function autoSaveInvoiceDraft() {
+            refreshInvoicePreview();
+            if (!activeUserUid) return;
+            const uidSnapshot = activeUserUid;
+            const snapshot = buildDraftSnapshotFromForm();
+            saveInvoiceDraftToLocal(uidSnapshot, snapshot);
+
+            const statusEl = document.getElementById('invoiceAutoSaveStatus');
+            if (statusEl) statusEl.innerText = "Auto-save tersimpan";
+
+            clearTimeout(invoiceCloudSaveTimer);
+            invoiceCloudSaveTimer = setTimeout(async () => {
+                if (activeUserUid !== uidSnapshot) return;
+                try {
+                    await setDoc(
+                        doc(db, `users/${uidSnapshot}`),
+                        { invoiceDraft: snapshot },
+                        { merge: true }
+                    );
+                } catch (_) {}
+            }, 400);
+        }
+
+        window.handleInvoiceFieldChange = () => {
+            autoSaveInvoiceDraft();
+        };
+
         function syncInvoiceProjectDropdown() {
             const sel = document.getElementById('invoiceProjectSourceSelect');
             if (!sel) return;
@@ -3267,7 +3495,7 @@
                 }
             ];
             renderInvoiceEditorItems();
-            refreshInvoicePreview();
+            autoSaveInvoiceDraft();
         };
 
         window.openInvoiceWithProject = (projectId) => {
@@ -3284,25 +3512,10 @@
             if (catDrop) catDrop.value = "";
             const projDrop = document.getElementById('invoiceProjectSourceSelect');
             if (projDrop) projDrop.value = "";
-            document.getElementById('invNumber').value = "";
-            document.getElementById('invStatus').value = "";
-            document.getElementById('invClientName').value = "";
-            document.getElementById('invClientSubtitle').value = "";
-            document.getElementById('invDateText').value = "";
-            document.getElementById('invEventDateText').value = "";
-            document.getElementById('invTransport').value = "";
-            document.getElementById('invDpPercent').value = "";
-            document.getElementById('invBank').value = "";
-            document.getElementById('invAccountHolder').value = "";
-            document.getElementById('invAccountNumber').value = "";
-            document.getElementById('invPhone').value = "";
-            document.getElementById('invEmail').value = "";
-            document.getElementById('invNotes').value = "";
-            document.getElementById('invTerms').value = "";
 
-            invoiceLineItems = [{ title: "", desc: "", qty: 1, price: 0 }];
-            renderInvoiceEditorItems();
-            refreshInvoicePreview();
+            const emptyDraft = createEmptyInvoiceDraft();
+            applyInvoiceDraftToForm(emptyDraft);
+            autoSaveInvoiceDraft();
         };
 
         window.applyCategoryPresetToInvoice = (categoryVal) => {
@@ -3340,7 +3553,7 @@
                 ];
             }
             renderInvoiceEditorItems();
-            refreshInvoicePreview();
+            autoSaveInvoiceDraft();
         };
 
         function renderInvoiceEditorItems() {
@@ -3376,7 +3589,7 @@
             } else {
                 invoiceLineItems[idx][field] = val;
             }
-            refreshInvoicePreview();
+            autoSaveInvoiceDraft();
         };
 
         window.addInvoiceLineItem = () => {
@@ -3387,14 +3600,14 @@
                 price: 0
             });
             renderInvoiceEditorItems();
-            refreshInvoicePreview();
+            autoSaveInvoiceDraft();
         };
 
         window.removeInvoiceItem = (idx) => {
             if (invoiceLineItems.length <= 1) return;
             invoiceLineItems.splice(idx, 1);
             renderInvoiceEditorItems();
-            refreshInvoicePreview();
+            autoSaveInvoiceDraft();
         };
 
         function collectCurrentInvoiceData() {
@@ -3680,6 +3893,12 @@
         };
 
         window.openInvoiceModal = () => {
+            if (activeUserUid) {
+                const localDraft = loadInvoiceDraftFromLocal(activeUserUid);
+                if (localDraft) {
+                    applyInvoiceDraftToForm(localDraft);
+                }
+            }
             syncInvoiceProjectDropdown();
             renderInvoiceEditorItems();
             refreshInvoicePreview();
@@ -3689,6 +3908,7 @@
         };
 
         window.closeInvoiceModal = () => {
+            autoSaveInvoiceDraft();
             const modal = document.getElementById('invoiceModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
@@ -3703,6 +3923,7 @@
                 await document.fonts.ready;
             }
 
+            autoSaveInvoiceDraft();
             const btn = document.getElementById('btnExportInvoicePdf');
             const label = document.getElementById('btnExportInvoicePdfLabel');
             btn.disabled = true;
@@ -4018,8 +4239,9 @@
                     }
                 }
 
-                pdf.save("narravia_rekap_invoice_tax_HD.pdf");
-                showToast("PDF Rekap Invoice & Pajak berhasil diunduh.");
+                const cleanUser = username.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
+                pdf.save(`rekap_invoice_pajak_${cleanUser}_HD.pdf`);
+                showToast("PDF Rekap Invoice & Pajak HD berhasil diunduh.");
             } catch (err) {
                 showToast("Gagal membuat PDF: " + err.message, true);
             } finally {
@@ -4029,283 +4251,270 @@
             }
         };
 
-        function sortByRateAndPopularity(list) {
-            const catFreq = {};
-            list.forEach(item => {
-                const c = item.category || 'Lainnya';
-                catFreq[c] = (catFreq[c] || 0) + 1;
-            });
-            return [...list].sort((a, b) => {
-                const amtDiff = (Number(b.amount) || 0) - (Number(a.amount) || 0);
-                if (amtDiff !== 0) return amtDiff;
-                return (catFreq[b.category] || 0) - (catFreq[a.category] || 0);
-            });
-        }
-
-        function triggerJpgDownload(dataUrl, filename) {
-            const a = document.createElement("a");
-            a.href = dataUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        function makeHd43Photo(src, targetW = 2400, targetH = 1800) {
-            return new Promise((resolve) => {
-                if (!src) return resolve("");
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = () => {
-                    const canvas = document.createElement("canvas");
-                    canvas.width = targetW;
-                    canvas.height = targetH;
-                    const ctx = canvas.getContext("2d");
-                    ctx.fillStyle = "#F3ECE2";
-                    ctx.fillRect(0, 0, targetW, targetH);
-
-                    const imgRatio = (img.width || 4) / (img.height || 3);
-                    const boxRatio = targetW / targetH;
-                    let drawW, drawH, offsetX, offsetY;
-
-                    if (imgRatio > boxRatio) {
-                        drawW = targetW;
-                        drawH = targetW / imgRatio;
-                        offsetX = 0;
-                        offsetY = (targetH - drawH) / 2;
-                    } else {
-                        drawH = targetH;
-                        drawW = targetH * imgRatio;
-                        offsetX = (targetW - drawW) / 2;
-                        offsetY = 0;
-                    }
-
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = "high";
-                    ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
-                    resolve(canvas.toDataURL("image/jpeg", 0.99));
-                };
-                img.onerror = () => resolve(src);
-                img.src = src;
-            });
-        }
-
-        function renderMonthlyCollages(items) {
+        /* ================= GALERI PORTOFOLIO & KOLASE BULANAN ================= */
+        window.renderPortfolio = () => {
             const collageContainer = document.getElementById('monthlyCollageContainer');
-            if (!collageContainer) return;
+            const yearlyContainer = document.getElementById('yearlyPortfolioContainer');
+            collageContainer.innerHTML = '';
+            yearlyContainer.innerHTML = '';
 
-            const photoItems = items.filter(r => r.photoData && r.photoData !== "");
-            if (photoItems.length === 0) {
+            syncGreetingTexts();
+            updateShowcaseSocialIcons();
+            syncJpgButtonState();
+
+            const portfolioItems = getPortfolioEligibleItems();
+
+            if (portfolioItems.length === 0) {
                 collageContainer.innerHTML = `
-                    <div class="col-span-full botanical-card text-center py-8 px-4 rounded-3xl text-muted text-xs">
-                        <p><i class="fa-regular fa-images text-roseSoft mr-1.5"></i> Tambahkan foto saat mencatat project untuk membentuk kolase per bulan.</p>
-                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill mt-3 px-4 py-1.5 text-[11px] font-semibold text-sageDark cursor-pointer">
+                    <div class="col-span-full botanical-card p-10 rounded-3xl text-center">
+                        <p class="font-serif text-xl text-espresso mb-2">Belum ada karya yang diunggah</p>
+                        <p class="text-xs text-muted mb-4">Tambahkan link gambar atau unggah foto pada form Input Project Baru agar muncul di kolase bulanan &amp; arsip tahunan.</p>
+                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill px-4 py-2 text-xs font-semibold text-sageDark cursor-pointer">
                             <i class="fa-solid fa-plus mr-1"></i> Tambah Karya Pertama
                         </button>
                     </div>`;
                 return;
             }
 
-            const monthGroups = {};
-            photoItems.forEach(item => {
+            const groupedByMonth = {};
+            portfolioItems.forEach(item => {
                 const ym = (item.date && item.date.length >= 7) ? item.date.slice(0, 7) : "Lainnya";
-                if (!monthGroups[ym]) monthGroups[ym] = [];
-                monthGroups[ym].push(item);
+                if (!groupedByMonth[ym]) groupedByMonth[ym] = [];
+                groupedByMonth[ym].push(item);
             });
 
-            const sortedMonths = Object.keys(monthGroups).sort().reverse();
-            collageContainer.innerHTML = '';
-
+            const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
             sortedMonths.forEach(ym => {
-                const ranked = sortByRateAndPopularity(monthGroups[ym]);
-                const topSix = ranked.slice(0, 6);
-                let slotsHtml = '';
+                const monthItems = groupedByMonth[ym];
+                const monthLabel = formatMonthName(ym);
 
-                for (let i = 0; i < 6; i++) {
-                    const cellItem = topSix[i];
-                    if (cellItem) {
-                        const rankBadge = i === 0
-                            ? `<span class="absolute top-1.5 left-1.5 bg-sageDark text-white text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-crown text-amber-300 mr-0.5"></i> Top</span>`
-                            : `<span class="absolute top-1.5 left-1.5 bg-ivory/95 text-espresso text-[10px] font-bold px-2 py-0.5 rounded-full">#${i + 1}</span>`;
-
-                        slotsHtml += `
-                            <div class="rounded-2xl bg-cream/80 border border-[#EADFD3]/55 p-2 flex flex-col">
-                                <div onclick="openPhotoModal('${cellItem.id}')" title="${escapeHtml(cellItem.clientName)}"
-                                    class="aspect-[4/3] w-full rounded-xl overflow-hidden bg-cream relative cursor-pointer group border border-[#EADFD3]/50 flex items-center justify-center">
-                                    <img src="${cellItem.photoData}" alt="${escapeHtml(cellItem.clientName)}" class="w-full h-full object-contain group-hover:scale-105 transition duration-300">
-                                    ${rankBadge}
-                                </div>
-                                <p class="mt-2 text-center font-semibold text-[11px] text-espresso leading-snug line-clamp-1" style="transform:none;">
-                                    ${escapeHtml(cellItem.clientName)}
-                                </p>
-                            </div>`;
-                    } else {
-                        slotsHtml += `
-                            <div class="aspect-[4/3] rounded-2xl border border-[#E6DACB]/55 bg-ivory/70 flex flex-col items-center justify-center text-muted/60 text-[10px]">
-                                <i class="fa-regular fa-image mb-1 text-roseSoft/60"></i>
-                                <span>Slot ${i + 1}</span>
-                            </div>`;
-                    }
-                }
-
-                collageContainer.innerHTML += `
-                    <div class="botanical-card micro-card-lift p-5 rounded-3xl">
-                        <div class="flex items-center justify-between gap-2 mb-3">
-                            <h3 class="font-serif text-lg font-semibold text-espresso flex items-center gap-2">
-                                <i class="fa-solid fa-spa text-roseSoft text-sm"></i>
-                                <span>Portofolio ${formatMonthName(ym)}</span>
-                            </h3>
-                            <span class="clay-pill px-3 py-1 text-espresso text-[11px] font-semibold inline-flex items-center">
-                                <i class="fa-solid fa-photo-film mr-1 text-roseSoft"></i> ${topSix.length}/6 Foto
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2.5">
-                            ${slotsHtml}
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function renderYearlyPortfolio(items) {
-            const yearlyContainer = document.getElementById('yearlyPortfolioContainer');
-            if (!yearlyContainer) return;
-
-            if (items.length === 0) {
-                yearlyContainer.innerHTML = `
-                    <div class="botanical-card text-center py-12 px-4 rounded-3xl text-muted text-sm">
-                        <p><i class="fa-solid fa-seedling text-sageDark mr-1.5"></i> Belum ada item portofolio. Tambahkan link konten atau foto saat mencatat project baru.</p>
-                        <button type="button" onclick="focusNewProjectForm()" class="clay-pill mt-3 px-4 py-1.5 text-xs font-semibold text-sageDark cursor-pointer">
-                            <i class="fa-solid fa-plus mr-1"></i> Tambah Project Pertama
-                        </button>
-                    </div>`;
-                return;
-            }
-
-            const yearGroups = {};
-            items.forEach(item => {
-                const yr = formatYearLabel(item.date);
-                if (!yearGroups[yr]) yearGroups[yr] = [];
-                yearGroups[yr].push(item);
-            });
-
-            const sortedYears = Object.keys(yearGroups).sort().reverse();
-            yearlyContainer.innerHTML = '';
-
-            sortedYears.forEach(yr => {
-                const yearItems = sortByRateAndPopularity(yearGroups[yr]);
-                const cardsHtml = yearItems.map(item => {
-                    const mediaHtml = item.photoData
-                        ? `<img src="${item.photoData}" alt="${escapeHtml(item.clientName)}" onclick="openPhotoModal('${item.id}')" class="w-full h-full object-contain cursor-pointer group-hover:scale-105 transition duration-300">`
-                        : `<div class="w-full h-full flex flex-col items-center justify-center bg-cream/80 text-sageDark p-6 text-center">
-                             <i class="fa-solid fa-clapperboard text-2xl mb-2 text-roseSoft"></i>
-                             <span class="text-xs font-medium">Konten Tersimpan</span>
-                           </div>`;
-
-                    const safeHref = sanitizeUrl(item.portfolioLink);
-                    const linkBtn = safeHref
-                        ? `<a href="${escapeHtml(safeHref)}" target="_blank" rel="noopener noreferrer" class="clay-pill inline-flex items-center gap-1.5 text-xs font-semibold text-sageDark px-3.5 py-1.5">
-                             <i class="fa-solid fa-link text-[10px]"></i> Lihat Karya <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                           </a>`
-                        : '';
-
+                const collageTilesHtml = monthItems.slice(0, 6).map(item => {
+                    const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                    const safeTitle = escapeHtml(item.clientName || 'Karya');
+                    const safeCat = escapeHtml(item.category || 'Event');
+                    const safeDate = escapeHtml(item.date || '');
                     return `
-                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden flex flex-col group">
-                            <div class="aspect-[4/3] w-full bg-cream overflow-hidden relative flex items-center justify-center">
-                                ${mediaHtml}
-                            </div>
-                            <div class="p-5 flex-1 flex flex-col justify-between text-center">
-                                <div>
-                                    <span class="text-[11px] font-bold uppercase tracking-wider text-roseSoft">${escapeHtml(item.category)}</span>
-                                    <h3 class="font-serif text-base font-semibold text-espresso mt-1">${escapeHtml(item.clientName)}</h3>
-                                    <p class="text-xs text-muted mt-1"><i class="fa-regular fa-calendar mr-1 text-sageDark"></i> ${escapeHtml(item.date || '-')}</p>
-                                </div>
-                                <div class="mt-4 pt-3 border-t border-[#F0E6DA]/70 flex items-center justify-center gap-2 flex-wrap">
-                                    ${linkBtn}
-                                    ${item.photoData ? `<button onclick="openPhotoModal('${item.id}')" class="clay-pill text-xs text-espresso font-medium px-3.5 py-1.5 cursor-pointer"><i class="fa-solid fa-expand mr-1 text-roseSoft"></i> Zoom</button>` : ''}
-                                </div>
+                        <div onclick="openPhotoModal('${escapeHtml(imgSrc)}', '${safeTitle}', '${safeCat} • ${safeDate}')"
+                            class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-[#EADFD3]/60 cursor-pointer">
+                            <img src="${escapeHtml(imgSrc)}" alt="${safeTitle}" loading="lazy"
+                                class="w-full h-full object-contain bg-cream group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/80 via-espresso/30 to-transparent p-2.5">
+                                <p class="text-white text-[11px] font-medium truncate">${safeTitle}</p>
                             </div>
                         </div>
                     `;
                 }).join('');
 
+                collageContainer.innerHTML += `
+                    <div class="botanical-card micro-card-lift p-5 sm:p-6 rounded-3xl">
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider font-semibold text-sageDark">Kolase Bulanan</span>
+                                <h3 class="font-serif text-xl font-semibold text-espresso">${escapeHtml(monthLabel)}</h3>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold text-muted">
+                                ${monthItems.length} karya
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            ${collageTilesHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            const groupedByYear = {};
+            portfolioItems.forEach(item => {
+                const yr = formatYearLabel(item.date);
+                if (!groupedByYear[yr]) groupedByYear[yr] = [];
+                groupedByYear[yr].push(item);
+            });
+
+            const sortedYears = Object.keys(groupedByYear).sort().reverse();
+            sortedYears.forEach(yr => {
+                const yearItems = groupedByYear[yr];
+                let cardsHtml = '';
+
+                yearItems.forEach(item => {
+                    const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                    const safeTitle = escapeHtml(item.clientName || 'Karya');
+                    const safeCat = escapeHtml(item.category || 'Event');
+                    const safeDate = escapeHtml(item.date || '');
+                    const mgmtBadge = item.managementName
+                        ? `<p class="text-[11px] text-sageDark font-medium mt-0.5 truncate"><i class="fa-solid fa-building-user mr-1"></i>${escapeHtml(item.managementName)}</p>`
+                        : '';
+                    const socBadge = item.projectSocialHandle
+                        ? `<p class="text-[11px] text-roseSoft font-medium mt-0.5 truncate"><i class="fa-solid fa-hashtag mr-1"></i>${escapeHtml(item.projectSocialPlatform || 'Sosmed')}: ${escapeHtml(item.projectSocialHandle)}</p>`
+                        : '';
+
+                    cardsHtml += `
+                        <div class="botanical-card micro-card-lift rounded-3xl overflow-hidden group flex flex-col">
+                            <div onclick="openPhotoModal('${escapeHtml(imgSrc)}', '${safeTitle}', '${safeCat} • ${safeDate}')"
+                                class="w-full aspect-[4/3] overflow-hidden bg-cream relative cursor-pointer">
+                                <img src="${escapeHtml(imgSrc)}" alt="${safeTitle}" loading="lazy"
+                                    class="w-full h-full object-contain bg-cream group-hover:scale-105 transition duration-500">
+                            </div>
+                            <div class="p-4 text-center flex-1 flex flex-col justify-center">
+                                <p class="text-[11px] font-semibold uppercase tracking-wider text-roseSoft">${safeCat}</p>
+                                <h4 class="font-serif font-semibold text-base text-espresso mt-0.5 truncate">${safeTitle}</h4>
+                                ${mgmtBadge}
+                                ${socBadge}
+                                <p class="text-xs text-muted mt-1">${safeDate}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
                 yearlyContainer.innerHTML += `
-                    <section class="space-y-4">
-                        <div class="flex items-center justify-between border-b border-[#E6DACB] pb-2.5">
-                            <h3 class="font-serif text-xl font-semibold text-espresso flex items-center gap-2">
-                                <i class="fa-solid fa-leaf text-sageDark text-base"></i>
-                                <span>Tahun ${escapeHtml(yr)}</span>
-                            </h3>
-                            <span class="clay-pill px-3.5 py-1 text-xs font-semibold text-sageDark">${yearItems.length} Karya</span>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-[#E6DACB] pb-2">
+                            <h3 class="font-serif text-xl sm:text-2xl font-semibold text-espresso">Tahun ${escapeHtml(yr)}</h3>
+                            <span class="text-xs font-medium text-muted">${yearItems.length} karya</span>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             ${cardsHtml}
                         </div>
-                    </section>
+                    </div>
                 `;
             });
-        }
-
-        window.renderPortfolio = () => {
-            const portfolioItems = getPortfolioEligibleItems();
-            syncJpgButtonState();
-            renderMonthlyCollages(portfolioItems);
-            renderYearlyPortfolio(portfolioItems);
         };
 
-        async function buildLandscapePortfolioElement(items, createdBySocial) {
-            const sorted = sortByRateAndPopularity(items);
-            const featured = sorted.slice(0, 6);
-            const hdPhotos = await Promise.all(
-                featured.map(it => it.photoData ? makeHd43Photo(it.photoData, 2400, 1800) : Promise.resolve(""))
-            );
-
+        /* ================= EXPORT JPG 4:3 LANDSCAPE HD (3600 x 2545 px) ================= */
+        function buildLandscapeJpgSheetElement(username, eligibleItems) {
             const sheet = document.createElement("div");
             sheet.className = "jpg-landscape-sheet";
 
-            const photoCellsHtml = featured.map((it, idx) => {
-                const imgSrc = hdPhotos[idx];
-                const mediaEl = imgSrc
-                    ? `<img src="${imgSrc}" alt="${escapeHtml(it.clientName)}" style="width:100%; height:100%; object-fit:contain; display:block;">`
-                    : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#4F6952; font-size:28px; font-weight:600;">${escapeHtml(it.category || "Event")}</div>`;
+            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
+            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
+            const th = normalizeSocialEntry(userSocials.threads, "threads");
+            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
+            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+
+            const socialItemsHtml = [
+                ig ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-instagram" style="color:#E1306C; font-size:30px;"></i><span>${escapeHtml(ig.label)}</span></span>` : "",
+                tt ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-tiktok" style="color:#352B28; font-size:28px;"></i><span>${escapeHtml(tt.label)}</span></span>` : "",
+                th ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-solid fa-at" style="color:#4F6952; font-size:28px;"></i><span>${escapeHtml(th.label)}</span></span>` : "",
+                fb ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-facebook" style="color:#4F6952; font-size:28px;"></i><span>${escapeHtml(fb.label)}</span></span>` : "",
+                tw ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-twitter" style="color:#D97D90; font-size:28px;"></i><span>${escapeHtml(tw.label)}</span></span>` : ""
+            ].filter(Boolean).join(`<span style="color:#B5A69E; font-size:24px;">•</span>`);
+
+            const displayItems = eligibleItems.slice(0, 6);
+            const isTwoRows = displayItems.length > 3;
+
+            const cardMinH = isTwoRows ? "760px" : "1220px";
+            const imgMaxH = isTwoRows ? "520px" : "920px";
+            const titleFont = isTwoRows ? "38px" : "46px";
+            const catFont = isTwoRows ? "23px" : "27px";
+            const dateFont = isTwoRows ? "22px" : "26px";
+            const gridGap = isTwoRows ? "48px 56px" : "64px";
+
+            const cardsHtml = displayItems.map(item => {
+                const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
+                const safeTitle = escapeHtml(item.clientName || "Karya");
+                const safeCat = escapeHtml(item.category || "Event");
+                const safeDate = escapeHtml(item.date || "");
 
                 return `
-                    <div style="background:rgba(255,253,250,0.96); border:1.5px solid rgba(234,223,211,0.65); border-radius:36px; padding:24px; box-shadow:0 16px 36px -14px rgba(79,105,82,0.12); display:flex; flex-direction:column;">
-                        <div style="width:100%; aspect-ratio:4/3; border-radius:26px; overflow:hidden; background:#F3ECE2; display:flex; align-items:center; justify-content:center;">
-                            ${mediaEl}
+                    <div style="background:rgba(255,253,250,0.94); border:2px solid rgba(226,212,195,0.78); border-radius:42px; overflow:hidden; box-shadow:0 18px 36px -14px rgba(53,43,40,0.12); display:flex; flex-direction:column; min-height:${cardMinH};">
+                        <div style="width:100%; flex:1; background:#F3ECE2; display:flex; align-items:center; justify-content:center; padding:24px; box-sizing:border-box; overflow:hidden;">
+                            <img src="${escapeHtml(imgSrc)}" alt="${safeTitle}" style="width:100%; height:100%; max-height:${imgMaxH}; object-fit:contain; border-radius:26px; display:block;">
                         </div>
-                        <div style="margin-top:20px; text-align:center;">
-                            <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:28px; font-weight:700; color:#352B28; line-height:1.25;">
-                                ${escapeHtml(it.clientName || "Project")}
-                            </p>
-                            <p style="margin:6px 0 0 0; font-size:18px; font-weight:600; color:#D97D90;">
-                                ${escapeHtml(it.category || "Event")} • ${escapeHtml(it.date || "")}
-                            </p>
+                        <div style="padding:22px 32px 26px 32px; text-align:center; background:rgba(255,253,250,0.98); border-top:1.5px solid rgba(234,223,211,0.65);">
+                            <p style="margin:0; font-size:${catFont}; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#D97D90;">${safeCat}</p>
+                            <h3 style="margin:6px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:${titleFont}; font-weight:700; color:#352B28; line-height:1.2;">${safeTitle}</h3>
+                            <p style="margin:0; font-size:${dateFont}; font-weight:500; color:#7A6C67;">${safeDate}</p>
                         </div>
                     </div>
                 `;
-            }).join("");
+            }).join('');
+
+            const createdBySocialText = getCreatedBySocialName();
+            const introSentence = buildIntroBubbleSentence();
 
             sheet.innerHTML = `
-                <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                <svg style="position:fixed; top:-20px; left:-20px; width:340px; height:340px; opacity:0.9; pointer-events:none; z-index:1;" viewBox="0 0 170 170" fill="none">
+                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.4" stroke-linecap="round"/>
+                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
+                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
+                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
+                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
+                </svg>
+
+                <svg style="position:fixed; top:-24px; right:36px; width:320px; height:320px; opacity:0.85; pointer-events:none; z-index:1;" viewBox="0 0 170 170" fill="none">
+                    <path d="M148 16C125 60 94 94 52 118" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="114" cy="58" rx="18" ry="8.5" transform="rotate(28 114 58)" fill="#7E9680" fill-opacity="0.34"/>
+                    <ellipse cx="82" cy="92" rx="17" ry="8" transform="rotate(42 82 92)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="52" cy="118" r="10.5" fill="#F6D8DE"/>
+                    <circle cx="42" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="62" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="52" cy="114" r="3.8" fill="#E4A853"/>
+                </svg>
+
+                <svg style="position:fixed; bottom:-24px; left:48px; width:330px; height:300px; opacity:0.85; pointer-events:none; z-index:1;" viewBox="0 0 170 150" fill="none">
+                    <path d="M22 132C55 110 88 94 128 84" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="64" cy="112" rx="17" ry="8" transform="rotate(-18 64 112)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="128" cy="84" r="9.5" fill="#F6D8DE"/>
+                    <circle cx="136" cy="90" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
+                    <circle cx="128" cy="88" r="3.5" fill="#E4A853"/>
+                </svg>
+
+                <svg style="position:fixed; bottom:-36px; right:-36px; width:380px; height:380px; opacity:0.9; pointer-events:none; z-index:1;" viewBox="0 0 180 180" fill="none">
+                    <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
+                    <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
+                    <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
+                    <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
+                    <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
+                    <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
+                </svg>
+
+                <svg style="position:fixed; top:160px; right:260px; width:128px; height:128px; opacity:0.85; pointer-events:none; z-index:1;" viewBox="0 0 80 80" fill="none">
+                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.6"/>
+                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.6"/>
+                    <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.4"/>
+                    <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.4"/>
+                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2.1" stroke-linecap="round"/>
+                </svg>
+
+                <svg style="position:fixed; bottom:210px; left:240px; width:116px; height:116px; opacity:0.8; pointer-events:none; z-index:1;" viewBox="0 0 80 80" fill="none">
+                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.6"/>
+                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.6"/>
+                    <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#7E9680" fill-opacity="0.35" stroke="#7E9680" stroke-width="1.4"/>
+                    <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#7E9680" fill-opacity="0.35" stroke="#7E9680" stroke-width="1.4"/>
+                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2.1" stroke-linecap="round"/>
+                </svg>
+
+                <div style="position:relative; z-index:2; min-height:2361px; display:flex; flex-direction:column; justify-content:space-between;">
                     <div>
-                        <div style="text-align:center; margin-bottom:46px;">
-                            <span style="display:inline-block; padding:10px 26px; border-radius:9999px; background:#F6D8DE; color:#D97D90; font-size:20px; font-weight:700; letter-spacing:0.06em; margin-bottom:14px;">
+                        <div style="text-align:center; margin-bottom:28px;">
+                            <span style="display:inline-block; padding:10px 28px; border-radius:9999px; background:rgba(246,216,222,0.65); color:#D97D90; font-size:24px; font-weight:700; letter-spacing:0.06em; margin-bottom:14px;">
                                 CREATOR PORTFOLIO SHOWCASE
                             </span>
-                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:64px; font-weight:700; color:#352B28; line-height:1.15;">
+                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:88px; font-weight:700; color:#352B28; line-height:1.1;">
                                 Narravia Studio
                             </h1>
+                            <p style="margin:12px 0 0 0; font-size:32px; font-weight:600; color:#4F6952;">
+                                ${escapeHtml(username)}
+                            </p>
+                            ${socialItemsHtml ? `<div style="margin-top:16px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:26px; font-size:28px; font-weight:700; color:#352B28;">${socialItemsHtml}</div>` : ""}
                         </div>
 
-                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:38px;">
-                            ${photoCellsHtml}
+                        <div style="background:rgba(255,253,250,0.92); border:2px solid rgba(226,212,195,0.75); border-radius:36px; padding:26px 44px; margin-bottom:44px; text-align:center;">
+                            <p style="margin:0; font-size:30px; font-weight:600; color:#352B28; line-height:1.5;">
+                                ${escapeHtml(introSentence)}
+                            </p>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:${gridGap};">
+                            ${cardsHtml}
                         </div>
                     </div>
 
-                    <div style="margin-top:46px; padding-top:24px; border-top:2px solid rgba(230,218,203,0.85); display:flex; justify-content:space-between; align-items:center; font-size:24px; color:#7A6C67;">
-                        <span>Created by ${escapeHtml(createdBySocial)}</span>
-                        <span style="font-weight:600; color:#4F6952;">Narravia.Studio</span>
+                    <div style="margin-top:44px; padding-top:22px; border-top:2px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:28px; color:#7A6C67;">
+                        <span>Created by Narravia.Studio</span>
+                        <span style="font-weight:600; color:#4F6952;">${escapeHtml(createdBySocialText)}</span>
                     </div>
                 </div>
             `;
@@ -4313,14 +4522,23 @@
             return sheet;
         }
 
+        function triggerJpgDownload(dataUrl, filename) {
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         window.exportPortfolioJPG = async () => {
-            const items = getPortfolioEligibleItems();
-            if (items.length < MIN_JPG_EVENTS) {
-                return showToast(`Minimal ${MIN_JPG_EVENTS} event/portofolio diperlukan untuk export JPG HD.`, true);
+            if (typeof html2canvas === "undefined") {
+                return showToast("Library export JPG belum termuat. Coba refresh halaman.", true);
             }
 
-            if (typeof html2canvas === "undefined") {
-                return showToast("Library export belum termuat. Coba refresh halaman.", true);
+            const eligibleItems = getPortfolioEligibleItems();
+            if (eligibleItems.length < MIN_JPG_EVENTS) {
+                return showToast(`Minimal ${MIN_JPG_EVENTS} event diperlukan untuk export JPG HD.`, true);
             }
 
             if (document.fonts && document.fonts.ready) {
@@ -4330,75 +4548,98 @@
             const btn = document.getElementById("btnExportJpg");
             const label = document.getElementById("btnExportJpgLabel");
             btn.disabled = true;
-            if (label) label.innerText = "Menyiapkan JPG HD...";
+            if (label) label.innerText = "Menyiapkan JPG...";
 
             const staging = document.getElementById("jpgRenderStaging");
             staging.innerHTML = "";
 
             try {
-                const createdBySocial = getCreatedBySocialName();
-                const sheetEl = await buildLandscapePortfolioElement(items, createdBySocial);
+                const username = getActiveUsername();
+                const sheetEl = buildLandscapeJpgSheetElement(username, eligibleItems);
                 staging.appendChild(sheetEl);
 
                 const canvas = await html2canvas(sheetEl, {
-                    scale: 2,
+                    scale: 1,
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: "#FAF7F2",
                     logging: false
                 });
 
-                const jpgUrl = canvas.toDataURL("image/jpeg", 0.99);
-                triggerJpgDownload(jpgUrl, "narravia_portfolio_showcase_HD.jpg");
-                showToast("Portofolio JPG HD berhasil diunduh.");
+                const jpgDataUrl = canvas.toDataURL("image/jpeg", 0.98);
+                const cleanUser = username.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
+                triggerJpgDownload(jpgDataUrl, `portofolio_${cleanUser}_4x3_HD.jpg`);
+                showToast("Portofolio JPG 4:3 HD berhasil diunduh.");
             } catch (err) {
-                showToast("Gagal membuat JPG: " + err.message, true);
+                showToast("Gagal membuat JPG portofolio: " + err.message, true);
             } finally {
                 staging.innerHTML = "";
                 syncJpgButtonState();
-                if (label) label.innerText = "Export JPG HD";
             }
         };
 
+        /* ================= EXPORT CSV ================= */
         window.exportToCSV = () => {
             if (records.length === 0) return showToast("Belum ada data untuk di-export.", true);
-            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Nominal Fee (Exclude Pajak)", "Pajak", "Status", "Management", "Deadline Konten", "Jatuh Tempo / Cair", "Sosmed Project", "Link Portofolio"];
+            const headers = ["Tanggal", "Project Name", "Kategori", "Tahap Pipeline", "Nominal Fee (Excl. Pajak)", "Pajak", "Status", "Management", "Deadline Konten", "Jatuh Tempo Cair", "Sosmed Project", "Link Portofolio"];
             const rows = records.map(r => [
-                r.date || '',
-                `"${String(r.clientName || '').replace(/"/g, '""')}"`,
-                `"${String(r.category || '').replace(/"/g, '""')}"`,
-                `"${String(r.pipelineStage || '').replace(/"/g, '""')}"`,
+                r.date || "",
+                r.clientName || "",
+                r.category || "",
+                r.pipelineStage || "Brief Diterima",
                 Number(r.amount) || 0,
                 Number(r.taxAmount) || 0,
-                r.status || '',
-                `"${String(r.managementName || '').replace(/"/g, '""')}"`,
-                r.deadlineDate || '',
-                r.payoutDate || '',
-                `"${String(r.projectSocialHandle ? `${r.projectSocialPlatform || ''}: ${r.projectSocialHandle}` : '').replace(/"/g, '""')}"`,
-                `"${String(r.portfolioLink || '').replace(/"/g, '""')}"`
+                r.status || "",
+                r.managementName || "",
+                r.deadlineDate || "",
+                r.payoutDate || "",
+                r.projectSocialHandle ? `${r.projectSocialPlatform || "Sosmed"}: ${r.projectSocialHandle}` : "",
+                r.portfolioLink || ""
             ]);
+
             const csvContent = "data:text/csv;charset=utf-8,"
-                + headers.join(",") + "\n"
-                + rows.map(e => e.join(",")).join("\n");
+                + [headers, ...rows].map(e => e.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
 
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "narravia_studio_income.csv");
+            link.setAttribute("download", `narravia_studio_pendapatan_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("Data CSV berhasil diunduh.");
+            showToast("File CSV berhasil diunduh.");
         };
 
-        window.openPhotoModal = (id) => {
-            const item = records.find(r => r.id === id);
-            if (!item || !item.photoData) return;
-            document.getElementById('modalTitle').innerText = item.clientName;
-            document.getElementById('modalSubtitle').innerText = `${item.category} • ${item.date || ''}`;
-            const img = document.getElementById('modalImg');
-            img.src = item.photoData;
-            img.alt = item.clientName;
+        /* ================= NAVIGASI TAB & MODAL ================= */
+        window.switchTab = (tab) => {
+            const isFinance = tab === 'finance';
+            const isPortfolio = tab === 'portfolio';
+            const isSocial = tab === 'social';
+            const isOperations = tab === 'operations';
+
+            document.getElementById('viewFinance').classList.toggle('hidden', !isFinance);
+            document.getElementById('viewPortfolio').classList.toggle('hidden', !isPortfolio);
+            document.getElementById('viewSocial').classList.toggle('hidden', !isSocial);
+            document.getElementById('viewOperations').classList.toggle('hidden', !isOperations);
+
+            const activeCls = 'clay-pill px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sageDark to-[#3F5542] cursor-pointer';
+            const inactiveCls = 'clay-pill px-5 py-2.5 text-sm font-semibold text-muted hover:text-espresso cursor-pointer';
+
+            document.getElementById('tabFinance').className = isFinance ? activeCls : inactiveCls;
+            document.getElementById('tabPortfolio').className = isPortfolio ? activeCls : inactiveCls;
+            document.getElementById('tabSocial').className = isSocial ? activeCls : inactiveCls;
+            document.getElementById('tabOperations').className = isOperations ? activeCls : inactiveCls;
+
+            if (isFinance) renderMonthlyChart();
+            if (isPortfolio) window.renderPortfolio();
+            if (isSocial) updateSocialProfileCard();
+            if (isOperations) renderOperationsTab();
+        };
+
+        window.openPhotoModal = (imgSrc, title, subtitle) => {
+            document.getElementById('modalImg').src = imgSrc;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalSubtitle').innerText = subtitle;
             const modal = document.getElementById('photoModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -4408,47 +4649,7 @@
             const modal = document.getElementById('photoModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        };
-
-        window.switchTab = (tab) => {
-            const activeClasses = ['text-white', 'bg-gradient-to-r', 'from-sageDark', 'to-[#3F5542]'];
-            const inactiveClasses = ['text-muted', 'hover:text-espresso'];
-
-            const views = {
-                finance: document.getElementById('viewFinance'),
-                portfolio: document.getElementById('viewPortfolio'),
-                social: document.getElementById('viewSocial'),
-                operations: document.getElementById('viewOperations')
-            };
-            const tabs = {
-                finance: document.getElementById('tabFinance'),
-                portfolio: document.getElementById('tabPortfolio'),
-                social: document.getElementById('tabSocial'),
-                operations: document.getElementById('tabOperations')
-            };
-
-            Object.keys(views).forEach(key => {
-                if (views[key]) views[key].classList.toggle('hidden', key !== tab);
-                if (tabs[key]) {
-                    activeClasses.forEach(c => tabs[key].classList.remove(c));
-                    inactiveClasses.forEach(c => tabs[key].classList.remove(c));
-                    if (key === tab) {
-                        activeClasses.forEach(c => tabs[key].classList.add(c));
-                    } else {
-                        inactiveClasses.forEach(c => tabs[key].classList.add(c));
-                    }
-                }
-            });
-
-            if (tab === 'finance') {
-                renderMonthlyChart();
-            } else if (tab === 'portfolio') {
-                window.renderPortfolio();
-            } else if (tab === 'social') {
-                updateSocialProfileCard();
-            } else if (tab === 'operations') {
-                renderOperationsTab();
-            }
+            document.getElementById('modalImg').src = '';
         };
     </script>
 </body>
