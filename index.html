@@ -107,25 +107,6 @@
             box-shadow: 0 14px 28px -12px rgba(53, 43, 40, 0.14);
         }
 
-        .jpg-landscape-sheet {
-            width: 3600px;
-            min-height: 2545px;
-            background-color: #FAF7F2;
-            background-image:
-                radial-gradient(rgba(53, 43, 40, 0.085) 8px, transparent 9px),
-                radial-gradient(rgba(53, 43, 40, 0.085) 8px, transparent 9px),
-                radial-gradient(circle at 8% 10%, rgba(246, 216, 222, 0.56) 0%, transparent 38%),
-                radial-gradient(circle at 92% 14%, rgba(126, 150, 128, 0.24) 0%, transparent 40%),
-                radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.2) 0%, transparent 38%),
-                radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 42%);
-            background-size: 84px 84px, 84px 84px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-            background-position: 0 0, 42px 42px, 0 0, 0 0, 0 0, 0 0;
-            position: relative;
-            overflow: hidden;
-            padding: 96px 150px 88px 150px;
-            box-sizing: border-box;
-        }
-
         .pdf-report-sheet {
             width: 1240px;
             min-height: 1754px;
@@ -288,7 +269,7 @@
         </svg>
     </div>
 
-    <!-- TAMPILAN PORTOFOLIO PUBLIK & FORM PILIHAN KATEGORI KLIEN (VIA SHARE LINK) -->
+    <!-- TAMPILAN PORTOFOLIO PUBLIK & FORM PILIHAN KATEGORI KERJASAMA (VIA SHARE LINK) -->
     <div id="publicShareSection" class="hidden relative z-10 max-w-5xl mx-auto p-4 sm:p-8 space-y-6">
         <div class="botanical-card p-6 sm:p-8 rounded-3xl">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -319,10 +300,10 @@
 
         <div class="botanical-card p-6 sm:p-8 rounded-3xl">
             <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
-                <i class="fa-solid fa-list-check"></i> Form Pilihan Kategori Klien
+                <i class="fa-solid fa-list-check"></i> Form Pilihan Kategori Kerjasama
             </span>
-            <h2 class="font-serif text-2xl font-semibold text-espresso mt-1.5">Pilih Kategori Konten yang Diminati</h2>
-            <p class="text-xs text-muted mt-1">Kirimkan pilihan kategori konten untuk penjajakan kerja sama. Data akan tersinkron ke catatan project kreator.</p>
+            <h2 class="font-serif text-2xl font-semibold text-espresso mt-1.5">Pilih Kategori Kerjasama</h2>
+            <p class="text-xs text-muted mt-1">Kirimkan pilihan kategori konten untuk penjajakan kerja sama. Data akan tersinkron ke catatan project kreator jadi Brand / Management dapat memilih kategori konten untuk pitching kerja sama.</p>
 
             <form id="clientCategoryForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
                 <div>
@@ -331,7 +312,7 @@
                         class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Kategori Konten Diminati</label>
+                    <label class="block text-xs font-semibold text-espresso/80 mb-1">Kategori Kerjasama</label>
                     <select id="clientPickCategory" class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm">
                         <option value="Event Coverage (Reels/TikTok)">Event Coverage (Reels/TikTok)</option>
                         <option value="Same Day Edit (SDE)">Same Day Edit (SDE)</option>
@@ -768,7 +749,7 @@
                         <h3 class="font-serif text-lg font-semibold text-espresso">
                             <i class="fa-solid fa-receipt text-sageDark mr-1.5 text-sm"></i> Riwayat Pemasukan &amp; Siklus Project
                         </h3>
-                        <p class="text-[11px] text-muted">Klik status DP / Pending untuk menandai lunas, atau tarik project siap tagih langsung ke Invoice</p>
+                        <p class="text-[11px] text-muted">Klik ikon pensil pada Project Name untuk mengedit nama project, klik status untuk ubah pembayaran, atau tarik ke Invoice</p>
                     </div>
                     <select id="filterStatus" onchange="renderData()" class="clay-pill px-4 py-1.5 text-xs font-semibold text-espresso focus:outline-none cursor-pointer">
                         <option value="ALL">Semua Status</option>
@@ -810,26 +791,17 @@
                     <button type="button" onclick="copyPublicPortfolioLink()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-share-from-square text-roseSoft"></i> <span id="btnCopyPublicLinkLabel">Link Portofolio Publik</span>
                     </button>
-                    <button type="button" onclick="copyClientCategoryFormLink()" class="clay-pill text-sageDark px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer">
-                        <i class="fa-solid fa-list-check text-sageDark"></i> <span id="btnCopyClientFormLabel">Link Form Kategori Klien</span>
-                    </button>
-                    <div class="flex flex-col items-end gap-1">
-                        <button type="button" id="btnExportJpg" onclick="exportPortfolioJPG()" class="clay-pill text-espresso px-4 py-2 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed">
-                            <i class="fa-solid fa-file-image text-sageDark"></i> <span id="btnExportJpgLabel">Export JPG HD</span>
-                        </button>
-                        <span id="jpgRequirementHint" class="text-[11px] text-muted">Minimal 3 event untuk export JPG HD</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- Pengaturan Shareable Public View & Form Pilihan Kategori Klien -->
+            <!-- Form Pengajuan Pitching Kerjasama -->
             <div class="botanical-card p-5 sm:p-6 rounded-3xl">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <div>
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blush/60 text-roseSoft text-[11px] font-semibold">
-                            <i class="fa-solid fa-globe"></i> Shareable Portfolio &amp; Client Category Link
+                            <i class="fa-solid fa-globe"></i> Form Pengajuan Pitching Kerjasama
                         </span>
-                        <h3 class="font-serif text-lg font-semibold text-espresso mt-1">Pengaturan Tampilan Publik &amp; Penjajakan Klien</h3>
+                        <h3 class="font-serif text-lg font-semibold text-espresso mt-1">Form Pengajuan Pitching Kerjasama</h3>
                     </div>
                     <span id="publicShareStatusMsg" class="text-xs font-semibold text-sageDark"></span>
                 </div>
@@ -843,18 +815,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-espresso/80 mb-1">Highlight Rate Card / Paket (Tanpa Angka Privat Wajib)</label>
+                        <label class="block text-xs font-semibold text-espresso/80 mb-1">Informasi Rate Card / Paket</label>
                         <input type="text" id="pubRateCardInput" oninput="savePublicShareSettings()" placeholder="Contoh: Paket Reels/TikTok, SDE & UGC (DM / Email untuk rate card)"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2 text-sm">
                     </div>
                 </div>
-            </div>
-
-            <!-- Kolom Sambutan dengan border semi-transparan -->
-            <div class="botanical-card p-4 sm:px-6 rounded-3xl flex items-center justify-center text-center">
-                <p id="portfolioGreetingBanner" class="text-sm font-medium text-espresso leading-relaxed">
-                    Hi, kenalin aku @username. Saat ini aku aktif sebagai Content Creator yang berdomisili di Jakarta Timur, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋
-                </p>
             </div>
 
             <!-- Kolase Portofolio Perbulan -->
@@ -875,9 +840,6 @@
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage/15 text-sageDark text-xs font-semibold">
                         <i class="fa-solid fa-id-badge"></i> Creator's Profile &amp; Pitching Card
                     </span>
-                    <button type="button" id="btnExportPitchingJpg" onclick="exportPitchingCardJPG()" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso cursor-pointer inline-flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-image text-roseSoft"></i> <span id="btnExportPitchLabel">Export JPG</span>
-                    </button>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-sage/60 bg-blush/50 flex items-center justify-center shrink-0">
@@ -936,7 +898,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-espresso/80 mb-1">
-                            <i class="fa-solid fa-at text-sageDark mr-1.5"></i> Link Threads
+                            <i class="fa-brands fa-threads text-espresso mr-1.5"></i> Link Threads
                         </label>
                         <input type="text" id="socThreads" placeholder="https://threads.net/@username atau @username"
                             class="w-full bg-ivory border border-[#E4D8CA] rounded-2xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-sageDark">
@@ -1223,7 +1185,7 @@
         </div>
     </div>
 
-    <!-- Container Tersembunyi untuk Render JPG HD & PDF Recap -->
+    <!-- Container Tersembunyi untuk Render PDF Recap -->
     <div id="jpgRenderStaging" style="position: fixed; left: -25000px; top: 0; pointer-events: none; z-index: -1;"></div>
 
     <!-- MODAL KONFIRMASI HAPUS -->
@@ -1309,7 +1271,6 @@
         const db = getFirestore(app);
 
         const REMEMBER_KEY = "narravia_remember_pref";
-        const MIN_JPG_EVENTS = 3;
         const MAX_FIRESTORE_PHOTO_CHARS = 780000;
         const MAX_RAW_FILE_BYTES = 15 * 1024 * 1024;
 
@@ -1356,6 +1317,7 @@
         let activeUserUid = "";
         let pendingVerifyUser = null;
         let pendingDeleteId = null;
+        let editingProjectId = null;
         let unsubscribeRecords = null;
         let unsubscribeProfile = null;
         let autoRefreshTimer = null;
@@ -1407,6 +1369,7 @@
 
         function resetAllPerUserUiState() {
             activeUserUid = "";
+            editingProjectId = null;
             currentAvatarDataUrl = "";
             userSocials = createEmptySocials();
             publicShareSettings = createEmptyPublicShare();
@@ -1438,6 +1401,7 @@
                 closePhotoModal();
                 closeInvoiceModal();
                 closeConfirmModal();
+                cancelEditProjectName();
             }
         });
 
@@ -1580,192 +1544,26 @@
             return rawName.startsWith("@") ? rawName : `@${rawName}`;
         }
 
-        function getCreatedBySocialName() {
-            const entries = [
-                normalizeSocialEntry(userSocials.instagram, "instagram"),
-                normalizeSocialEntry(userSocials.tiktok, "tiktok"),
-                normalizeSocialEntry(userSocials.threads, "threads"),
-                normalizeSocialEntry(userSocials.facebook, "facebook"),
-                normalizeSocialEntry(userSocials.twitter, "twitter")
-            ].filter(Boolean);
-
-            if (entries.length > 0) {
-                return entries.map(e => e.label).join(" • ");
-            }
-            return getActiveUsername();
+        function getUsernameWithoutAt() {
+            const clean = getActiveUsername().replace(/^@+/, "").trim();
+            return clean || "Narravia Studio";
         }
 
-        function buildIntroBubbleSentence() {
-            const username = getActiveUsername();
+        function buildIntroBubbleSentence(creatorHandle = "") {
+            const username = creatorHandle || getActiveUsername();
             const domicile = (userSocials.domicile || "").trim();
             const locationPart = domicile ? ` yang berdomisili di ${domicile}` : "";
             return `Hi, kenalin aku ${username}. Saat ini aku aktif sebagai Content Creator${locationPart}, aku lagi open collaboration untuk Brand maupun Management yang ingin bekerja sama. Let's work together! ✨🌸🦋`;
         }
 
-        function buildPitchingCardExportElement(createdByLabel, introSentence, collabStatusText, avatarSrc, socialBadges) {
-            const sheet = document.createElement("div");
-            sheet.style.cssText = [
-                "width: 1800px",
-                "min-height: 1120px",
-                "background-color: #FAF7F2",
-                "background-image:",
-                "  radial-gradient(rgba(53, 43, 40, 0.085) 6px, transparent 6.5px),",
-                "  radial-gradient(rgba(53, 43, 40, 0.085) 6px, transparent 6.5px),",
-                "  radial-gradient(circle at 8% 12%, rgba(246, 216, 222, 0.58) 0%, transparent 38%),",
-                "  radial-gradient(circle at 92% 16%, rgba(126, 150, 128, 0.24) 0%, transparent 40%),",
-                "  radial-gradient(circle at 14% 88%, rgba(126, 150, 128, 0.18) 0%, transparent 38%),",
-                "  radial-gradient(circle at 88% 88%, rgba(246, 216, 222, 0.52) 0%, transparent 42%)",
-                "background-size: 64px 64px, 64px 64px, 100% 100%, 100% 100%, 100% 100%, 100% 100%",
-                "background-position: 0 0, 32px 32px, 0 0, 0 0, 0 0, 0 0",
-                "padding: 76px 92px",
-                "box-sizing: border-box",
-                "position: relative",
-                "overflow: hidden",
-                "font-family: 'Plus Jakarta Sans', system-ui, sans-serif",
-                "font-style: normal"
-            ].join(";");
-
-            const initialChar = (createdByLabel.replace(/^@+/, "").trim().charAt(0) || "U").toUpperCase();
-            const avatarHtml = avatarSrc
-                ? `<img src="${avatarSrc}" alt="Foto Profil Kreator" style="width:100%; height:100%; object-fit:cover; display:block;">`
-                : `<span style="font-family:'Playfair Display',Georgia,serif; font-size:96px; font-weight:700; color:#352B28; font-style:normal;">${escapeHtml(initialChar)}</span>`;
-
-            const badgesHtml = socialBadges.length > 0
-                ? socialBadges.map(b => `
-                    <span style="display:inline-flex; align-items:center; gap:12px; padding:14px 26px; border-radius:9999px; background:linear-gradient(145deg,#FFFDF9,#EFE5D8); border:1.5px solid #E2D4C3; box-shadow:4px 4px 10px rgba(53,43,40,0.09),-3px -3px 8px rgba(255,255,255,0.9); font-size:24px; font-weight:700; color:#352B28; font-style:normal;">
-                        <i class="${b.iconClass}" style="color:${b.iconColor}; font-size:26px;"></i>
-                        <span>${escapeHtml(b.label)}</span>
-                    </span>
-                `).join("")
-                : `<span style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; border-radius:9999px; background:#F3ECE2; border:1.5px solid #E2D4C3; font-size:22px; font-weight:600; color:#7A6C67; font-style:normal;">${escapeHtml(createdByLabel)}</span>`;
-
-            sheet.innerHTML = `
-                <svg style="position:absolute; top:-16px; left:-16px; width:260px; height:260px; pointer-events:none; opacity:0.9;" viewBox="0 0 170 170" fill="none">
-                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.4" stroke-linecap="round"/>
-                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
-                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
-                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
-                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
-                </svg>
-
-                <svg style="position:absolute; bottom:-24px; right:-24px; width:300px; height:300px; pointer-events:none; opacity:0.9;" viewBox="0 0 180 180" fill="none">
-                    <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
-                    <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
-                    <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
-                    <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
-                </svg>
-
-                <div style="position:relative; z-index:2; background:rgba(255,253,250,0.95); border:2px solid rgba(226,212,195,0.85); border-radius:44px; padding:56px 64px; box-shadow:0 18px 40px -16px rgba(79,105,82,0.14); display:flex; flex-direction:column; justify-content:space-between; min-height:968px; font-style:normal;">
-                    <div>
-                        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px; margin-bottom:46px;">
-                            <span style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; border-radius:9999px; background:rgba(126,150,128,0.18); color:#4F6952; font-size:21px; font-weight:700; font-style:normal;">
-                                <i class="fa-solid fa-id-badge"></i> Creator's Profile &amp; Pitching Card
-                            </span>
-                            <span style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; border-radius:9999px; background:rgba(246,216,222,0.65); color:#D97D90; font-size:20px; font-weight:700; font-style:normal;">
-                                <i class="fa-solid fa-sparkles"></i> ${escapeHtml(collabStatusText)}
-                            </span>
-                        </div>
-
-                        <div style="display:flex; align-items:center; gap:48px;">
-                            <div style="width:260px; height:260px; border-radius:9999px; overflow:hidden; border:5px solid rgba(79,105,82,0.45); background:#F6D8DE; box-shadow:0 14px 30px -10px rgba(53,43,40,0.18); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                ${avatarHtml}
-                            </div>
-
-                            <div style="flex:1; min-width:0;">
-                                <div style="background:rgba(243,236,226,0.88); border:1.5px solid #E2D4C3; border-radius:36px; padding:38px 44px; font-style:normal;">
-                                    <p style="margin:0; font-size:32px; font-weight:600; color:#352B28; line-height:1.55; font-style:normal;">
-                                        ${escapeHtml(introSentence)}
-                                    </p>
-                                </div>
-
-                                <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:28px;">
-                                    ${badgesHtml}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:48px; padding-top:24px; border-top:1.5px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:21px; color:#7A6C67; font-style:normal;">
-                        <span style="font-style:normal;"><i class="fa-solid fa-leaf" style="color:#4F6952; margin-right:8px;"></i> Created by Narravia.Studio</span>
-                        <span style="font-weight:600; color:#4F6952; font-style:normal;">${escapeHtml(createdByLabel)}</span>
-                    </div>
-                </div>
-            `;
-
-            return sheet;
+        function getSocialBrandIconClass(platform) {
+            if (platform === "instagram") return "fa-brands fa-instagram";
+            if (platform === "tiktok") return "fa-brands fa-tiktok";
+            if (platform === "threads") return "fa-brands fa-threads";
+            if (platform === "facebook") return "fa-brands fa-facebook";
+            if (platform === "twitter") return "fa-brands fa-twitter";
+            return "fa-solid fa-link";
         }
-
-        window.exportPitchingCardJPG = async () => {
-            if (typeof html2canvas === "undefined") {
-                return showToast("Library export belum termuat. Coba refresh halaman.", true);
-            }
-
-            if (document.fonts && document.fonts.ready) {
-                await document.fonts.ready;
-            }
-
-            const btn = document.getElementById("btnExportPitchingJpg");
-            const label = document.getElementById("btnExportPitchLabel");
-            if (btn) btn.disabled = true;
-            if (label) label.innerText = "Menyiapkan JPG...";
-
-            const staging = document.getElementById("jpgRenderStaging");
-            staging.innerHTML = "";
-
-            try {
-                const createdByLabel = getActiveUsername();
-                const introSentence = buildIntroBubbleSentence();
-                const collabStatusText = publicShareSettings.collabStatus || "Open Collaboration";
-                const avatarSrc = currentAvatarDataUrl || document.getElementById("userAvatarImg")?.src || "";
-
-                const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
-                const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
-                const th = normalizeSocialEntry(userSocials.threads, "threads");
-                const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
-                const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
-
-                const socialBadges = [
-                    ig ? { label: ig.label, iconClass: "fa-brands fa-instagram", iconColor: "#D97D90" } : null,
-                    tt ? { label: tt.label, iconClass: "fa-brands fa-tiktok", iconColor: "#352B28" } : null,
-                    th ? { label: th.label, iconClass: "fa-solid fa-at", iconColor: "#4F6952" } : null,
-                    fb ? { label: fb.label, iconClass: "fa-brands fa-facebook", iconColor: "#4F6952" } : null,
-                    tw ? { label: tw.label, iconClass: "fa-brands fa-twitter", iconColor: "#D97D90" } : null
-                ].filter(Boolean);
-
-                const cardEl = buildPitchingCardExportElement(
-                    createdByLabel,
-                    introSentence,
-                    collabStatusText,
-                    avatarSrc,
-                    socialBadges
-                );
-                staging.appendChild(cardEl);
-
-                const canvas = await html2canvas(cardEl, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: "#FAF7F2",
-                    logging: false
-                });
-
-                const jpgUrl = canvas.toDataURL("image/jpeg", 0.98);
-                const cleanSlug = createdByLabel.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
-                triggerJpgDownload(jpgUrl, `pitching_card_${cleanSlug}_HD.jpg`);
-                showToast("Kartu pitching JPG HD berhasil diunduh.");
-            } catch (err) {
-                showToast("Gagal membuat JPG kartu pitching: " + err.message, true);
-            } finally {
-                staging.innerHTML = "";
-                if (btn) btn.disabled = false;
-                if (label) label.innerText = "Export JPG";
-            }
-        };
 
         async function persistSocialsToUser(nextSocials, uid = activeUserUid) {
             if (!uid) return;
@@ -1900,7 +1698,7 @@
                 mode,
                 uid: activeUserUid || currentUser?.uid || "",
                 creatorName: username,
-                bio: buildIntroBubbleSentence(),
+                bio: buildIntroBubbleSentence(username),
                 collabStatus: publicShareSettings.collabStatus,
                 rateCardNote: publicShareSettings.rateCardNote,
                 topCategories,
@@ -1909,36 +1707,22 @@
             };
         }
 
-        async function copyShareUrl(mode, labelId, defaultLabel, copiedLabel) {
-            const payload = buildSharePayload(mode);
+        window.copyPublicPortfolioLink = async () => {
+            const payload = buildSharePayload("portfolio");
             const encoded = encodeSharePayload(payload);
-            const url = `${window.location.origin}${window.location.pathname}#${mode}=${encoded}`;
+            const url = `${window.location.origin}${window.location.pathname}#portfolio=${encoded}`;
             try {
                 await navigator.clipboard.writeText(url);
-                const lbl = document.getElementById(labelId);
+                const lbl = document.getElementById('btnCopyPublicLinkLabel');
                 if (lbl) {
-                    lbl.innerText = copiedLabel;
-                    setTimeout(() => { lbl.innerText = defaultLabel; }, 2000);
+                    lbl.innerText = "Link Portofolio Tersalin!";
+                    setTimeout(() => { lbl.innerText = "Link Portofolio Publik"; }, 2000);
                 }
-                showToast(`${defaultLabel} berhasil disalin.`);
+                showToast("Link portofolio publik berhasil disalin.");
             } catch (_) {
                 showToast("Gagal menyalin link otomatis ke clipboard.", true);
             }
-        }
-
-        window.copyPublicPortfolioLink = () => copyShareUrl(
-            "portfolio",
-            "btnCopyPublicLinkLabel",
-            "Link Portofolio Publik",
-            "Link Portofolio Tersalin!"
-        );
-
-        window.copyClientCategoryFormLink = () => copyShareUrl(
-            "client-form",
-            "btnCopyClientFormLabel",
-            "Link Form Kategori Klien",
-            "Link Form Tersalin!"
-        );
+        };
 
         function checkPublicShareHash() {
             const hash = window.location.hash || "";
@@ -1967,12 +1751,17 @@
                     : `<span class="text-xs text-muted">Semua kategori konten</span>`;
 
                 const soc = data.socials || {};
-                const socChips = [
-                    normalizeSocialEntry(soc.instagram, "instagram")?.label ? `<span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold">IG: ${escapeHtml(normalizeSocialEntry(soc.instagram, "instagram").label)}</span>` : "",
-                    normalizeSocialEntry(soc.tiktok, "tiktok")?.label ? `<span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold">TT: ${escapeHtml(normalizeSocialEntry(soc.tiktok, "tiktok").label)}</span>` : "",
-                    normalizeSocialEntry(soc.threads, "threads")?.label ? `<span class="px-3 py-1 rounded-full bg-cream text-xs font-semibold">Threads: ${escapeHtml(normalizeSocialEntry(soc.threads, "threads").label)}</span>` : ""
-                ].filter(Boolean).join("");
-                document.getElementById('pubSocialsList').innerHTML = socChips;
+                const socLinks = [
+                    { entry: normalizeSocialEntry(soc.instagram, "instagram"), icon: getSocialBrandIconClass("instagram"), color: "text-roseSoft" },
+                    { entry: normalizeSocialEntry(soc.tiktok, "tiktok"), icon: getSocialBrandIconClass("tiktok"), color: "text-espresso" },
+                    { entry: normalizeSocialEntry(soc.threads, "threads"), icon: getSocialBrandIconClass("threads"), color: "text-espresso" },
+                    { entry: normalizeSocialEntry(soc.facebook, "facebook"), icon: getSocialBrandIconClass("facebook"), color: "text-sageDark" },
+                    { entry: normalizeSocialEntry(soc.twitter, "twitter"), icon: getSocialBrandIconClass("twitter"), color: "text-roseSoft" }
+                ]
+                    .filter(item => item.entry)
+                    .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="${item.icon} ${item.color}"></i><span>${escapeHtml(item.entry.label)}</span></a>`)
+                    .join("");
+                document.getElementById('pubSocialsList').innerHTML = socLinks;
 
                 const gridEl = document.getElementById('pubGalleryGrid');
                 gridEl.innerHTML = (data.galleryPreviews || []).map(g => {
@@ -2054,37 +1843,25 @@
             }
         });
 
-        function syncGreetingTexts() {
-            const sentence = buildIntroBubbleSentence();
-            const bubbleEl = document.getElementById('socialIntroBubbleText');
-            const bannerEl = document.getElementById('portfolioGreetingBanner');
-            if (bubbleEl) bubbleEl.innerText = sentence;
-            if (bannerEl) bannerEl.innerText = sentence;
-        }
-
         function updateShowcaseSocialIcons() {
             const row = document.getElementById('showcaseSocialIconsRow');
             if (!row) return;
 
-            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
-            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
-            const th = normalizeSocialEntry(userSocials.threads, "threads");
-            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
-            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
+            const items = [
+                { entry: normalizeSocialEntry(userSocials.instagram, "instagram"), icon: getSocialBrandIconClass("instagram"), color: "text-roseSoft" },
+                { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), icon: getSocialBrandIconClass("tiktok"), color: "text-espresso" },
+                { entry: normalizeSocialEntry(userSocials.threads, "threads"), icon: getSocialBrandIconClass("threads"), color: "text-espresso" },
+                { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), icon: getSocialBrandIconClass("facebook"), color: "text-sageDark" },
+                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), icon: getSocialBrandIconClass("twitter"), color: "text-roseSoft" }
+            ].filter(item => item.entry);
 
-            const iconLinks = [
-                ig ? `<a href="${escapeHtml(ig.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-instagram text-roseSoft text-sm"></i><span>${escapeHtml(ig.label)}</span></a>` : "",
-                tt ? `<a href="${escapeHtml(tt.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-tiktok text-espresso text-sm"></i><span>${escapeHtml(tt.label)}</span></a>` : "",
-                th ? `<a href="${escapeHtml(th.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-solid fa-at text-sageDark text-sm"></i><span>${escapeHtml(th.label)}</span></a>` : "",
-                fb ? `<a href="${escapeHtml(fb.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-facebook text-sageDark text-sm"></i><span>${escapeHtml(fb.label)}</span></a>` : "",
-                tw ? `<a href="${escapeHtml(tw.href)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:underline"><i class="fa-brands fa-twitter text-roseSoft text-sm"></i><span>${escapeHtml(tw.label)}</span></a>` : ""
-            ].filter(Boolean);
-
-            if (iconLinks.length === 0) {
+            if (items.length === 0) {
                 row.innerHTML = "";
                 row.classList.add('hidden');
             } else {
-                row.innerHTML = iconLinks.join(`<span class="text-muted/60">•</span>`);
+                row.innerHTML = items
+                    .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(item.entry.label)}" title="${escapeHtml(item.entry.label)}" class="clay-pill w-8 h-8 inline-flex items-center justify-center hover:text-roseSoft"><i class="${item.icon} ${item.color} text-sm"></i></a>`)
+                    .join("");
                 row.classList.remove('hidden');
             }
         }
@@ -2092,11 +1869,13 @@
         function updateSocialProfileCard() {
             const cardEl = document.getElementById('socialProfileBubbleCard');
             const chipsRow = document.getElementById('socialHandlesPreviewRow');
+            const bubbleEl = document.getElementById('socialIntroBubbleText');
             const avatarImg = document.getElementById('socialProfileAvatarImg');
             const avatarInitial = document.getElementById('socialProfileAvatarInitial');
 
-            syncGreetingTexts();
+            if (bubbleEl) bubbleEl.innerText = buildIntroBubbleSentence();
             updateShowcaseSocialIcons();
+            refreshInvoicePreview();
 
             if (!cardEl || !chipsRow) return;
 
@@ -2118,19 +1897,15 @@
                 }
             }
 
-            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
-            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
-            const th = normalizeSocialEntry(userSocials.threads, "threads");
-            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
-            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
-
             const clickableBadges = [
-                ig ? `<a href="${escapeHtml(ig.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="fa-brands fa-instagram text-roseSoft"></i><span>${escapeHtml(ig.label)}</span></a>` : "",
-                tt ? `<a href="${escapeHtml(tt.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-sageDark"><i class="fa-brands fa-tiktok text-sageDark"></i><span>${escapeHtml(tt.label)}</span></a>` : "",
-                th ? `<a href="${escapeHtml(th.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="fa-solid fa-at text-roseSoft"></i><span>${escapeHtml(th.label)}</span></a>` : "",
-                fb ? `<a href="${escapeHtml(fb.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-sageDark"><i class="fa-brands fa-facebook text-sageDark"></i><span>${escapeHtml(fb.label)}</span></a>` : "",
-                tw ? `<a href="${escapeHtml(tw.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="fa-brands fa-twitter text-roseSoft"></i><span>${escapeHtml(tw.label)}</span></a>` : ""
-            ].filter(Boolean);
+                { entry: normalizeSocialEntry(userSocials.instagram, "instagram"), icon: getSocialBrandIconClass("instagram"), color: "text-roseSoft" },
+                { entry: normalizeSocialEntry(userSocials.tiktok, "tiktok"), icon: getSocialBrandIconClass("tiktok"), color: "text-sageDark" },
+                { entry: normalizeSocialEntry(userSocials.threads, "threads"), icon: getSocialBrandIconClass("threads"), color: "text-espresso" },
+                { entry: normalizeSocialEntry(userSocials.facebook, "facebook"), icon: getSocialBrandIconClass("facebook"), color: "text-sageDark" },
+                { entry: normalizeSocialEntry(userSocials.twitter, "twitter"), icon: getSocialBrandIconClass("twitter"), color: "text-roseSoft" }
+            ]
+                .filter(item => item.entry)
+                .map(item => `<a href="${escapeHtml(item.entry.href)}" target="_blank" rel="noopener noreferrer" class="clay-pill px-3.5 py-1.5 text-xs font-semibold text-espresso inline-flex items-center gap-1.5 hover:text-roseSoft"><i class="${item.icon} ${item.color}"></i><span>${escapeHtml(item.entry.label)}</span></a>`);
 
             chipsRow.innerHTML = clickableBadges.join("");
             cardEl.classList.remove('hidden');
@@ -2851,6 +2626,48 @@
             }
         });
 
+        window.startEditProjectName = (id) => {
+            editingProjectId = id;
+            window.renderData();
+            setTimeout(() => {
+                const inp = document.getElementById(`editProjectNameInput_${id}`);
+                if (inp) {
+                    inp.focus();
+                    inp.select();
+                }
+            }, 30);
+        };
+
+        window.cancelEditProjectName = () => {
+            if (!editingProjectId) return;
+            editingProjectId = null;
+            window.renderData();
+        };
+
+        window.saveEditedProjectName = async (id) => {
+            if (!currentUser || !activeUserUid || !id) return;
+            const inp = document.getElementById(`editProjectNameInput_${id}`);
+            const nextName = (inp?.value || "").trim();
+            if (!nextName) {
+                showToast("Project Name tidak boleh kosong.", true);
+                return;
+            }
+
+            const existing = records.find(r => r.id === id);
+            editingProjectId = null;
+            if (existing) {
+                existing.clientName = nextName;
+            }
+            window.renderData();
+
+            try {
+                await updateDoc(doc(db, `users/${activeUserUid}/projects`, id), { clientName: nextName });
+                showToast("Project Name diperbarui.");
+            } catch (err) {
+                showToast("Gagal memperbarui Project Name: " + err.message, true);
+            }
+        };
+
         window.toggleStatus = async (id, currentStatus) => {
             if (!currentUser || !activeUserUid) return;
             const nextStatus = currentStatus === 'Lunas' ? 'DP 50%' : 'Lunas';
@@ -3062,21 +2879,6 @@
             return records.filter(r => (r.photoData && r.photoData !== "") || (r.portfolioLink && r.portfolioLink !== ""));
         }
 
-        function syncJpgButtonState() {
-            const btn = document.getElementById("btnExportJpg");
-            const label = document.getElementById("btnExportJpgLabel");
-            const hint = document.getElementById("jpgRequirementHint");
-            if (!btn || !label || !hint) return;
-
-            const eligibleCount = getPortfolioEligibleItems().length;
-            const enough = eligibleCount >= MIN_JPG_EVENTS;
-            btn.disabled = !enough;
-            label.innerText = enough ? "Export JPG HD" : `Export JPG (${eligibleCount}/${MIN_JPG_EVENTS})`;
-            hint.innerText = enough
-                ? `${eligibleCount} event siap di-export JPG HD`
-                : `Minimal ${MIN_JPG_EVENTS} event untuk export JPG HD`;
-        }
-
         function syncRankSelectOptions(selectEl, listLength, topLabel) {
             if (!selectEl) return;
             const prevVal = parseInt(selectEl.value || "0", 10) || 0;
@@ -3275,8 +3077,6 @@
             document.getElementById('popularPortfolioCount').innerText = selectedPopular
                 ? `${selectedPopular.count} ${selectedPopular.isFromPortfolio ? 'item portofolio' : 'project'}`
                 : '0 project';
-
-            syncJpgButtonState();
         };
 
         window.renderData = () => {
@@ -3327,6 +3127,31 @@
                     ? `<div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">${metaLines.join('')}</div>`
                     : '';
 
+                const isEditingName = editingProjectId === r.id;
+                const projectNameHtml = isEditingName
+                    ? `
+                        <div class="flex items-center gap-1.5">
+                            <input type="text" id="editProjectNameInput_${r.id}" value="${escapeHtml(r.clientName)}"
+                                onkeydown="if(event.key==='Enter'){event.preventDefault();saveEditedProjectName('${r.id}');}else if(event.key==='Escape'){cancelEditProjectName();}"
+                                class="bg-white border border-sageDark rounded-xl px-2.5 py-1 text-xs font-semibold text-espresso w-full max-w-[260px] focus:outline-none">
+                            <button type="button" onclick="saveEditedProjectName('${r.id}')" title="Simpan nama project" class="clay-pill px-2.5 py-1 text-xs font-semibold text-sageDark cursor-pointer shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <button type="button" onclick="cancelEditProjectName()" title="Batal edit" class="clay-pill px-2.5 py-1 text-xs font-semibold text-muted cursor-pointer shrink-0">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    `
+                    : `
+                        <div class="inline-flex items-center gap-1.5 flex-wrap">
+                            <span>${escapeHtml(r.clientName)}</span>
+                            <button type="button" onclick="startEditProjectName('${r.id}')" title="Edit Project Name" class="text-muted hover:text-sageDark text-xs px-1 py-0.5 cursor-pointer">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </button>
+                            ${portfolioBadge}
+                        </div>
+                    `;
+
                 const taxSubHtml = (Number(r.taxAmount) > 0)
                     ? `<p class="text-[11px] text-muted mt-0.5">Pajak: ${formatRupiah(Number(r.taxAmount))}${r.taxInputRaw && String(r.taxInputRaw).includes('%') ? ` (${escapeHtml(r.taxInputRaw)})` : ''}</p>`
                     : '';
@@ -3338,7 +3163,7 @@
                 tbody.innerHTML += `
                     <tr class="hover:bg-cream/50 transition">
                         <td class="p-4 text-muted whitespace-nowrap">${escapeHtml(r.date || '-')}</td>
-                        <td class="p-4 font-semibold text-espresso">${escapeHtml(r.clientName)} ${portfolioBadge}${extraMetaHtml}</td>
+                        <td class="p-4 font-semibold text-espresso">${projectNameHtml}${extraMetaHtml}</td>
                         <td class="p-4 text-muted text-xs">${escapeHtml(r.category)}</td>
                         <td class="p-4 font-semibold text-espresso whitespace-nowrap">${formatRupiah(r.amount)}${taxSubHtml}</td>
                         <td class="p-4 whitespace-nowrap">
@@ -3639,6 +3464,7 @@
             const remainingBalance = Math.max(0, grandTotal - dpAmount);
 
             const igHandle = normalizeSocialEntry(userSocials.instagram, "instagram")?.label || "";
+            const signOffName = getUsernameWithoutAt();
 
             return {
                 invNumber,
@@ -3660,6 +3486,7 @@
                 phone,
                 email,
                 igHandle,
+                signOffName,
                 notesLines,
                 termsLines
             };
@@ -3831,7 +3658,7 @@
                         </div>
                         <div style="text-align:right; font-style:normal;">
                             <p style="margin:0; font-size:12px; color:#7A6C67; font-style:normal;">Hormat Kami,</p>
-                            <p style="margin:3px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28; font-style:normal;">Narravia Studio</p>
+                            <p style="margin:3px 0 0 0; font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:#352B28; font-style:normal;">${escapeHtml(data.signOffName)}</p>
                         </div>
                     </div>
                 </div>
@@ -3857,7 +3684,7 @@
                                 </p>
                             </div>
                             <div style="text-align:right; font-style:normal;">
-                                <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28; font-style:normal;">Narravia Studio</p>
+                                <p style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:#352B28; font-style:normal;">${escapeHtml(data.signOffName)}</p>
                                 <p style="margin:2px 0 0 0; font-size:12px; color:#7A6C67; font-style:normal;">${escapeHtml(data.igHandle)}</p>
                             </div>
                         </div>
@@ -4258,9 +4085,7 @@
             collageContainer.innerHTML = '';
             yearlyContainer.innerHTML = '';
 
-            syncGreetingTexts();
             updateShowcaseSocialIcons();
-            syncJpgButtonState();
 
             const portfolioItems = getPortfolioEligibleItems();
 
@@ -4377,205 +4202,6 @@
                     </div>
                 `;
             });
-        };
-
-        /* ================= EXPORT JPG 4:3 LANDSCAPE HD (3600 x 2545 px) ================= */
-        function buildLandscapeJpgSheetElement(username, eligibleItems) {
-            const sheet = document.createElement("div");
-            sheet.className = "jpg-landscape-sheet";
-
-            const ig = normalizeSocialEntry(userSocials.instagram, "instagram");
-            const tt = normalizeSocialEntry(userSocials.tiktok, "tiktok");
-            const th = normalizeSocialEntry(userSocials.threads, "threads");
-            const fb = normalizeSocialEntry(userSocials.facebook, "facebook");
-            const tw = normalizeSocialEntry(userSocials.twitter, "twitter");
-
-            const socialItemsHtml = [
-                ig ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-instagram" style="color:#E1306C; font-size:30px;"></i><span>${escapeHtml(ig.label)}</span></span>` : "",
-                tt ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-tiktok" style="color:#352B28; font-size:28px;"></i><span>${escapeHtml(tt.label)}</span></span>` : "",
-                th ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-solid fa-at" style="color:#4F6952; font-size:28px;"></i><span>${escapeHtml(th.label)}</span></span>` : "",
-                fb ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-facebook" style="color:#4F6952; font-size:28px;"></i><span>${escapeHtml(fb.label)}</span></span>` : "",
-                tw ? `<span style="display:inline-flex; align-items:center; gap:12px;"><i class="fa-brands fa-twitter" style="color:#D97D90; font-size:28px;"></i><span>${escapeHtml(tw.label)}</span></span>` : ""
-            ].filter(Boolean).join(`<span style="color:#B5A69E; font-size:24px;">•</span>`);
-
-            const displayItems = eligibleItems.slice(0, 6);
-            const isTwoRows = displayItems.length > 3;
-
-            const cardMinH = isTwoRows ? "760px" : "1220px";
-            const imgMaxH = isTwoRows ? "520px" : "920px";
-            const titleFont = isTwoRows ? "38px" : "46px";
-            const catFont = isTwoRows ? "23px" : "27px";
-            const dateFont = isTwoRows ? "22px" : "26px";
-            const gridGap = isTwoRows ? "48px 56px" : "64px";
-
-            const cardsHtml = displayItems.map(item => {
-                const imgSrc = item.photoData || sanitizeUrl(item.portfolioLink);
-                const safeTitle = escapeHtml(item.clientName || "Karya");
-                const safeCat = escapeHtml(item.category || "Event");
-                const safeDate = escapeHtml(item.date || "");
-
-                return `
-                    <div style="background:rgba(255,253,250,0.94); border:2px solid rgba(226,212,195,0.78); border-radius:42px; overflow:hidden; box-shadow:0 18px 36px -14px rgba(53,43,40,0.12); display:flex; flex-direction:column; min-height:${cardMinH};">
-                        <div style="width:100%; flex:1; background:#F3ECE2; display:flex; align-items:center; justify-content:center; padding:24px; box-sizing:border-box; overflow:hidden;">
-                            <img src="${escapeHtml(imgSrc)}" alt="${safeTitle}" style="width:100%; height:100%; max-height:${imgMaxH}; object-fit:contain; border-radius:26px; display:block;">
-                        </div>
-                        <div style="padding:22px 32px 26px 32px; text-align:center; background:rgba(255,253,250,0.98); border-top:1.5px solid rgba(234,223,211,0.65);">
-                            <p style="margin:0; font-size:${catFont}; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#D97D90;">${safeCat}</p>
-                            <h3 style="margin:6px 0 4px 0; font-family:'Playfair Display',Georgia,serif; font-size:${titleFont}; font-weight:700; color:#352B28; line-height:1.2;">${safeTitle}</h3>
-                            <p style="margin:0; font-size:${dateFont}; font-weight:500; color:#7A6C67;">${safeDate}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            const createdBySocialText = getCreatedBySocialName();
-            const introSentence = buildIntroBubbleSentence();
-
-            sheet.innerHTML = `
-                <svg style="position:fixed; top:-20px; left:-20px; width:340px; height:340px; opacity:0.9; pointer-events:none; z-index:1;" viewBox="0 0 170 170" fill="none">
-                    <path d="M18 152C38 102 76 60 132 24" stroke="#7E9680" stroke-width="2.4" stroke-linecap="round"/>
-                    <ellipse cx="56" cy="96" rx="19" ry="9.5" transform="rotate(-36 56 96)" fill="#7E9680" fill-opacity="0.38"/>
-                    <ellipse cx="92" cy="56" rx="19" ry="9.5" transform="rotate(-22 92 56)" fill="#7E9680" fill-opacity="0.38"/>
-                    <circle cx="132" cy="24" r="11" fill="#F6D8DE"/>
-                    <circle cx="143" cy="33" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="122" cy="34" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="132" cy="30" r="4.2" fill="#E4A853"/>
-                </svg>
-
-                <svg style="position:fixed; top:-24px; right:36px; width:320px; height:320px; opacity:0.85; pointer-events:none; z-index:1;" viewBox="0 0 170 170" fill="none">
-                    <path d="M148 16C125 60 94 94 52 118" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
-                    <ellipse cx="114" cy="58" rx="18" ry="8.5" transform="rotate(28 114 58)" fill="#7E9680" fill-opacity="0.34"/>
-                    <ellipse cx="82" cy="92" rx="17" ry="8" transform="rotate(42 82 92)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="52" cy="118" r="10.5" fill="#F6D8DE"/>
-                    <circle cx="42" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="62" cy="111" r="8" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="52" cy="114" r="3.8" fill="#E4A853"/>
-                </svg>
-
-                <svg style="position:fixed; bottom:-24px; left:48px; width:330px; height:300px; opacity:0.85; pointer-events:none; z-index:1;" viewBox="0 0 170 150" fill="none">
-                    <path d="M22 132C55 110 88 94 128 84" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
-                    <ellipse cx="64" cy="112" rx="17" ry="8" transform="rotate(-18 64 112)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="128" cy="84" r="9.5" fill="#F6D8DE"/>
-                    <circle cx="136" cy="90" r="7" fill="#E8A5B4" fill-opacity="0.75"/>
-                    <circle cx="128" cy="88" r="3.5" fill="#E4A853"/>
-                </svg>
-
-                <svg style="position:fixed; bottom:-36px; right:-36px; width:380px; height:380px; opacity:0.9; pointer-events:none; z-index:1;" viewBox="0 0 180 180" fill="none">
-                    <path d="M150 30C125 80 85 120 30 150" stroke="#7E9680" stroke-width="2.2" stroke-linecap="round"/>
-                    <ellipse cx="110" cy="75" rx="20" ry="10" transform="rotate(35 110 75)" fill="#7E9680" fill-opacity="0.34"/>
-                    <ellipse cx="75" cy="115" rx="20" ry="10" transform="rotate(20 75 115)" fill="#7E9680" fill-opacity="0.34"/>
-                    <circle cx="48" cy="140" r="12" fill="#F6D8DE"/>
-                    <circle cx="36" cy="130" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="58" cy="129" r="9" fill="#E8A5B4" fill-opacity="0.78"/>
-                    <circle cx="48" cy="133" r="4.5" fill="#E4A853"/>
-                </svg>
-
-                <svg style="position:fixed; top:160px; right:260px; width:128px; height:128px; opacity:0.85; pointer-events:none; z-index:1;" viewBox="0 0 80 80" fill="none">
-                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.6"/>
-                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#D97D90" stroke-width="1.6"/>
-                    <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.4"/>
-                    <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#E8A5B4" fill-opacity="0.72" stroke="#D97D90" stroke-width="1.4"/>
-                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2.1" stroke-linecap="round"/>
-                </svg>
-
-                <svg style="position:fixed; bottom:210px; left:240px; width:116px; height:116px; opacity:0.8; pointer-events:none; z-index:1;" viewBox="0 0 80 80" fill="none">
-                    <path d="M38 38C25 18 8 20 12 36C15 46 28 46 38 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.6"/>
-                    <path d="M42 38C55 18 72 20 68 36C65 46 52 46 42 41Z" fill="#F6D8DE" stroke="#7E9680" stroke-width="1.6"/>
-                    <path d="M38 42C27 44 18 55 24 62C30 67 36 55 39 44Z" fill="#7E9680" fill-opacity="0.35" stroke="#7E9680" stroke-width="1.4"/>
-                    <path d="M42 42C53 44 62 55 56 62C50 67 44 55 41 44Z" fill="#7E9680" fill-opacity="0.35" stroke="#7E9680" stroke-width="1.4"/>
-                    <line x1="40" y1="28" x2="40" y2="54" stroke="#352B28" stroke-width="2.1" stroke-linecap="round"/>
-                </svg>
-
-                <div style="position:relative; z-index:2; min-height:2361px; display:flex; flex-direction:column; justify-content:space-between;">
-                    <div>
-                        <div style="text-align:center; margin-bottom:28px;">
-                            <span style="display:inline-block; padding:10px 28px; border-radius:9999px; background:rgba(246,216,222,0.65); color:#D97D90; font-size:24px; font-weight:700; letter-spacing:0.06em; margin-bottom:14px;">
-                                CREATOR PORTFOLIO SHOWCASE
-                            </span>
-                            <h1 style="margin:0; font-family:'Playfair Display',Georgia,serif; font-size:88px; font-weight:700; color:#352B28; line-height:1.1;">
-                                Narravia Studio
-                            </h1>
-                            <p style="margin:12px 0 0 0; font-size:32px; font-weight:600; color:#4F6952;">
-                                ${escapeHtml(username)}
-                            </p>
-                            ${socialItemsHtml ? `<div style="margin-top:16px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:26px; font-size:28px; font-weight:700; color:#352B28;">${socialItemsHtml}</div>` : ""}
-                        </div>
-
-                        <div style="background:rgba(255,253,250,0.92); border:2px solid rgba(226,212,195,0.75); border-radius:36px; padding:26px 44px; margin-bottom:44px; text-align:center;">
-                            <p style="margin:0; font-size:30px; font-weight:600; color:#352B28; line-height:1.5;">
-                                ${escapeHtml(introSentence)}
-                            </p>
-                        </div>
-
-                        <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:${gridGap};">
-                            ${cardsHtml}
-                        </div>
-                    </div>
-
-                    <div style="margin-top:44px; padding-top:22px; border-top:2px solid rgba(226,212,195,0.85); display:flex; justify-content:space-between; align-items:center; font-size:28px; color:#7A6C67;">
-                        <span>Created by Narravia.Studio</span>
-                        <span style="font-weight:600; color:#4F6952;">${escapeHtml(createdBySocialText)}</span>
-                    </div>
-                </div>
-            `;
-
-            return sheet;
-        }
-
-        function triggerJpgDownload(dataUrl, filename) {
-            const link = document.createElement("a");
-            link.href = dataUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        window.exportPortfolioJPG = async () => {
-            if (typeof html2canvas === "undefined") {
-                return showToast("Library export JPG belum termuat. Coba refresh halaman.", true);
-            }
-
-            const eligibleItems = getPortfolioEligibleItems();
-            if (eligibleItems.length < MIN_JPG_EVENTS) {
-                return showToast(`Minimal ${MIN_JPG_EVENTS} event diperlukan untuk export JPG HD.`, true);
-            }
-
-            if (document.fonts && document.fonts.ready) {
-                await document.fonts.ready;
-            }
-
-            const btn = document.getElementById("btnExportJpg");
-            const label = document.getElementById("btnExportJpgLabel");
-            btn.disabled = true;
-            if (label) label.innerText = "Menyiapkan JPG...";
-
-            const staging = document.getElementById("jpgRenderStaging");
-            staging.innerHTML = "";
-
-            try {
-                const username = getActiveUsername();
-                const sheetEl = buildLandscapeJpgSheetElement(username, eligibleItems);
-                staging.appendChild(sheetEl);
-
-                const canvas = await html2canvas(sheetEl, {
-                    scale: 1,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: "#FAF7F2",
-                    logging: false
-                });
-
-                const jpgDataUrl = canvas.toDataURL("image/jpeg", 0.98);
-                const cleanUser = username.replace(/[^a-zA-Z0-9_-]+/g, "_") || "creator";
-                triggerJpgDownload(jpgDataUrl, `portofolio_${cleanUser}_4x3_HD.jpg`);
-                showToast("Portofolio JPG 4:3 HD berhasil diunduh.");
-            } catch (err) {
-                showToast("Gagal membuat JPG portofolio: " + err.message, true);
-            } finally {
-                staging.innerHTML = "";
-                syncJpgButtonState();
-            }
         };
 
         /* ================= EXPORT CSV ================= */
