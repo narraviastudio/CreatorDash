@@ -836,7 +836,7 @@
                 </div>
             </div>
 
-            <!-- KALKULATOR & RATE CARD CREATOR (NANO / MICRO / MACRO BERDASARKAN FOLLOWERS & INSIGHT) -->
+            <!-- KALKULATOR & ESTIMASI RATE CARD CREATOR -->
             <div class="botanical-card p-5 sm:p-6 rounded-3xl space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -844,7 +844,7 @@
                             <i class="fa-solid fa-chart-line"></i> Creator Tier &amp; Smart Ratecard
                         </span>
                         <h3 class="font-serif text-xl font-semibold text-espresso mt-1">
-                            Rate Card Otomatis (Nano / Micro / Macro)
+                            Estimasi Ratecard
                         </h3>
                         <p class="text-xs text-muted">Dihitung otomatis dari total followers, rata-rata views/reach insight, dan engagement rate kamu.</p>
                     </div>
@@ -858,13 +858,13 @@
                     </div>
                 </div>
 
-                <!-- Input Insight & Followers -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-4">
+                <!-- Input Insight & Followers (3 Kolom tanpa Kategori Manual/Auto) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-4">
                     <div>
                         <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
                             <i class="fa-solid fa-users text-sageDark mr-1"></i> Total Followers (IG / TikTok)
                         </label>
-                        <input type="number" id="rcFollowersInput" min="0" placeholder="Contoh: 8500" oninput="handleInsightInputChange()"
+                        <input type="text" inputmode="numeric" id="rcFollowersInput" placeholder="Contoh: 8.500" oninput="handleInsightInputChange(this)"
                             class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
                         <p class="text-[10px] text-muted mt-1">Nano: &lt;10K • Micro: 10K–100K • Macro: &gt;100K</p>
                     </div>
@@ -872,7 +872,7 @@
                         <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
                             <i class="fa-solid fa-eye text-roseSoft mr-1"></i> Avg. Views / Reach per Konten
                         </label>
-                        <input type="number" id="rcAvgViewsInput" min="0" placeholder="Contoh: 4200" oninput="handleInsightInputChange()"
+                        <input type="text" inputmode="numeric" id="rcAvgViewsInput" placeholder="Contoh: 4.200" oninput="handleInsightInputChange(this)"
                             class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
                         <p class="text-[10px] text-muted mt-1">Rata-rata views 30 hari terakhir</p>
                     </div>
@@ -880,26 +880,19 @@
                         <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
                             <i class="fa-solid fa-heart-pulse text-roseSoft mr-1"></i> Engagement Rate (%)
                         </label>
-                        <input type="number" id="rcEngagementInput" min="0" max="100" step="0.1" placeholder="Contoh: 4.5" oninput="handleInsightInputChange()"
+                        <input type="text" inputmode="decimal" id="rcEngagementInput" placeholder="Otomatis terhitung (Contoh: 4,5%)" oninput="handleManualEngagementInput(this)"
                             class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
-                        <p class="text-[10px] text-muted mt-1">Bonus multiplier jika ER &ge; 4%</p>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-espresso/80 mb-1">
-                            <i class="fa-solid fa-layer-group text-sageDark mr-1"></i> Kategori Creator (Manual / Auto)
-                        </label>
-                        <select id="rcTierOverrideSelect" onchange="handleTierSelectChange()"
-                            class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-2 text-xs font-semibold text-espresso focus:outline-none focus:border-sageDark">
-                            <option value="AUTO">Otomatis dari Followers</option>
-                            <option value="Nano">Nano Creator (1K – 10K)</option>
-                            <option value="Micro">Micro Creator (10K – 100K)</option>
-                            <option value="Macro">Macro Creator (100K – 1M)</option>
-                        </select>
-                        <p id="rcInsightScoreHint" class="text-[10px] text-sageDark font-semibold mt-1">Insight Score: Standar</p>
+                        <p id="rcInsightScoreHint" class="text-[10px] text-sageDark font-semibold mt-1">Otomatis dari Avg. Views / Followers • Bonus jika ER &ge; 4%</p>
                     </div>
                 </div>
 
-                <!-- Daftar Paket Ratecard yang Bisa Diedit Nominalnya -->
+                <!-- Disclaimer Estimasi Ratecard -->
+                <div class="bg-amber-50/90 border border-amber-200/80 rounded-2xl px-4 py-2.5 flex items-start gap-2 text-[11px] text-amber-900">
+                    <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 shrink-0"></i>
+                    <p><span class="font-bold">Catatan Disclaimer:</span> Estimasi ratecard ini bersifat referensi perhitungan otomatis dan masih dapat berubah tergantung kebijakan, kebutuhan deliverable, eksklusivitas, maupun kesepakatan dari creator.</p>
+                </div>
+
+                <!-- Daftar Paket Ratecard yang Bisa Diedit Nominalnya (dengan pemisah titik) -->
                 <div id="ratecardPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
             </div>
 
@@ -1046,6 +1039,63 @@
 
         <!-- TAB 4: PIPELINE STATUS, DEADLINE REMINDER & TEMPLATE FOLLOW-UP -->
         <div id="viewOperations" class="hidden space-y-6">
+            <!-- CALENDAR TRACKING JADWAL CONTENT CREATOR & PRIORITY HIGHLIGHTS -->
+            <div class="botanical-card p-6 sm:p-7 rounded-3xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blush/60 text-roseSoft text-[11px] font-semibold">
+                            <i class="fa-regular fa-calendar-days"></i> Content Creator Schedule &amp; Priority
+                        </span>
+                        <h2 class="font-serif text-2xl font-semibold text-espresso mt-1">
+                            Creator Calendar &amp; Priority Highlights
+                        </h2>
+                        <p class="text-xs text-muted mt-0.5">
+                            Pantau jadwal shooting/event, deadline tayang konten, dan tagihan prioritas tinggi dalam satu kalender.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="changeCreatorCalendarMonth(-1)" class="clay-pill w-8 h-8 inline-flex items-center justify-center text-xs text-espresso cursor-pointer" title="Bulan Sebelumnya">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span id="creatorCalendarMonthLabel" class="px-3.5 py-1.5 rounded-full bg-ivory border border-[#E4D8CA] font-serif text-sm font-bold text-espresso min-w-[155px] text-center">
+                            November 2026
+                        </span>
+                        <button type="button" onclick="changeCreatorCalendarMonth(1)" class="clay-pill w-8 h-8 inline-flex items-center justify-center text-xs text-espresso cursor-pointer" title="Bulan Berikutnya">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend & Priority Highlights Bar -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                    <div class="lg:col-span-8 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-3.5 sm:p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-[11px]">
+                            <div class="flex flex-wrap items-center gap-3 font-semibold">
+                                <span class="inline-flex items-center gap-1.5 text-rose-700"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> High Priority / Mepet (&le;3 Hari)</span>
+                                <span class="inline-flex items-center gap-1.5 text-sageDark"><span class="w-2.5 h-2.5 rounded-full bg-sageDark inline-block"></span> Jadwal Event / Shoot</span>
+                                <span class="inline-flex items-center gap-1.5 text-amber-800"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Deadline Konten / Cair</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-muted pb-1.5 border-b border-[#EADFD3]">
+                            <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                        </div>
+                        <div id="creatorCalendarGrid" class="grid grid-cols-7 gap-1.5 mt-2"></div>
+                    </div>
+
+                    <!-- Priority Highlights Side Panel -->
+                    <div class="lg:col-span-4 bg-ivory/90 border border-[#EADFD3] rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-serif text-base font-bold text-espresso flex items-center gap-1.5">
+                                <i class="fa-solid fa-fire text-rose-600"></i> Priority Highlights
+                            </h3>
+                            <span id="priorityCountBadge" class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold">0 item</span>
+                        </div>
+                        <p class="text-[11px] text-muted">Project yang ditandai <span class="font-semibold text-rose-700">Priority</span> atau memiliki deadline terdekat.</p>
+                        <div id="priorityHighlightsList" class="space-y-2.5 max-h-[310px] overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="botanical-card p-6 sm:p-7 rounded-3xl">
                 <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                     <div>
@@ -3192,37 +3242,68 @@
             }, 350);
         }
 
+        function formatDotNumber(num) {
+            const n = Math.max(0, Math.round(Number(num) || 0));
+            return n.toLocaleString("id-ID");
+        }
+
+        function parseDotNumber(raw) {
+            const digits = String(raw || "").replace(/[^0-9]/g, "");
+            return digits ? parseInt(digits, 10) : 0;
+        }
+
+        function computeAutoEngagementRate(followers, avgViews) {
+            const f = Math.max(0, Number(followers) || 0);
+            const v = Math.max(0, Number(avgViews) || 0);
+            if (f <= 0 || v <= 0) return 0;
+            const rawEr = (v / f) * 100;
+            return Math.round(rawEr * 100) / 100;
+        }
+
         function renderRatecardUI() {
             const fInp = document.getElementById("rcFollowersInput");
             const vInp = document.getElementById("rcAvgViewsInput");
             const eInp = document.getElementById("rcEngagementInput");
-            const tSel = document.getElementById("rcTierOverrideSelect");
             const badge = document.getElementById("creatorTierBadge");
             const hint = document.getElementById("rcInsightScoreHint");
             const grid = document.getElementById("ratecardPackagesGrid");
 
-            if (fInp && document.activeElement !== fInp) fInp.value = creatorRatecard.followers || "";
-            if (vInp && document.activeElement !== vInp) vInp.value = creatorRatecard.avgViews || "";
-            if (eInp && document.activeElement !== eInp) eInp.value = creatorRatecard.engagementRate || "";
-            if (tSel && document.activeElement !== tSel) tSel.value = creatorRatecard.tierMode || "AUTO";
+            if (fInp && document.activeElement !== fInp) {
+                fInp.value = creatorRatecard.followers > 0 ? formatDotNumber(creatorRatecard.followers) : "";
+            }
+            if (vInp && document.activeElement !== vInp) {
+                vInp.value = creatorRatecard.avgViews > 0 ? formatDotNumber(creatorRatecard.avgViews) : "";
+            }
+            if (eInp && document.activeElement !== eInp) {
+                eInp.value = creatorRatecard.engagementRate > 0
+                    ? String(creatorRatecard.engagementRate).replace(".", ",")
+                    : "";
+            }
 
-            const activeTier = creatorRatecard.tierMode === "AUTO"
-                ? classifyCreatorTier(creatorRatecard.followers)
-                : creatorRatecard.tierMode;
+            const activeTier = classifyCreatorTier(creatorRatecard.followers);
             creatorRatecard.detectedTier = activeTier;
 
             const tierLabelMap = {
                 Nano: "Nano Creator (1K – 10K)",
                 Micro: "Micro Creator (10K – 100K)",
-                Macro: "Macro Creator (100K – 1M)"
+                Macro: "Macro Creator (> 100K)"
             };
-            if (badge) badge.textContent = tierLabelMap[activeTier] || tierLabelMap.Nano;
+            if (badge) {
+                badge.textContent = tierLabelMap[activeTier] || tierLabelMap.Nano;
+                if (activeTier === "Macro") {
+                    badge.className = "px-3.5 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold";
+                } else if (activeTier === "Micro") {
+                    badge.className = "px-3.5 py-1.5 rounded-full bg-sage/25 text-sageDark text-xs font-bold";
+                } else {
+                    badge.className = "px-3.5 py-1.5 rounded-full bg-blush/70 text-roseSoft text-xs font-bold";
+                }
+            }
 
             const mult = computeInsightMultiplier(creatorRatecard.followers, creatorRatecard.avgViews, creatorRatecard.engagementRate);
             if (hint) {
                 const boostPct = Math.round((mult - 1) * 100);
                 hint.textContent = boostPct > 0
-                    ? `Insight Multiplier: +${boostPct}% (High Reach/ER)`
+                    ? `Insight Multiplier: +${boostPct}% (Tier ${activeTier} • High Reach/ER)`
                     : `Insight Multiplier: Standar Tier ${activeTier}`;
             }
 
@@ -3233,50 +3314,69 @@
                     <div>
                         <div class="flex items-center justify-between gap-2">
                             <span class="text-[10px] uppercase tracking-wider font-bold text-sageDark">${escapeHtml(activeTier)} Tier</span>
-                            <span class="text-[10px] font-semibold text-roseSoft bg-blush/50 px-2 py-0.5 rounded-full">Ratecard</span>
+                            <span class="text-[10px] font-semibold text-roseSoft bg-blush/50 px-2 py-0.5 rounded-full">Estimasi</span>
                         </div>
                         <h4 class="font-serif text-base font-bold text-espresso mt-1">${escapeHtml(pkg.name)}</h4>
                         <p class="text-[11px] text-muted mt-0.5">${escapeHtml(pkg.desc || "")}</p>
                     </div>
                     <div class="mt-3 pt-2.5 border-t border-[#EFE5D8]">
-                        <label class="block text-[10px] font-semibold text-muted mb-1">Tarif Paket (Rp)</label>
-                        <input type="number" min="0" step="25000" value="${Number(pkg.price) || 0}"
-                            oninput="updateRatecardPackagePrice(${idx}, this.value)"
+                        <label class="block text-[10px] font-semibold text-muted mb-1">Estimasi Tarif Paket (Rp)</label>
+                        <input type="text" inputmode="numeric" value="${formatDotNumber(Number(pkg.price) || 0)}"
+                            oninput="updateRatecardPackagePrice(${idx}, this)"
                             class="w-full bg-white border border-[#E4D8CA] rounded-xl px-3 py-1.5 text-xs font-bold text-sageDark focus:outline-none focus:border-sageDark">
                     </div>
                 </div>
             `).join("");
         }
 
-        window.handleInsightInputChange = () => {
-            creatorRatecard.followers = Math.max(0, parseInt(document.getElementById("rcFollowersInput")?.value || "0", 10) || 0);
-            creatorRatecard.avgViews = Math.max(0, parseInt(document.getElementById("rcAvgViewsInput")?.value || "0", 10) || 0);
-            creatorRatecard.engagementRate = Math.max(0, parseFloat(document.getElementById("rcEngagementInput")?.value || "0") || 0);
+        window.handleInsightInputChange = (el) => {
+            const fInp = document.getElementById("rcFollowersInput");
+            const vInp = document.getElementById("rcAvgViewsInput");
+            const followers = parseDotNumber(fInp?.value || "");
+            const avgViews = parseDotNumber(vInp?.value || "");
+
+            if (el === fInp && fInp) {
+                fInp.value = followers > 0 ? formatDotNumber(followers) : "";
+            }
+            if (el === vInp && vInp) {
+                vInp.value = avgViews > 0 ? formatDotNumber(avgViews) : "";
+            }
+
+            creatorRatecard.followers = followers;
+            creatorRatecard.avgViews = avgViews;
+            creatorRatecard.engagementRate = computeAutoEngagementRate(followers, avgViews);
             recalculateRatecardFromInsight(false);
         };
 
-        window.handleTierSelectChange = () => {
-            creatorRatecard.tierMode = document.getElementById("rcTierOverrideSelect")?.value || "AUTO";
+        window.handleManualEngagementInput = (el) => {
+            const cleaned = String(el?.value || "").replace(/[^0-9.,]/g, "").replace(",", ".");
+            const parsed = Math.min(100, Math.max(0, parseFloat(cleaned) || 0));
+            creatorRatecard.engagementRate = parsed;
             recalculateRatecardFromInsight(false);
         };
 
         window.recalculateRatecardFromInsight = (notifyUser = false) => {
-            const tier = creatorRatecard.tierMode === "AUTO"
-                ? classifyCreatorTier(creatorRatecard.followers)
-                : creatorRatecard.tierMode;
+            const tier = classifyCreatorTier(creatorRatecard.followers);
             creatorRatecard.detectedTier = tier;
+            if (creatorRatecard.followers > 0 && creatorRatecard.avgViews > 0 && (!creatorRatecard.engagementRate || document.activeElement !== document.getElementById("rcEngagementInput"))) {
+                creatorRatecard.engagementRate = computeAutoEngagementRate(creatorRatecard.followers, creatorRatecard.avgViews);
+            }
             const mult = computeInsightMultiplier(creatorRatecard.followers, creatorRatecard.avgViews, creatorRatecard.engagementRate);
             creatorRatecard.packages = buildRecommendedPackagesForTier(tier, mult);
             renderRatecardUI();
             persistCreatorRatecard();
             if (notifyUser) {
-                showToast(`Ratecard disesuaikan untuk kategori ${tier} Creator berdasarkan followers & insight!`);
+                showToast(`Estimasi ratecard diperbarui untuk kategori ${tier} Creator!`);
             }
         };
 
-        window.updateRatecardPackagePrice = (idx, val) => {
+        window.updateRatecardPackagePrice = (idx, inputEl) => {
             if (!creatorRatecard.packages || !creatorRatecard.packages[idx]) return;
-            creatorRatecard.packages[idx].price = Math.max(0, parseFloat(val) || 0);
+            const numericVal = parseDotNumber(inputEl?.value || "");
+            if (inputEl) {
+                inputEl.value = numericVal > 0 ? formatDotNumber(numericVal) : "0";
+            }
+            creatorRatecard.packages[idx].price = numericVal;
             persistCreatorRatecard();
         };
 
@@ -3562,7 +3662,176 @@
             }
         });
 
+        let calendarViewDate = new Date();
+
+        window.changeCreatorCalendarMonth = (offset) => {
+            calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() + offset, 1);
+            renderCreatorCalendarAndPriorities();
+        };
+
+        window.toggleProjectPriority = async (id, currentPriority) => {
+            if (!currentUser || !activeUserUid) return;
+            const nextVal = !currentPriority;
+            try {
+                await updateDoc(doc(db, `users/${activeUserUid}/projects`, id), { isPriority: nextVal });
+                showToast(nextVal ? "Project ditandai sebagai Priority!" : "Label Priority dilepas.");
+            } catch (err) {
+                showToast("Gagal mengubah status priority: " + err.message, true);
+            }
+        };
+
+        function isProjectUrgentOrPriority(r) {
+            if (r.isPriority) return true;
+            const targetDateStr = r.deadlineDate || r.date || "";
+            if (!targetDateStr || r.status === "Lunas") return false;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(targetDateStr + "T00:00:00");
+            if (Number.isNaN(target.getTime())) return false;
+            const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+            return diffDays >= -2 && diffDays <= 3;
+        }
+
+        function renderCreatorCalendarAndPriorities() {
+            const monthLabel = document.getElementById("creatorCalendarMonthLabel");
+            const gridEl = document.getElementById("creatorCalendarGrid");
+            const prioListEl = document.getElementById("priorityHighlightsList");
+            const prioBadge = document.getElementById("priorityCountBadge");
+
+            const year = calendarViewDate.getFullYear();
+            const month = calendarViewDate.getMonth();
+            if (monthLabel) {
+                monthLabel.textContent = new Date(year, month, 1).toLocaleDateString("id-ID", {
+                    month: "long",
+                    year: "numeric"
+                });
+            }
+
+            // Map events per YYYY-MM-DD
+            const eventsByDate = {};
+            const addCalEvent = (dateStr, ev) => {
+                if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return;
+                if (!eventsByDate[dateStr]) eventsByDate[dateStr] = [];
+                eventsByDate[dateStr].push(ev);
+            };
+
+            records.forEach(r => {
+                const urgent = isProjectUrgentOrPriority(r);
+                if (r.date) {
+                    addCalEvent(r.date, {
+                        id: r.id,
+                        title: r.clientName,
+                        type: "event",
+                        urgent,
+                        label: `Event: ${r.clientName}`
+                    });
+                }
+                if (r.deadlineDate && r.deadlineDate !== r.date) {
+                    addCalEvent(r.deadlineDate, {
+                        id: r.id,
+                        title: r.clientName,
+                        type: "deadline",
+                        urgent,
+                        label: `Deadline: ${r.clientName}`
+                    });
+                }
+                if (r.payoutDate) {
+                    addCalEvent(r.payoutDate, {
+                        id: r.id,
+                        title: r.clientName,
+                        type: "payout",
+                        urgent,
+                        label: `Cair: ${r.clientName}`
+                    });
+                }
+            });
+
+            if (gridEl) {
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const todayIso = new Date().toISOString().slice(0, 10);
+
+                let cellsHtml = "";
+                for (let b = 0; b < firstDay; b++) {
+                    cellsHtml += `<div class="min-h-[68px] rounded-xl bg-cream/35 border border-transparent"></div>`;
+                }
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const mm = String(month + 1).padStart(2, "0");
+                    const dd = String(d).padStart(2, "0");
+                    const iso = `${year}-${mm}-${dd}`;
+                    const dayEvents = eventsByDate[iso] || [];
+                    const hasPriority = dayEvents.some(e => e.urgent);
+                    const isToday = iso === todayIso;
+
+                    const cellBorder = hasPriority
+                        ? "border-rose-400 bg-rose-50/75"
+                        : isToday
+                        ? "border-sageDark bg-sage/10"
+                        : "border-[#E6DACB] bg-white/90";
+
+                    const pillsHtml = dayEvents.slice(0, 2).map(ev => {
+                        const pillStyle = ev.urgent
+                            ? "bg-rose-600 text-white"
+                            : ev.type === "event"
+                            ? "bg-sage/20 text-sageDark"
+                            : "bg-amber-100 text-amber-900";
+                        return `<div class="px-1.5 py-0.5 rounded-md text-[9px] font-bold truncate ${pillStyle}" title="${escapeHtml(ev.label)}">${ev.urgent ? "★ " : ""}${escapeHtml(ev.title)}</div>`;
+                    }).join("");
+
+                    const moreHtml = dayEvents.length > 2
+                        ? `<div class="text-[9px] font-semibold text-muted">+${dayEvents.length - 2} lagi</div>`
+                        : "";
+
+                    cellsHtml += `
+                        <div class="min-h-[68px] rounded-xl border ${cellBorder} p-1.5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-bold ${hasPriority ? "text-rose-700" : isToday ? "text-sageDark" : "text-espresso"}">${d}</span>
+                                ${hasPriority ? `<i class="fa-solid fa-star text-[9px] text-rose-500" title="Priority Schedule"></i>` : ""}
+                            </div>
+                            <div class="space-y-0.5 mt-1">
+                                ${pillsHtml}
+                                ${moreHtml}
+                            </div>
+                        </div>
+                    `;
+                }
+                gridEl.innerHTML = cellsHtml;
+            }
+
+            // Priority Highlights List
+            const priorityItems = records.filter(r => isProjectUrgentOrPriority(r));
+            if (prioBadge) prioBadge.textContent = `${priorityItems.length} priority`;
+
+            if (prioListEl) {
+                if (priorityItems.length === 0) {
+                    prioListEl.innerHTML = `
+                        <div class="bg-white border border-[#E6DACB] rounded-xl p-4 text-center text-xs text-muted">
+                            Belum ada jadwal priority. Klik ikon bintang <i class="fa-regular fa-star text-rose-500"></i> pada daftar project di bawah untuk menandai priority.
+                        </div>`;
+                } else {
+                    prioListEl.innerHTML = priorityItems.map(item => `
+                        <div class="bg-rose-50/85 border border-rose-300 rounded-xl p-3 space-y-1">
+                            <div class="flex items-start justify-between gap-2">
+                                <p class="text-xs font-bold text-espresso flex items-center gap-1.5">
+                                    <i class="fa-solid fa-star text-rose-600 text-[11px]"></i>
+                                    <span>${escapeHtml(item.clientName)}</span>
+                                </p>
+                                <span class="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[9px] font-bold shrink-0">PRIORITY</span>
+                            </div>
+                            <p class="text-[11px] text-muted">${escapeHtml(item.category || "Event")} • <span class="font-semibold text-sageDark">${escapeHtml(item.pipelineStage || "Brief Diterima")}</span></p>
+                            <div class="flex flex-wrap items-center gap-2 text-[10px] font-semibold text-rose-800 pt-0.5">
+                                ${item.date ? `<span><i class="fa-regular fa-calendar mr-1"></i>Event: ${escapeHtml(item.date)}</span>` : ""}
+                                ${item.deadlineDate ? `<span><i class="fa-regular fa-clock mr-1"></i>Deadline: ${escapeHtml(item.deadlineDate)}</span>` : ""}
+                            </div>
+                        </div>
+                    `).join("");
+                }
+            }
+        }
+
         window.renderOperationsTab = () => {
+            renderCreatorCalendarAndPriorities();
             const listEl = document.getElementById('pipelineCardsList');
             const stageFilter = document.getElementById('filterPipelineStage')?.value || 'ALL';
             const selEl = document.getElementById('followupProjectSelect');
@@ -3613,11 +3882,21 @@
 
                 const isReadyToBill = stage === 'Post & Invoice Terkirim' && r.status !== 'Lunas';
 
+                const isPrio = Boolean(r.isPriority);
+                const cardHighlightClass = isPrio
+                    ? "bg-rose-50/75 border-rose-300 shadow-xs"
+                    : "bg-ivory border-[#EADFD3]";
+
                 return `
-                    <div class="bg-ivory border border-[#EADFD3] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="${cardHighlightClass} border rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="space-y-1">
                             <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="toggleProjectPriority('${r.id}', ${isPrio})" title="${isPrio ? 'Hapus dari Priority' : 'Tandai sebagai Priority'}"
+                                    class="text-sm cursor-pointer ${isPrio ? 'text-rose-600' : 'text-muted hover:text-rose-500'}">
+                                    <i class="${isPrio ? 'fa-solid' : 'fa-regular'} fa-star"></i>
+                                </button>
                                 <h4 class="font-semibold text-sm text-espresso">${escapeHtml(r.clientName)}</h4>
+                                ${isPrio ? `<span class="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold">Priority</span>` : ''}
                                 <span class="text-xs text-muted">• ${escapeHtml(r.category || 'Event')}</span>
                                 <span class="text-xs font-bold text-espresso">• ${formatRupiah(r.amount)}</span>
                                 ${isReadyToBill ? `<span class="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-[10px] font-bold">Siap Tagih</span>` : ''}
